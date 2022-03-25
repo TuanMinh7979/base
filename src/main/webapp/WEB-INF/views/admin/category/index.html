@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/admin_layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Manage</title>
+    <th:block layout:fragment="addcss">
+        <link rel="stylesheet" th:href="@{/resource/css/admin/category/styles.css}">
+
+    </th:block>
+
+</head>
+<body>
+
+
+<div class="content-wrapper" layout:fragment="content">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Category</h1>
+                </div><!-- /.col -->
+
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+
+
+            <form class="col-8 row mb-2" th:action="@{/admin/category/}" method="post">
+
+                <div class="col-4">
+                    <label> Sort By Field</label>
+                    <select id="selBy" name="sortBy">
+                        <option value="id">id</option>
+                        <option value="name">name</option>
+
+
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label>Order</label>
+
+                    <select id="selDirection" name="sortDirection">
+                        <!--                        <div th:if="${param.sortDirection==null or #strings.equals(param.sortDirection, 'asc') }">-->
+                        <!--                            <option value="asc">ASC</option>-->
+                        <!--                            <option value="desc">DESC</option>-->
+                        <!--                        </div>-->
+                        <!--                        <div th:if="${#strings.equals(param.sortDirection, 'desc')}">-->
+                        <!--                            <option value="desc">DESC</option>-->
+                        <!--                            <option value="asc">ASC</option>-->
+                        <!--                        </div>-->
+
+                        <option value="asc">ASC</option>
+                        <option value="desc">DESC</option>
+                    </select>
+
+                </div>
+                <div class="col-2">
+                    <input type="submit" class="btn btn-success" value="FILTER">
+                </div>
+                <div class="col-2">
+                    <a th:href="@{/admin/category}"
+                       type="reset" class="btn btn-default">
+                        RESET
+                    </a>
+                </div>
+
+
+            </form>
+
+            <div class="col-4"><a th:href="@{/admin/category/add}" class="btn btn-info float-right ">Add</a></div>
+
+
+            <div class="col-12">
+                <table class="table table-bordered tableFixHeight">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th class="col-4">Name</th>
+                        <th class="col-4">Code</th>
+                        <th class="col-3">Action</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="tabledata" class="tableBodyFixHeight">
+                    <tr class="spacer" th:each="cate: ${model.data}">
+                        <td class="col-1"><input type="checkbox" th:value="${cate.id}"></td>
+                        <td class="col-4" th:text="${cate.name}">Name</td>
+                        <td class="col-4" th:text="${cate.code}">Code</td>
+                        <td class="col-3">
+                            <a class="btn btn-default"
+                               th:href="@{/admin/category/edit/{cateid} (cateid=${cate.id})}">Edit</a>
+
+                            <a class="btn btn-danger tag_delete_one"
+                               th:href="@{/admin/category/delete/{cateid}(cateid=${cate.id})}">Delete</a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="col-12"><a th:href="@{/admin/category/delete}" id="tag_delete_many"
+                                   class="btn btn-danger float-right ml-2 ">Delete Many</a></div>
+
+
+            <ul class="col-12 pagination">
+                <li th:each="i: ${#numbers.sequence(1, model.totalPages)}" class="pagination">
+                    <a class="page-link" th:href="@{/admin/category(page=${i})}" th:text="${i}"></a>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+
+
+<th:block layout:fragment="addscript">
+
+    <script th:src="@{/resource/js/admin/category/index.js}"></script>
+</th:block>
+</body>
+</html>

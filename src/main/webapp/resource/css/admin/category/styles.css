@@ -1,0 +1,13 @@
+.tableBodyFixHeight {
+    height: 360px;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tableFixHeight tr {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/home/home_layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+    <div class="container" style="width:1200px ;border: 1px solid blue"  layout:fragment="content">
+        <div class="row" style="justify-content: space-around">
+            <div style="min-width: 230px; padding: 0" th:each="p : ${products}"
+                 class="col-sm-12 col-md-2">
+                <div style="border: 1px solid red">
+                    <div class="card-body">
+                        <img class="img-fluid" th:src="@{/resource/img.png}" alt=""/>
+                    </div>
+                    <div class="card-footer">
+                        <h4 class="card-title" th:text="${p.name}"></h4>
+                        <p class="card-text" th:text="${p.price}"></p>
+                        <a href="#" class="btn btn-primary">
+                            Them vao gio</a>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>
