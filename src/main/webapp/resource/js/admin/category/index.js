@@ -1,19 +1,4 @@
-// console.log(totalPage+" "+pageNumber);
-//
-
-
-$(function () {
-
-    // loadOption();
-
-    let params = (new URL(document.location)).searchParams;
-
-    let sortBy = params.get("sortBy");
-    let sortDirection = params.get("sortDirection");
-
-    let page = params.get("page");
-    let limit = params.get("limit");
-
+function callViewApi(page, limit, sortBy, sortDirection) {
 
     let url = "/admin/category/viewApi";
     if (page == null) {
@@ -48,31 +33,49 @@ $(function () {
 
 
     });
+}
 
-    $("#filter-form").submit(function () {
+$(function () {
+    alert("vao ham load ban dau")
 
-        alert("---------------");
-    })
+    callViewApi(null, null, null, null);
+    paging();
 
 
 
 })
 
+
+function HdleFilterBtn() {
+    //load data sử dụng bộ filter
+    let sortBy = document.getElementById("by-sel").value;
+    let sortDirection = document.getElementById("direction-sel").value;
+    let limit = document.getElementById("limit-inp").value;
+    callViewApi(null, limit, sortBy, sortDirection);
+
+
+}
+
 function renderData(data) {
     let arrCate = [];
     arrCate = data.data;
-    console.log(arrCate.length)
+
+
+    let trcontent = "";
     for (let i = 0; i < arrCate.length; i++) {
-        $('#tabledata').append(`<tr> <td class="col-1"><input type="checkbox" value="${arrCate[i].id}"></td>
+        trcontent += `<tr> <td class="col-1"><input type="checkbox" value="${arrCate[i].id}"></td>
  <td class="col-4" >${arrCate[i].name}</td>
   <td class="col-4" >${arrCate[i].code}</td>
  <td class="col-3">
  <a class="btn btn-default"  href="/admin/category/edit/${arrCate[i].id}">Edit</a>
   <a class="btn btn-danger tag_delete_one"  onclick="deleteOnTable(event)" href="/admin/category/delete/${arrCate[i].id}">Delete</a>
 </td>
- </tr>`);
+ </tr>`;
 
     }
+
+
+    $("#tabledata").html(trcontent);
 }
 
 $(function () {
@@ -80,10 +83,13 @@ $(function () {
     //doi voi preventDefault nhu the a nên đặt onclick vì khi html render bằng ajax event bằng class hay id sẽ KHÔNG đc
 
     $("#tag_delete_many").on("click", deleteManyOnTable);
+    $("#btn-filter").on("click", HdleFilterBtn);
 
-    upSelect("selBy", "sortBy", "id")
-    upSelect("selDirection", "sortDirection", "asc")
+
 })
+
+
+
 
 
 

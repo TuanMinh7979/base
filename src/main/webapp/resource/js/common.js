@@ -1,25 +1,8 @@
-//update select tag value to current option
-function upSelect(idSelTag, urlPar, defaultval) {
-    let fieldSelTag = document.getElementById(idSelTag);
-
-
-    let urlParams = (new URL(document.location)).searchParams;
-    const parValue = urlParams.get(urlPar);
-
-    if (parValue == null) {
-
-        fieldSelTag.value = defaultval;
-    } else {
-
-        fieldSelTag.value = parValue;
-    }
-
-}
 
 function deleteOnTable(event) {
     event.preventDefault();
 
-    alert("VAODAY KHONG VAY")
+
     let url = $(this).attr("href");
     let that = $(this);
 
@@ -60,7 +43,7 @@ function deleteOnTable(event) {
 function deleteManyOnTable(event) {
     event.preventDefault();
     let url = $(this).attr("href");
-    let that = $(this);
+    // let that = $(this);
 
     var toDelChecboxs = [];
     var checkboxes = document.querySelectorAll('tr input[type="checkbox"]:checked');

@@ -34,7 +34,7 @@ public class CategoryController {
         return "admin/category/index";
     }
 
-    @RequestMapping("viewApi")
+    @GetMapping("viewApi")
     @ResponseBody
     public ViewApi<List<Category>> getCategories(Model model,
                                                  @RequestParam(name = "page", required = false) String pageParam,
@@ -60,8 +60,42 @@ public class CategoryController {
         System.out.println("CALL MAY LAN ROI ___________________");
 //
 
+        System.out.println("total page la"+totalPage);
+        System.out.println("limit la "+limitParam);
         return new ViewApi<>(totalPage, pageIndex, data);
     }
+
+    @GetMapping("viewApi")
+    @ResponseBody
+    public ViewApi<List<Category>> getCategories(Model model,
+                                                 @RequestParam(name = "page", required = false) String pageParam,
+                                                 @RequestParam(name = "limit", required = false) String limitParam,
+                                                 @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                 @RequestParam(name = "sortDirection", required = false) String sortDirection) {
+
+
+        String sortField = sortBy == null ? "id" : sortBy;
+        Sort sort = (sortDirection == null || sortDirection.equals("asc")) ? Sort.by(Sort.Direction.ASC, sortField)
+                : Sort.by(Sort.Direction.DESC, sortField);
+        int page = pageParam == null ? 0 : Integer.parseInt(pageParam) - 1;
+        int limit = limitParam == null ? 2 : Integer.parseInt(limitParam);
+
+        Pageable pageable = PageRequest.of(page, limit, sort);
+        Page categoryPage = categoryService.getCategories(pageable);
+
+
+        List data = categoryPage.getContent();
+
+        int totalPage = categoryPage.getTotalPages();
+        int pageIndex = categoryPage.getNumber();
+        System.out.println("CALL MAY LAN ROI ___________________");
+//
+
+        System.out.println("total page la"+totalPage);
+        System.out.println("limit la "+limitParam);
+        return new ViewApi<>(totalPage, pageIndex, data);
+    }
+
 
 
     @PostMapping("save")
