@@ -2,10 +2,9 @@
 function deleteOnTable(event) {
     event.preventDefault();
 
-
     let url = $(this).attr("href");
-    let that = $(this);
 
+    let that = $(this);
 
     Swal.fire({
 
@@ -19,7 +18,7 @@ function deleteOnTable(event) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                type: "get",
+                type: "post",
                 url: url,
                 success: function (data) {
 
@@ -78,7 +77,7 @@ function deleteManyOnTable(event) {
 
                     }
 
-                    // that.closest("tr").remove();
+
                 },
                 error: function () {
                     Swal.fire({

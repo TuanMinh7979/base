@@ -28,9 +28,6 @@
 
     <div class="container-fluid">
         <div class="row">
-
-
-            <!--            <form id="filter-form" class="col-8 row mb-2" th:action="@{/admin/category}" method="post">-->
             <div class="col-8 row mb-2">
 
                 <div class="col-3">
@@ -46,22 +43,13 @@
                     <label>OrderBy</label>
 
                     <select id="direction-sel" name="sortDirection">
-                        <!--                        <div th:if="${param.sortDirection==null or #strings.equals(param.sortDirection, 'asc') }">-->
-                        <!--                            <option value="asc">ASC</option>-->
-                        <!--                            <option value="desc">DESC</option>-->
-                        <!--                        </div>-->
-                        <!--                        <div th:if="${#strings.equals(param.sortDirection, 'desc')}">-->
-                        <!--                            <option value="desc">DESC</option>-->
-                        <!--                            <option value="asc">ASC</option>-->
-                        <!--                        </div>-->
-
                         <option value="asc">ASC</option>
                         <option value="desc">DESC</option>
                     </select>
 
                 </div>
                 <div class="col-2">
-                    <label>Limit</label> <input value="5" style="width: 60px" type="number" id="limit-inp">
+                    <label>Limit</label> <input value="3" style="width: 60px" type="number" id="limit-inp">
                 </div>
                 <div class="col-2">
                     <button id="btn-filter" class="btn btn-success">FILTER</button>
@@ -100,12 +88,12 @@
                                    class="btn btn-danger float-right ml-2 ">Delete Many</a></div>
 
 
-            <ul class="col-12 pagination-sm" id="pagination"></ul>
+            <ul id="pagination-demo" class="pagination-sm col-12"></ul>
         </div>
     </div>
 </div>
 
-<input type="hidden" id="totalpage-hinp">
+
 <th:block layout:fragment="addscript">
     <script th:src="@{/resource/js/admin/category/index.js}"></script>
 </th:block>
