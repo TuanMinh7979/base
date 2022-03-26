@@ -1,8 +1,9 @@
 //update select tag value to current option
 function upSelect(idSelTag, urlPar, defaultval) {
     let fieldSelTag = document.getElementById(idSelTag);
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+
+
+    let urlParams = (new URL(document.location)).searchParams;
     const parValue = urlParams.get(urlPar);
 
     if (parValue == null) {
@@ -18,6 +19,7 @@ function upSelect(idSelTag, urlPar, defaultval) {
 function deleteOnTable(event) {
     event.preventDefault();
 
+    alert("VAODAY KHONG VAY")
     let url = $(this).attr("href");
     let that = $(this);
 

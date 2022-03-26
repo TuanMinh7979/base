@@ -1,5 +1,6 @@
 package com.tmt.tmdt.controller.admin;
 
+import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,37 +28,39 @@ public class CategoryController {
     private final CategoryService categoryService;
 
 
-    @RequestMapping("")
+    @GetMapping("")
     public String index() {
 
         return "admin/category/index";
     }
 
-    @GetMapping("viewApi")
-    public List<> getCategories(Model model,
-                                      @RequestParam(name = "page", required = false) String pageParam,
-                                      @RequestParam(name = "limit", required = false) String limitParam,
-                                      @RequestParam(name = "sortBy", required = false) String sortBy,
-                                      @RequestParam(name = "sortDirection", required = false) String sortDirection) {
+    @RequestMapping("viewApi")
+    @ResponseBody
+    public ViewApi<List<Category>> getCategories(Model model,
+                                                 @RequestParam(name = "page", required = false) String pageParam,
+                                                 @RequestParam(name = "limit", required = false) String limitParam,
+                                                 @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                 @RequestParam(name = "sortDirection", required = false) String sortDirection) {
+
+
         String sortField = sortBy == null ? "id" : sortBy;
         Sort sort = (sortDirection == null || sortDirection.equals("asc")) ? Sort.by(Sort.Direction.ASC, sortField)
                 : Sort.by(Sort.Direction.DESC, sortField);
         int page = pageParam == null ? 0 : Integer.parseInt(pageParam) - 1;
-        int limit = limitParam == null ? 5 : Integer.parseInt(limitParam);
+        int limit = limitParam == null ? 2 : Integer.parseInt(limitParam);
 
         Pageable pageable = PageRequest.of(page, limit, sort);
-        Page categoryData = categoryService.getCategories(pageable);
-//        categoryData.getNumber();
-//        categoryData.getTotalPages();
-//        categoryData.getContent();
-        model.addAttribute("pageNumber", pageParam);
-        model.addAttribute("totalPages", categoryData.getTotalPages());
-        model.addAttribute("data", categoryData.getContent());
+        Page categoryPage = categoryService.getCategories(pageable);
 
-        ModelAndView mav = new ModelAndView("admin/category/index");
-        mav.addObject("model", model);
 
-        return mav;
+        List data = categoryPage.getContent();
+
+        int totalPage = categoryPage.getTotalPages();
+        int pageIndex = categoryPage.getNumber();
+        System.out.println("CALL MAY LAN ROI ___________________");
+//
+
+        return new ViewApi<>(totalPage, pageIndex, data);
     }
 
 
@@ -79,7 +83,7 @@ public class CategoryController {
 
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
 
         if (categoryService.deleteById(id) != null) {

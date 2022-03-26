@@ -30,7 +30,7 @@
         <div class="row">
 
 
-            <form class="col-8 row mb-2" th:action="@{/admin/category/}" method="post">
+            <form id="filter-form" class="col-8 row mb-2" th:action="@{/admin/category}" method="post">
 
                 <div class="col-4">
                     <label> Sort By Field</label>
@@ -87,18 +87,18 @@
                     </tr>
                     </thead>
                     <tbody id="tabledata" class="tableBodyFixHeight">
-                    <tr class="spacer" th:each="cate: ${model.data}">
-                        <td class="col-1"><input type="checkbox" th:value="${cate.id}"></td>
-                        <td class="col-4" th:text="${cate.name}">Name</td>
-                        <td class="col-4" th:text="${cate.code}">Code</td>
-                        <td class="col-3">
-                            <a class="btn btn-default"
-                               th:href="@{/admin/category/edit/{cateid} (cateid=${cate.id})}">Edit</a>
+                    <!--                    <tr class="spacer" th:each="cate: ${model.data}">-->
+                    <!--                        <td class="col-1"><input type="checkbox" th:value="${cate.id}"></td>-->
+                    <!--                        <td class="col-4" th:text="${cate.name}">Name</td>-->
+                    <!--                        <td class="col-4" th:text="${cate.code}">Code</td>-->
+                    <!--                        <td class="col-3">-->
+                    <!--                            <a class="btn btn-default"-->
+                    <!--                               th:href="@{/admin/category/edit/{cateid} (cateid=${cate.id})}">Edit</a>-->
 
-                            <a class="btn btn-danger tag_delete_one"
-                               th:href="@{/admin/category/delete/{cateid}(cateid=${cate.id})}">Delete</a>
-                        </td>
-                    </tr>
+                    <!--                            <a class="btn btn-danger tag_delete_one"-->
+                    <!--                               th:href="@{/admin/category/delete/{cateid}(cateid=${cate.id})}">Delete</a>-->
+                    <!--                        </td>-->
+                    <!--                    </tr>-->
 
                     </tbody>
 
@@ -106,13 +106,15 @@
             </div>
             <div class="col-12"><a th:href="@{/admin/category/delete}" id="tag_delete_many"
                                    class="btn btn-danger float-right ml-2 ">Delete Many</a></div>
+            <div class="col-12"><a class="btn btn-danger tag_delete_one"
+                                   th:href="@{/admin/category/delete/3}">Delete</a></div>
 
 
-            <ul class="col-12 pagination">
-                <li th:each="i: ${#numbers.sequence(1, model.totalPages)}" class="pagination">
-                    <a class="page-link" th:href="@{/admin/category(page=${i})}" th:text="${i}"></a>
-                </li>
-            </ul>
+            <!--            <ul class="col-12 pagination">-->
+            <!--                <li th:each="i: ${#numbers.sequence(1, model.totalPages)}" class="pagination">-->
+            <!--                    <a class="page-link" th:href="@{/admin/category(page=${i})}" th:text="${i}"></a>-->
+            <!--                </li>-->
+            <!--            </ul>-->
 
 
         </div>
@@ -121,7 +123,6 @@
 
 
 <th:block layout:fragment="addscript">
-
     <script th:src="@{/resource/js/admin/category/index.js}"></script>
 </th:block>
 </body>
