@@ -79,5 +79,20 @@ public class CategoryServiceImpl implements CategoryService {
         return cateRepository.existsByName(name);
     }
 
+    @Override
+    public List<String> getCategoryNamesByKw(String kw) {
+        return cateRepository.getCategoryNamesByKw(kw);
+    }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        return cateRepository.findByName(name);
+    }
+
+    @Override
+    public Page<Category> getCategoriesByNameLike(String name, Pageable pageable) {
+        return cateRepository.getCategoriesByNameLike( name, pageable);
+    }
+
 
 }

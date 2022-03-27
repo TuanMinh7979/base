@@ -12,7 +12,7 @@ import lombok.Setter;
 
 public class ViewApi<T> {
     private int totalPage;
-    private int pageIndex;
-   
+
+
     T data;
 }

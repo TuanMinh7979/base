@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -40,7 +39,8 @@ public class CategoryController {
                                                  @RequestParam(name = "page", required = false) String pageParam,
                                                  @RequestParam(name = "limit", required = false) String limitParam,
                                                  @RequestParam(name = "sortBy", required = false) String sortBy,
-                                                 @RequestParam(name = "sortDirection", required = false) String sortDirection) {
+                                                 @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                                 @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -50,17 +50,40 @@ public class CategoryController {
         int limit = limitParam == null ? 3 : Integer.parseInt(limitParam);
 
         Pageable pageable = PageRequest.of(page, limit, sort);
-        Page categoryPage = categoryService.getCategories(pageable);
+        Page categoryPage = null;
+        if (searchNameTerm != null && !searchNameTerm.isEmpty()) {
+
+            categoryPage = categoryService.getCategoriesByNameLike(searchNameTerm, pageable);
+        } else {
+            categoryPage = categoryService.getCategories(pageable);
+        }
 
 
         List data = categoryPage.getContent();
 
         int totalPage = categoryPage.getTotalPages();
-        int pageIndex = categoryPage.getNumber();
 
-        return new ViewApi<>(totalPage, pageIndex, data);
+        System.out.println(data.size()+"--------------"+totalPage);
+
+
+        return new ViewApi<>(totalPage, data);
     }
 
+//    @GetMapping("viewApi/search/{name}")
+//    @ResponseBody
+//    public ViewApi<List<Category>> getCategoriesByNameLike(@PathVariable String name) {
+//        System.out.println("__________Call this__________");
+//        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+//        Pageable pageable = PageRequest.of(0, 3, sort);
+//        Page catePage = categoryService.getCategoriesByNameLike(name, pageable);
+//
+//        List data = catePage.getContent();
+//        int totalPage = catePage.getTotalPages();
+//        System.out.println("TOTAL PAGE" + totalPage);
+//        return new ViewApi<>(totalPage, data);
+//
+//
+//    }
 
 
     @PostMapping("save")
@@ -105,10 +128,16 @@ public class CategoryController {
     }
 
 
-    @GetMapping("edit/{id}")
+    @GetMapping("edit/{idx}")
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
-    public String showUpdateForm(Model model, @PathVariable Long id) {
-        model.addAttribute("category", categoryService.getCategory(id));
+    public String showUpdateForm(Model model, @PathVariable("idx") Object idx) {
+        if (idx instanceof String) {
+            model.addAttribute("category", categoryService.getCategoryByName((String) idx));
+
+        } else {
+            model.addAttribute("category", categoryService.getCategory((Long) idx));
+        }
+
         return "admin/category/edit";
     }
 

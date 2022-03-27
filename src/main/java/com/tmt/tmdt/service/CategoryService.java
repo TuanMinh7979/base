@@ -29,5 +29,9 @@ public interface CategoryService {
 
     boolean existByName(String name);
 
+    List<String> getCategoryNamesByKw(String kw);
+    Category getCategoryByName(String name);
 
+
+    Page<Category> getCategoriesByNameLike(String name, Pageable pageable);
 }

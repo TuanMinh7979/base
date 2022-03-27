@@ -1,7 +1,8 @@
 var GlobalTotalPage = 1;//flag variable
 var currentPage = 1;
+var activeKeyword = "";
 
-function callViewApi(page, limit, sortBy, sortDirection) {
+function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm) {
 
     let url = "/admin/category/viewApi";
     if (page == null) {
@@ -18,7 +19,10 @@ function callViewApi(page, limit, sortBy, sortDirection) {
     if (sortDirection != null) {
         url += `&sortDirection=${sortDirection}`;
     }
-    // console.log("URL la " + url);
+    if (searchNameTerm != null) {
+        url += `&searchNameTerm=${searchNameTerm}`;
+    }
+
     $.ajax({
         type: "get",
         url: url,
@@ -50,29 +54,32 @@ function HdleFilterBtn() {
     let sortBy = document.getElementById("by-sel").value;
     let sortDirection = document.getElementById("direction-sel").value;
     let limit = document.getElementById("limit-inp").value;
-    callViewApi(currentPage, limit, sortBy, sortDirection);
+
+    callViewApi(currentPage, limit, sortBy, sortDirection, activeKeyword);
 
 
 }
 
 function renderData(data) {
-    let arrCate = [];
-    arrCate = data.data;
-    let trcontent = "";
-    for (let i = 0; i < arrCate.length; i++) {
-        trcontent += `<tr> <td class="col-1"><input type="checkbox" value="${arrCate[i].id}"></td>
- <td class="col-4" >${arrCate[i].name}</td>
-  <td class="col-4" >${arrCate[i].code}</td>
- <td class="col-3">
- <a class="btn btn-default"  href="/admin/category/edit/${arrCate[i].id}">Edit</a>
-  <a class="btn btn-danger tag_delete_one"  href="/admin/category/delete/${arrCate[i].id}">Delete</a>
-</td>
- </tr>`;
+    let rs = "";
+    data.data.map(function (catei) {
+            rs += "<tr>"
+            rs += `<td class="col-1"><input type="checkbox" value="${catei.id}"></td>`
+            rs += `<td class="col-4" >${catei.name}</td>`
+            rs += `<td class = "col-4" >${catei.code} </td>`
+            rs += '<td class="col-3">'
+            rs += `<a class="btn btn-default"  href="/admin/category/edit/${catei.id}">Edit</a>`
+            rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/category/delete/${catei.id}">Delete</a>`
+            rs += "</td>"
+            rs += "</tr>"
 
-    }
+
+        }
+    )
+    $("#tabledata").html(rs);
     let newTotalPage = data.totalPage;
     if (newTotalPage != GlobalTotalPage) {
-        // alert("call again");
+
         GlobalTotalPage = newTotalPage;
         var $pagination = $("#pagination-demo");
         $pagination.twbsPagination("destroy");
@@ -80,11 +87,15 @@ function renderData(data) {
                 totalPages: GlobalTotalPage,
                 visiblePages: GlobalTotalPage,
                 onPageClick: function (event, page) {
+
                     currentPage = page;
                     let sortBy = document.getElementById("by-sel").value;
                     let sortDirection = document.getElementById("direction-sel").value;
                     let limit = document.getElementById("limit-inp").value;
-                    callViewApi(page, limit, sortBy, sortDirection);
+
+
+                    callViewApi(page, limit, sortBy, sortDirection, activeKeyword);
+
                 }
             }
         );
@@ -100,29 +111,37 @@ $(function () {
 
     $("#tag_delete_many").on("click", deleteManyOnTable);
     $("#btn-filter").on("click", HdleFilterBtn);
-
+    $(document).on("click", '.tag_delete_one', deleteOnTable);
 
 })
 
 //Use event delegation for dynamically created elements(bind event on ajax loaded content)
-$(document).on("click", '.tag_delete_one', deleteOnTable);
+
 //Use event delegation for dynamically created elements:
 
-// function paging() {
-//
-//     $('#pagination-demo').twbsPagination({
-//         totalPages: GlobalTotalPage,
-//         visiblePages: 5,
-//         onPageClick: function (event, page) {
-//             let sortBy = document.getElementById("by-sel").value;
-//             let sortDirection = document.getElementById("direction-sel").value;
-//             let limit = document.getElementById("limit-inp").value;
-//
-//             alert("Nhan vao");
-//             callViewApi(page, limit, sortBy, sortDirection);
-//         }
-//     });
-// }
+
+//autocomplete
+$(function () {
+    $("#main-search-inp").on("change", function () {
+        activeKeyword = $(this).val();
+
+
+    })
+
+    $("#main-search-inp").autocomplete({
+        source: "/ajax/autocomplete-search/category",
+
+        select: function (event, ui) {
+            window.location.href = "/admin/category/edit/" + ui.item.value;
+
+        }
+    })
+    $("#main-search-btn").on("click", function () {
+        callViewApi(currentPage, null, null, null, activeKeyword);
+
+    })
+})
+
 
 
 
