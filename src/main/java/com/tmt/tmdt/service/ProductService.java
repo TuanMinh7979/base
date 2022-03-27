@@ -9,10 +9,20 @@ import java.util.List;
 public interface ProductService {
     List<Product> findAll();
 
+    //for auto complete search
     List<String> getNamesByKw(String kw);
 
+    //for input search by keyword
     List<Product> getProductsByName(String name);
+
+    Product getProduct(Long id);
 
     List<Product> getProductsByCategory(Long categoryId);
     List<Product> getProducts();
+
+    boolean existByName(String name);
+
+    Product save(Product product);
+
+
 }

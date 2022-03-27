@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 
@@ -21,9 +20,12 @@ public class ImageDetail {
     private Long id;
     private String link;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-
+    public ImageDetail(String link, Product product) {
+        this.link = link;
+        this.product = product;
+    }
 }

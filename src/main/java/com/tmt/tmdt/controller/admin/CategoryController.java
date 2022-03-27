@@ -5,6 +5,8 @@ import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.service.CategoryService;
 import groovyjarjarpicocli.CommandLine;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,14 +60,8 @@ public class CategoryController {
         } else {
             categoryPage = categoryService.getCategories(pageable);
         }
-
-
         List data = categoryPage.getContent();
-
         int totalPage = categoryPage.getTotalPages();
-
-        System.out.println(data.size() + "--------------" + totalPage);
-
 
         return new ViewApi<>(totalPage, data);
     }
@@ -117,15 +113,21 @@ public class CategoryController {
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
     public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
 
+        Category category = null;
         try {
             Long id = Long.parseLong(idx);
-            model.addAttribute("category", categoryService.getCategory(id));
-            return "admin/category/edit";
+            category = categoryService.getCategory(id);
         } catch (Exception e) {
             e.printStackTrace();
+            category = categoryService.getCategoryByName(idx);
         }
-        model.addAttribute("category", categoryService.getCategoryByName(idx));
+        if (category == null) {
+            model.addAttribute("message", "Category not found");
+            return "admin/category/error";
+        }
+        model.addAttribute("category", category);
         return "admin/category/edit";
+
     }
 
     @GetMapping("add")

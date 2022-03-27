@@ -21,5 +21,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("from Product where category.id = :categoryId")
     List<Product> getProductsByCategory(@Param("categoryId") Long categoryId);
 
+    boolean existsByName(String name);
 
 }

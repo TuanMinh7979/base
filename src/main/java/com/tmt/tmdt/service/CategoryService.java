@@ -34,4 +34,7 @@ public interface CategoryService {
 
 
     Page<Category> getCategoriesByNameLike(String name, Pageable pageable);
+
+    Category addProductToCategory(Long cateId, Long productId);
+    Category removeProductFromCategory(Long cateId, Long productId);
 }

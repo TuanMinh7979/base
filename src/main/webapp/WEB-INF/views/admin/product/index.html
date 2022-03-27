@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/admin_layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Manage</title>
+    <th:block layout:fragment="addcss">
+
+        <link rel="stylesheet"
+              href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    </th:block>
+
+</head>
+<body>
+
+
+<div class="content-wrapper" layout:fragment="content">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">abc</h1>
+                </div><!-- /.col -->
+
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+
+</div>
+
+
+<th:block layout:fragment="addscript">
+    <script th:src="@{/resource/js/admin/product/index.js}"></script>
+</th:block>
+</body>
+</html>

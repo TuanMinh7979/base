@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/admin_layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Add Product</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/admin/product/}">Product index</a></li>
+
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-6 ml-5">
+                <form th:action="@{/admin/product/save}" th:object="${product}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" type="text" th:field="*{name}">
+                        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
+                              th:errors="*{name}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input class="form-control" type="text" th:field="*{price}">
+                        <span th:if="${#fields.hasErrors('price')}" class="form-control alert alert-warning"
+                              th:errors="*{name}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Main Image</label>
+                        <input class="form-control" type="file" th:field="*{file}">
+                        <span th:if="${#fields.hasErrors('file')}" class="form-control alert alert-warning"
+                              th:errors="*{file}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Detail Images</label>
+                        <input class="form-control" type="file" th:field="*{files}" multiple>
+                        <span th:if="${#fields.hasErrors('files')}" class="form-control alert alert-warning"
+                              th:errors="*{files}"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="7"></textarea>
+                        <span th:if="${#fields.hasErrors('description')}" class="form-control alert alert-warning"
+                              th:errors="*{description}"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label >Category</label>
+                        <select th:field="*{category}" id="category-sel">
+                            <th:block th:each="catei : ${categories}">
+                                <option th:text="${catei.name}" th:value="${catei.id}"></option>
+                            </th:block>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="add">
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-6">
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
