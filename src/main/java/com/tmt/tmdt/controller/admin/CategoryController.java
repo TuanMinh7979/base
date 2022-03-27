@@ -3,6 +3,7 @@ package com.tmt.tmdt.controller.admin;
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.service.CategoryService;
+import groovyjarjarpicocli.CommandLine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,27 +64,11 @@ public class CategoryController {
 
         int totalPage = categoryPage.getTotalPages();
 
-        System.out.println(data.size()+"--------------"+totalPage);
+        System.out.println(data.size() + "--------------" + totalPage);
 
 
         return new ViewApi<>(totalPage, data);
     }
-
-//    @GetMapping("viewApi/search/{name}")
-//    @ResponseBody
-//    public ViewApi<List<Category>> getCategoriesByNameLike(@PathVariable String name) {
-//        System.out.println("__________Call this__________");
-//        Sort sort = Sort.by(Sort.Direction.ASC, "id");
-//        Pageable pageable = PageRequest.of(0, 3, sort);
-//        Page catePage = categoryService.getCategoriesByNameLike(name, pageable);
-//
-//        List data = catePage.getContent();
-//        int totalPage = catePage.getTotalPages();
-//        System.out.println("TOTAL PAGE" + totalPage);
-//        return new ViewApi<>(totalPage, data);
-//
-//
-//    }
 
 
     @PostMapping("save")
@@ -130,14 +115,16 @@ public class CategoryController {
 
     @GetMapping("edit/{idx}")
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
-    public String showUpdateForm(Model model, @PathVariable("idx") Object idx) {
-        if (idx instanceof String) {
-            model.addAttribute("category", categoryService.getCategoryByName((String) idx));
+    public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
 
-        } else {
-            model.addAttribute("category", categoryService.getCategory((Long) idx));
+        try {
+            Long id = Long.parseLong(idx);
+            model.addAttribute("category", categoryService.getCategory(id));
+            return "admin/category/edit";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        model.addAttribute("category", categoryService.getCategoryByName(idx));
         return "admin/category/edit";
     }
 
