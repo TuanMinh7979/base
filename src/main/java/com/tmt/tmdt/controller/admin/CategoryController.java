@@ -91,15 +91,19 @@ public class CategoryController {
     //call with ajax
     public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
 
-        //Neu xay ra loi thi tra ve trang loi trong service
-        categoryService.deleteById(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        //Xay ra loi sql o tang sql chua the handle tam thoi return null
+
+        Long deletedId = categoryService.deleteById(id);
+        return new ResponseEntity<>(deletedId, HttpStatus.OK);
+        //handle a error or runtimeException by return a bad request in Global Exception handleling
+
+
     }
 
 
     @PostMapping("delete")
     public ResponseEntity<Long[]> deleteCategories(@RequestBody Long[] ids) {
-        //Neu xay ra loi thi tra ve trang loi trong service
+        //Neu xay ra loi thi tra ve 1 response bad request trnog GlobalExceptionHandler
         categoryService.deleteCategories(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);
 
@@ -120,7 +124,7 @@ public class CategoryController {
             e.printStackTrace();
             category = categoryService.getCategoryByName(idx);
         }
-        //other exception will be handled in service
+
 
         model.addAttribute("category", category);
         return "admin/category/edit";

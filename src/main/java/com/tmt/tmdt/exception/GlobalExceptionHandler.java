@@ -26,10 +26,10 @@ public class GlobalExceptionHandler {
         return "admin/error/404Err";
     }
 
+
     @ExceptionHandler({RuntimeException.class})
-    public String handleUncheckedException(Exception e, Model model) {
-        model.addAttribute("message", e.getMessage());
-        return "admin/error/500Err";
+    public ResponseEntity<ErrResponse> handleUncheckedException(Exception e, Model model) {
+        return new ResponseEntity<>(new ErrResponse(new ErrResponse.Meta(e.getMessage())), HttpStatus.BAD_REQUEST);
     }
 
 

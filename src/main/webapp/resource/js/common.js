@@ -1,4 +1,3 @@
-
 function deleteOnTable(event) {
     event.preventDefault();
 
@@ -21,6 +20,7 @@ function deleteOnTable(event) {
                 type: "post",
                 url: url,
                 success: function (data) {
+                    console.log("------------------------------"+data);
 
                     that.closest("tr").remove();
                 },
