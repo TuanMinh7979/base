@@ -32,12 +32,14 @@ public class CategoryServiceImpl implements CategoryService {
         //nếu như findById là null thì ta không thể get()(exception)
         //nếu v thì phải return Optional, vậy nên cần phải custom cho phải return null
         //để controller còn biết mà xữ lý trả về.
-        return cateRepository.findById(id)
-                .orElseGet(() -> {
-                    log.warn(">>>Not found category with id: " + id);
-                    return null;
 
+        //ta cũng có thể custom để return 1 page ngay trong service
+        return cateRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn(">>>Category with id" + id + " not found");
+                    return new ResourceNotFoundException("Category with id " + id + " not found");
                 });
+
 
     }
 
@@ -53,19 +55,27 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void save(Category category) {
+        //uncheckend exception handler
         category.setCode(TextUtil.generateCode(category.getName()));
         cateRepository.save(category);
     }
 
     @Override
     public Long deleteById(Long id) {
-        try {
-            cateRepository.deleteById(id);
-            return id;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
+
+        // có thể try catch và return null nếu không thể xóa
+//        try {
+//            cateRepository.deleteById(id);
+//            return id;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+        //otherwise :  Có thể bắt runtime exception và trả về 1 page lỗi ngay trong service
+
+        cateRepository.deleteById(id);
+        return id;
+
 
     }
 
@@ -95,11 +105,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryByName(String name) {
-        Category category = cateRepository.findByName(name);
-        if (category == null) {
-            log.warn(">>> Not found category with name " + name);
-        }
-        return category;
+
+        return  cateRepository.findByName(name);
+
     }
 
     @Override

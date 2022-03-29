@@ -18,16 +18,12 @@ public class HomeController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-//    @ModelAttribute
-//    public void commonAtr(Model model, HttpSession ses) {
-//        model.addAttribute("categories", this.categoryService.getCategories());
-////        model.addAttribute("currentUser", ses.getAttribute("currentUser"));
-//    }
+
 
     @GetMapping("")
     public String index(Model model) {
 
-        List<Product> listProduct = productService.findAll();
+        List<Product> listProduct = productService.getProducts();
         model.addAttribute("products", listProduct);
         return "home";
     }
@@ -46,8 +42,8 @@ public class HomeController {
 
     @GetMapping("/danhmuc/{categoryId}")
     public String getProductsByCategory(Model model, @PathVariable("categoryId") Long categoryId) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
-        model.addAttribute("products", products);
+//        List<Product> products = productService.getProductsByCategory(categoryId);
+//        model.addAttribute("products", products);
         return "home";
     }
 

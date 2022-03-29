@@ -11,10 +11,15 @@
     table-layout: fixed;
 }
 
-#errorpage {
-background-color: #0c84ff;
+#page500 {
+
     background-image: url("../../img/500img.jpg");
     background-size: cover;
 
+}
+#page400{
+
+    background-image: url("../../img/404img.png");
+    background-size: cover;
 }
 

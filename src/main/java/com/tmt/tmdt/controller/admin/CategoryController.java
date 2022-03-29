@@ -3,10 +3,7 @@ package com.tmt.tmdt.controller.admin;
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.service.CategoryService;
-import groovyjarjarpicocli.CommandLine;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+//handle delete:
+//handle Bindding error
+//handle get Exceotion in service layer:
+///-return a 404 page when edit(because edit is a page with specific url path )
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("admin/category")
@@ -50,7 +51,7 @@ public class CategoryController {
         Sort sort = (sortDirection == null || sortDirection.equals("asc")) ? Sort.by(Sort.Direction.ASC, sortField)
                 : Sort.by(Sort.Direction.DESC, sortField);
         int page = pageParam == null ? 0 : Integer.parseInt(pageParam) - 1;
-        int limit = limitParam == null ? 3 : Integer.parseInt(limitParam);
+        int limit = limitParam == null ? 5 : Integer.parseInt(limitParam);
 
         Pageable pageable = PageRequest.of(page, limit, sort);
         Page categoryPage = null;
@@ -71,7 +72,7 @@ public class CategoryController {
     //rest api save => add(post), edit(put)
     public String save(@Valid @ModelAttribute("category") Category category, BindingResult result) {
         if (categoryService.existByName(category.getName())) {
-//            result.rejectValue("name", "category.nameExist", "Loi xay ra");
+
             result.rejectValue("name", "nameIsExist");
 
         }
@@ -87,23 +88,20 @@ public class CategoryController {
     }
 
     @PostMapping("delete/{id}")
+    //call with ajax
     public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
 
-        if (categoryService.deleteById(id) != null) {
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-
-
+        //Neu xay ra loi thi tra ve trang loi trong service
+        categoryService.deleteById(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
+
 
     @PostMapping("delete")
     public ResponseEntity<Long[]> deleteCategories(@RequestBody Long[] ids) {
-        System.out.println(ids.length);
-        if (categoryService.deleteCategories(ids) != null) {
-            return new ResponseEntity<>(ids, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        //Neu xay ra loi thi tra ve trang loi trong service
+        categoryService.deleteCategories(ids);
+        return new ResponseEntity<>(ids, HttpStatus.OK);
 
 
     }
@@ -115,16 +113,15 @@ public class CategoryController {
 
         Category category = null;
         try {
+            //Catch casting exception
             Long id = Long.parseLong(idx);
             category = categoryService.getCategory(id);
         } catch (Exception e) {
             e.printStackTrace();
             category = categoryService.getCategoryByName(idx);
         }
-        if (category == null) {
-            model.addAttribute("message", "Category not found");
-            return "admin/category/error";
-        }
+        //other exception will be handled in service
+
         model.addAttribute("category", category);
         return "admin/category/edit";
 

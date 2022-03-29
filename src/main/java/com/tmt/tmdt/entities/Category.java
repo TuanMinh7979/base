@@ -22,7 +22,7 @@ public class Category extends BaseEntity {
 
     //without JsonIngnore->  not query but want render
     @JsonIgnore
-    @OneToMany(mappedBy = "category",cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "category")
     private Set<Product> products;
 
     private String code;

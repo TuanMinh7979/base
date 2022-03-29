@@ -14,9 +14,11 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByName(String name);
 
+    //source for auto complete
     @Query("select name from Category where name like %:name% ")
     List<String> getCategoryNamesByKw(@Param("name") String name);
 
+    //find by name for autocomplete
     Category findByName(String name);
 
     @Query(value = "SELECT * FROM categories WHERE name like %?1%",
@@ -24,6 +26,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             nativeQuery = true)
 
     Page<Category> getCategoriesByNameLike( String name, Pageable pageable);
+
 
 
 }

@@ -1,10 +1,11 @@
 var GlobalTotalPage = 1;//flag variable
 var currentPage = 1;
 var activeKeyword = "";
+var category = "";
 
-function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm) {
+function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm, category) {
 
-    let url = "/admin/category/viewApi";
+    let url = "/admin/product/viewApi";
     if (page == null) {
         url += `?page=1`;
     } else {
@@ -22,11 +23,16 @@ function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm) {
     if (searchNameTerm != null) {
         url += `&searchNameTerm=${searchNameTerm}`;
     }
+    if (category != null) {
+        url +=`&category=${category}`;
+    }
 
+    console.log(url);
     $.ajax({
         type: "get",
         url: url,
         success: function (data) {
+            console.log(data.data)
             renderData(data);
         },
         error: function () {
@@ -55,27 +61,31 @@ function HdleFilterBtn() {
     let sortDirection = document.getElementById("direction-sel").value;
     let limit = document.getElementById("limit-inp").value;
 
-    callViewApi(currentPage, limit, sortBy, sortDirection, activeKeyword);
+    callViewApi(currentPage, limit, sortBy, sortDirection, activeKeyword, category);
 
 
 }
 
 function renderData(data) {
     let rs = "";
-    data.data.map(function (catei) {
-            rs += "<tr>"
-            rs += `<td class="col-1"><input type="checkbox" value="${catei.id}"></td>`
-            rs += `<td class="col-4" >${catei.name}</td>`
-            rs += `<td class = "col-4" >${catei.code} </td>`
-            rs += '<td class="col-3">'
-            rs += `<a class="btn btn-default"  href="/admin/category/edit/${catei.id}">Edit</a>`
-            rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/category/delete/${catei.id}">Delete</a>`
-            rs += "</td>"
-            rs += "</tr>"
+    data.data.map(function(producti) {
+        rs += '<tr>'
+        rs += `<td class="col-1"><input type="checkbox" value="${producti.id}"></td>`
+
+        rs += `<td class="col-3" >${producti.name}</td>`
+        rs += `<td class = "col-1" >${producti.price} </td>`
+        rs += `<td class = "col-1" >${producti.image} </td>`
+        rs += `<td class="col-3"> ${producti.code}</td>`
+        rs += `<td class="col-1"> ${producti.category.name}</td>`
+
+        rs += '<td class="col-1">'
+        rs += `<a class="btn btn-default"  href="/admin/product/edit/${producti.id}">Edit</a>`
+        rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/producat/delete/${producti.id}">Delete</a>`
+        rs += "</td>"
+        rs += "</tr>"
 
 
-        }
-    )
+    });
     $("#tabledata").html(rs);
     let newTotalPage = data.totalPage;
     if (newTotalPage != GlobalTotalPage) {
@@ -94,13 +104,12 @@ function renderData(data) {
                     let limit = document.getElementById("limit-inp").value;
 
 
-                    callViewApi(page, limit, sortBy, sortDirection, activeKeyword);
+                    callViewApi(page, limit, sortBy, sortDirection, activeKeyword, category);
 
                 }
             }
         );
     }
-
 
 
 }
@@ -128,19 +137,23 @@ $(function () {
 
     })
 
+    $("#category-sel").on("change", function () {
+        category = $(this).val();
 
+
+    })
 
     $("#main-search-inp").autocomplete({
-        source: "/ajax/autocomplete-search/category",
+        source: "/ajax/autocomplete-search/product",
 
         //can not fail
         select: function (event, ui) {
-            window.location.href = "/admin/category/edit/" + ui.item.value;
+            window.location.href = "/admin/product/edit/" + ui.item.value;
 
         }
     })
     $("#main-search-btn").on("click", function () {
-        callViewApi(currentPage, null, null, null, activeKeyword);
+        callViewApi(currentPage, null, null, null, activeKeyword, category);
 
     })
 })

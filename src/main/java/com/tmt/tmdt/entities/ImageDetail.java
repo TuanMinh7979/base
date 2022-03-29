@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "imagedetail")
+@Table(name = "imagedetails")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
