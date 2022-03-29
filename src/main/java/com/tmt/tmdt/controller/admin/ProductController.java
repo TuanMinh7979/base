@@ -10,6 +10,7 @@ import com.tmt.tmdt.service.CategoryService;
 import com.tmt.tmdt.service.ImageDetailService;
 import com.tmt.tmdt.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
 public class ProductController {
@@ -124,8 +125,8 @@ public class ProductController {
                 }
 
             } catch (IOException ex) {
-                //custom message for IOException
-                throw new RuntimeException("Can not upload your image to server");
+                model.addAttribute("message", "Can not upload image to server");
+                return "admin/product/add";
             }
 
             return "redirect:/admin/product";
@@ -155,7 +156,7 @@ public class ProductController {
         }
         //other exception will be handled in service
 
-        model.addAttribute("product",product );
+        model.addAttribute("product", product);
         return "admin/product/edit";
 
     }
