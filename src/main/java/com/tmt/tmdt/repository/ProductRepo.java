@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepo extends JpaRepository<Product, Long> {
 
     @Query("select name from Product where name like %:kw% ")
     List<String> getNamesByKw(@Param("kw") String kw);

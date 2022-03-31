@@ -55,7 +55,7 @@ public class ProductController {
 
     }
 
-    @GetMapping("viewApi")
+    @GetMapping("api/viewApi")
     @ResponseBody
     public ViewApi<List<Product>> getCategories(Model model,
                                                 @RequestParam(name = "page", required = false) String pageParam,
@@ -161,13 +161,21 @@ public class ProductController {
 
     }
 
-    @PostMapping("delete/{id}")
+    @PostMapping("api/delete/{id}")
     //call with ajax
     public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
 
         productService.deleteById(id);
 
         return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @PostMapping("api/delete")
+    public ResponseEntity<Long[]> deleteProduct(@RequestBody Long[] ids) {
+        //Neu xay ra loi thi tra ve 1 response bad request trnog GlobalExceptionHandler
+        productService.deleteProducts(ids);
+        return new ResponseEntity<>(ids, HttpStatus.OK);
+
     }
 
 

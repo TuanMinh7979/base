@@ -36,4 +36,5 @@ public interface ProductService {
 
     Long deleteById(Long id);
 
+    void deleteProducts(Long[] ids);
 }

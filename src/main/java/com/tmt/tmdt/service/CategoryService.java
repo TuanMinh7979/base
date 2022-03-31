@@ -1,12 +1,8 @@
 package com.tmt.tmdt.service;
 
 import com.tmt.tmdt.entities.Category;
-import com.tmt.tmdt.repository.CategoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,7 +10,7 @@ import java.util.List;
 public interface CategoryService {
 
 
-    Category getCategory(Long id);
+    Category getCategory(Integer id);
 
     List<Category> getCategories();
 
@@ -23,9 +19,9 @@ public interface CategoryService {
 
     void save(Category category);
 
-    Long deleteById(Long id);
+    Integer deleteById(Integer id);
 
-    Long[] deleteCategories(Long[] ids);
+    Integer[] deleteCategories(Integer[] ids);
 
     boolean existByName(String name);
 
@@ -35,6 +31,6 @@ public interface CategoryService {
 
     Page<Category> getCategoriesByNameLike(String name, Pageable pageable);
 
-    Category addProductToCategory(Long cateId, Long productId);
-    Category removeProductFromCategory(Long cateId, Long productId);
+    Category addProductToCategory(Integer cateId, Long productId);
+    Category removeProductFromCategory(Integer cateId, Long productId);
 }

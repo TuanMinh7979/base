@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/admin_layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Role</title>
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Edit Role</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/admin/role/}">Role index</a></li>
+
+                    </ol>
+                </div><!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+                <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <div class="container-fluid">
+        <form th:action="@{/admin/role/update}" method="post" th:object="${role}">
+            <div class="col-12">
+                <div class="form-group col-3">
+                    <label>Id</label>
+                    <input class="form-control" type="text" id="id-inp" th:field="*{id}" readonly="true">
+                    <span th:if="${#fields.hasErrors('id')}" class="form-control alert alert-warning"
+                          th:errors="*{id}"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label>Role Name</label>
+                    <input class="form-control" type="text" th:field="*{name}">
+                    <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
+                          th:errors="*{name}"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label>Description</label>
+                    <textarea class="form-control" type="text" th:field="*{description}"></textarea>
+                    <span th:if="${#fields.hasErrors('description')}" class="form-control alert alert-warning"
+                          th:errors="*{description}"></span>
+                </div>
+            </div>
+            <div class="col-12"><h5> Choose permissions </h5></div>
+
+            <div id="permission-div" class="col-12 row flex-column">
+                <div class="col-12"><input id="all-chbx" value="0" type="checkbox"> <span>All</span>
+                </div>
+
+                <div th:each="permissioni : ${permissionList}" class="card col-6 ">
+                    <div class="card-header ">
+                        <input class="parent_permission_chbx" th:value="${permissioni.id}"
+                               type="checkbox" value="">
+                        <span th:text="${permissioni.name}"></span>
+                    </div>
+                    <div class="card-body row justify-content-around">
+                        <div th:each="permissionSubi : ${permissioni.subPermissions}" class="col-3">
+                            <input
+                                    class="child_permission_chbx"
+                                    th:value="${permissionSubi.id}" name="permissions" type="checkbox">
+                            <span th:text="${permissionSubi.name}">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <input type="submit" class="btn btn-success" id="submit-btn" value="Edit">
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<th:block layout:fragment="addscript">
+
+    <script th:src="@{/resource/js/admin/role/edit.js}"></script>
+
+</th:block>
+
+</body>
+</html>

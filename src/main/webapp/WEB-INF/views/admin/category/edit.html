@@ -27,7 +27,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <form th:action="@{/admin/category/save}" th:object="${category}" method="post">
+                <form th:action="@{/admin/category/update}" th:object="${category}" method="post">
                     <div class="form-group">
                         <label>Id</label>
                         <input class="form-control" type="text" th:field="*{id}" readonly="true" >

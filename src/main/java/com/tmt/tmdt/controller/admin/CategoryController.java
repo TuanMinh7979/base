@@ -2,6 +2,7 @@ package com.tmt.tmdt.controller.admin;
 
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
+import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 //handle delete:
 //handle Bindding error
@@ -30,14 +32,20 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+//    @GetMapping("/api/all")
+//    @ResponseBody
+//    public List<Category> data() {
+//        return categoryService.getCategories();
+//    }
 
     @GetMapping("")
     public String index() {
 
+
         return "admin/category/index";
     }
 
-    @GetMapping("viewApi")
+    @GetMapping("api/viewApi")
     @ResponseBody
     public ViewApi<List<Category>> getCategories(Model model,
                                                  @RequestParam(name = "page", required = false) String pageParam,
@@ -87,13 +95,23 @@ public class CategoryController {
 
     }
 
-    @PostMapping("delete/{id}")
+    @PostMapping("update")
+    //rest api save => add(post), edit(put)
+    public String update(@Valid @ModelAttribute("category") Category category, BindingResult result) {
+
+        if (!result.hasErrors()) {
+            categoryService.save(category);
+            return "redirect:/admin/category";
+        }
+        return "admin/category/edit";
+    }
+
+    @PostMapping("api/delete/{id}")
     //call with ajax
-    public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Integer> deleteCategory(@PathVariable Integer id) {
 
-        //Xay ra loi sql o tang sql chua the handle tam thoi return null
 
-        Long deletedId = categoryService.deleteById(id);
+        Integer deletedId = categoryService.deleteById(id);
         return new ResponseEntity<>(deletedId, HttpStatus.OK);
         //handle a error or runtimeException by return a bad request in Global Exception handleling
 
@@ -101,8 +119,8 @@ public class CategoryController {
     }
 
 
-    @PostMapping("delete")
-    public ResponseEntity<Long[]> deleteCategories(@RequestBody Long[] ids) {
+    @PostMapping("api/delete")
+    public ResponseEntity<Integer[]> deleteCategories(@RequestBody Integer[] ids) {
         //Neu xay ra loi thi tra ve 1 response bad request trnog GlobalExceptionHandler
         categoryService.deleteCategories(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);
@@ -118,7 +136,7 @@ public class CategoryController {
         Category category = null;
         try {
             //Catch casting exception
-            Long id = Long.parseLong(idx);
+            Integer id = Integer.parseInt(idx);
             category = categoryService.getCategory(id);
         } catch (Exception e) {
             e.printStackTrace();

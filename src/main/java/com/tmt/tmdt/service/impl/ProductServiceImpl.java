@@ -2,8 +2,7 @@ package com.tmt.tmdt.service.impl;
 
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
-import com.tmt.tmdt.repository.ProductRepository;
-import com.tmt.tmdt.service.CategoryService;
+import com.tmt.tmdt.repository.ProductRepo;
 import com.tmt.tmdt.service.ProductService;
 import com.tmt.tmdt.util.TextUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableTransactionManagement
 public class ProductServiceImpl implements ProductService {
-    private final ProductRepository productRepo;
+    private final ProductRepo productRepo;
 
     @Override
     public Product getProduct(Long id) {
@@ -82,6 +79,13 @@ public class ProductServiceImpl implements ProductService {
         //return null to sign that error happened
         productRepo.deleteById(id);
         return id;
+    }
+
+    @Override
+    public void deleteProducts(Long[] ids) {
+        for (Long id : ids) {
+            productRepo.deleteById(id);
+        }
     }
 
     @Override

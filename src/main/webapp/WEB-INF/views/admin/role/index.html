@@ -3,7 +3,7 @@
       layout:decorate="~{layout/admin/admin_layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Category Manage</title>
+    <title>Role Manage</title>
     <th:block layout:fragment="addcss">
 
         <link rel="stylesheet"
@@ -22,7 +22,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Category</h1>
+                    <h1 class="m-0">Role</h1>
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
@@ -64,7 +64,7 @@
                     <button id="btn-filter" class="btn btn-success">FILTER</button>
                 </div>
                 <div class="col-2">
-                    <a th:href="@{/admin/category}"
+                    <a th:href="@{/admin/role}"
                        type="reset" class="btn btn-default">
                         RESET
                     </a>
@@ -73,7 +73,7 @@
 
             </div>
 
-            <div class="col-4"><a th:href="@{/admin/category/add}" class="btn btn-info float-right ">Add</a></div>
+            <div class="col-4"><a th:href="@{/admin/role/add}" class="btn btn-info float-right ">Add</a></div>
 
 
             <div class="col-12">
@@ -82,7 +82,7 @@
                     <tr>
                         <th></th>
                         <th class="col-4">Name</th>
-                        <th class="col-4">Code</th>
+                        <th class="col-4">Description</th>
                         <th class="col-3">Action</th>
 
                     </tr>
@@ -93,7 +93,7 @@
 
                 </table>
             </div>
-            <div class="col-12"><a th:href="@{/admin/category/api/delete}" id="tag_delete_many"
+            <div class="col-12"><a th:href="@{/admin/role/api/delete}" id="tag_delete_many"
                                    class="btn btn-danger float-right ml-2 ">Delete Many</a></div>
 
 
@@ -104,7 +104,7 @@
 
 
 <th:block layout:fragment="addscript">
-    <script th:src="@{/resource/js/admin/category/index.js}"></script>
+    <script th:src="@{/resource/js/admin/role/index.js}"></script>
 </th:block>
 </body>
 </html>

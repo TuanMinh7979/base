@@ -32,6 +32,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrResponse(new ErrResponse.Meta(e.getMessage())), HttpStatus.BAD_REQUEST);
     }
 
+//    @ExceptionHandler({RuntimeException.class})
+//    public ResponseEntity<String> handleUncheckedException(Exception e, Model model) {
+//        return new ResponseEntity<>("error message !!!", HttpStatus.BAD_REQUEST);
+//    }
+
 
 
 }

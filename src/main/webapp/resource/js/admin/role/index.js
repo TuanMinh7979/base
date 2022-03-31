@@ -2,9 +2,10 @@ var GlobalTotalPage = 1;//flag variable
 var currentPage = 1;
 var activeKeyword = "";
 
+
 function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm) {
 
-    let url = "/admin/category/api/viewApi";
+    let url = "/admin/role/api/viewApi";
     if (page == null) {
         url += `?page=1`;
     } else {
@@ -23,10 +24,13 @@ function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm) {
         url += `&searchNameTerm=${searchNameTerm}`;
     }
 
+
+    console.log(url);
     $.ajax({
         type: "get",
         url: url,
         success: function (data) {
+            console.log(data.data)
             renderData(data);
         },
         error: function () {
@@ -56,26 +60,24 @@ function HdleFilterBtn() {
     let limit = document.getElementById("limit-inp").value;
 
     callViewApi(currentPage, limit, sortBy, sortDirection, activeKeyword);
-
-
 }
 
 function renderData(data) {
     let rs = "";
-    data.data.map(function (catei) {
+    data.data.map(function (rolei) {
             rs += "<tr>"
-            rs += `<td class="col-1"><input type="checkbox" value="${catei.id}"></td>`
-            rs += `<td class="col-4" >${catei.name}</td>`
-            rs += `<td class = "col-4" >${catei.code} </td>`
+            rs += `<td class="col-1"><input type="checkbox" value="${rolei.id}"></td>`
+            rs += `<td class="col-4" >${rolei.name}</td>`
+            rs += `<td class = "col-4" >${rolei.description} </td>`
             rs += '<td class="col-3">'
-            rs += `<a class="btn btn-default"  href="/admin/category/edit/${catei.id}">Edit</a>`
-            rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/category/api/delete/${catei.id}">Delete</a>`
+            rs += `<a class="btn btn-default"  href="/admin/role/edit/${rolei.id}">Edit</a>`
+            rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/role/api/delete/${rolei.id}">Delete</a>`
             rs += "</td>"
             rs += "</tr>"
 
 
         }
-    )
+    );
     $("#tabledata").html(rs);
     let newTotalPage = data.totalPage;
     if (newTotalPage != GlobalTotalPage) {
@@ -100,7 +102,6 @@ function renderData(data) {
             }
         );
     }
-
 
 
 }
@@ -129,13 +130,12 @@ $(function () {
     })
 
 
-
     $("#main-search-inp").autocomplete({
-        source: "/ajax/autocomplete-search/category",
+        source: "/ajax/autocomplete-search/product",
 
         //can not fail
         select: function (event, ui) {
-            window.location.href = "/admin/category/edit/" + ui.item.value;
+            window.location.href = "/admin/product/edit/" + ui.item.value;
 
         }
     })

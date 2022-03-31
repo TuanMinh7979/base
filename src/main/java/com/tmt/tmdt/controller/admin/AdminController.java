@@ -20,6 +20,7 @@ public class AdminController {
     @ModelAttribute
     public void commonAtr(Model model) {
         model.addAttribute("categories", this.categoryService.getCategories());
+
     }
 
     @GetMapping("")

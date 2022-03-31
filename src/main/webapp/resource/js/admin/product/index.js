@@ -5,7 +5,7 @@ var category = "";
 
 function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm, category) {
 
-    let url = "/admin/product/viewApi";
+    let url = "/admin/product/api/viewApi";
     if (page == null) {
         url += `?page=1`;
     } else {
@@ -80,7 +80,7 @@ function renderData(data) {
 
         rs += '<td class="col-1">'
         rs += `<a class="btn btn-default"  href="/admin/product/edit/${producti.id}">Edit</a>`
-        rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/producat/delete/${producti.id}">Delete</a>`
+        rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/product/api/delete/${producti.id}">Delete</a>`
         rs += "</td>"
         rs += "</tr>"
 

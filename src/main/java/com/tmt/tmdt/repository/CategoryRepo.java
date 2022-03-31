@@ -9,9 +9,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface CategoryRepo extends JpaRepository<Category, Integer> {
     boolean existsByName(String name);
 
     //source for auto complete
@@ -26,7 +27,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             nativeQuery = true)
 
     Page<Category> getCategoriesByNameLike( String name, Pageable pageable);
-
 
 
 }

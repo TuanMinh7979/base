@@ -20,11 +20,11 @@ function deleteOnTable(event) {
                 type: "post",
                 url: url,
                 success: function (data) {
-                    console.log("------------------------------"+data);
-
                     that.closest("tr").remove();
                 },
-                error: function () {
+                error: function (data) {
+
+                    // console.log(data.responseJSON);
                     Swal.fire({
                         icon: 'error',
                         title: 'Can not delete',
