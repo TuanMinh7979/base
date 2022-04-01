@@ -36,7 +36,7 @@ public class Permission extends BaseEntity implements Serializable {
     @JoinColumn(name = "parent_id")
     private Permission parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", orphanRemoval = true,  fetch = FetchType.EAGER)
     private Set<Permission> subPermissions = new HashSet<>();
 
 }

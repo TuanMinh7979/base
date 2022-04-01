@@ -27,10 +27,11 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<ErrResponse> handleUncheckedException(Exception e, Model model) {
-        return new ResponseEntity<>(new ErrResponse(new ErrResponse.Meta(e.getMessage())), HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler({RuntimeException.class})
+//    public ResponseEntity<ErrResponse> handleUncheckedException(Exception e, Model model) {
+//        System.out.println("(((((((((((((((VAO DAY");
+//        return new ResponseEntity<>(new ErrResponse(new ErrResponse.Meta(e.getMessage())), HttpStatus.BAD_REQUEST);
+//    }
 
 //    @ExceptionHandler({RuntimeException.class})
 //    public ResponseEntity<String> handleUncheckedException(Exception e, Model model) {

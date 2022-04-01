@@ -1,13 +1,9 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
-import com.tmt.tmdt.entities.ImageDetail;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
-import com.tmt.tmdt.service.ImageDetailService;
 import com.tmt.tmdt.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,22 +17,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
 public class ProductController {
-    private final Cloudinary cloudinary;
+
     private final CategoryService categoryService;
     private final ProductService productService;
-    private final ImageDetailService imageDetailService;
+
 
     @GetMapping("")
     public String index(Model model) {
@@ -84,7 +78,7 @@ public class ProductController {
                 productPage = productService.getProductsByCategory(categoryId, pageable);
             }
 
-            //otherwise do nothing
+
         } else if (searchNameTerm != null && !searchNameTerm.isEmpty()) {
 
             productPage = productService.getProductsByName(searchNameTerm, pageable);
@@ -100,7 +94,6 @@ public class ProductController {
 
 
     @PostMapping("save")
-
     public String save(Model model, @Valid @ModelAttribute("product") Product product, BindingResult result) {
         //Phai dat block nay o tren vi blog se phat sinh loi xuat hien o block duoi
         if (productService.existByName(product.getName())) {
@@ -109,32 +102,16 @@ public class ProductController {
         }
 
         if (!result.hasErrors()) {
-            Product productSaved = null;
-            //nen su dung DTO
             try {
-                if (!product.getFile().isEmpty()) {
-                    Map rs = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                    product.setImage((String) rs.get("url"));
-                }
-                productSaved = productService.save(product);
-                for (MultipartFile filei : product.getFiles()) {
-                    if (!filei.isEmpty()) {
-                        Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                        imageDetailService.save(new ImageDetail((String) rsi.get("url"), productSaved));
-                    }
-                }
-
-            } catch (IOException ex) {
-                model.addAttribute("message", "Can not upload image to server");
+                productService.save(product);
+            } catch (IOException e) {
+                model.addAttribute("message", "Can not read your file, try again please!");
+                //ioe
                 return "admin/product/add";
             }
-
+            //success
             return "redirect:/admin/product";
-
-
         }
-
-        //redirect thi tao mot request moi va se khong ton tai error
         //handle loi bindding
         return "admin/product/add";
 
@@ -164,15 +141,13 @@ public class ProductController {
     @PostMapping("api/delete/{id}")
     //call with ajax
     public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
-
         productService.deleteById(id);
-
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @PostMapping("api/delete")
     public ResponseEntity<Long[]> deleteProduct(@RequestBody Long[] ids) {
-        //Neu xay ra loi thi tra ve 1 response bad request trnog GlobalExceptionHandler
+
         productService.deleteProducts(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);
 

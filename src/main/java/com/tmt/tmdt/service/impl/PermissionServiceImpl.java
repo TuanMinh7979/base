@@ -26,9 +26,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Permission getPermission(Integer id) {
-        return permissionRepo.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Permission with is " + id + " not found")
-        );
+        return permissionRepo.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Permission with is " + id + " not found")
+                );
     }
 
     @Override

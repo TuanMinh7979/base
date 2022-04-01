@@ -18,12 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
-//handle delete:
-//handle Bindding error
-//handle get Exceotion in service layer:
-///-return a 404 page when edit(because edit is a page with specific url path )
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("admin/category")
@@ -32,28 +27,28 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/api/all")
-    @ResponseBody
-    public List<Category> testapi() {
-        System.out.println("==========================");
-        categoryService.getCategories().get(0).getProducts().forEach((p) -> {
-            System.out.println("*************************"+p.getName());
-            //with EAGER can get with get method but can not render json because open-session-in-view-layer= false
-            //bug:,"products":[{"createAt":"2022-03-29T15:26:12.056281","updateAt":"2022-03-29T15:26:12.057278","id":8,"name":"ip13","price":30.00,"image":null
-            // ,"description":null,"images"}]}]{"meta":{"message":"Could not write JSON: failed to lazily initialize a collection of role:
-            // com.tmt.tmdt.entities.Product.images, could not initialize proxy - no Session; nested
-            // exception is com.fasterxml.jackson.databind.JsonMappingException: failed to lazily initialize a collection of role:
-            // com.tmt.tmdt.entities.Product.images, could not initialize proxy -
-            // no Session (through reference chain: java.util.ArrayList[0]->com.tmt.tmdt.entities.Category[\"products\"]->
-            // org.hibernate.collection.internal.PersistentSet[0]->com.tmt.tmdt.entities.Product[\"images\"])"}}
-
-            //LAZY CANNOT call getMethod even in java code
-            //bug {"meta":{"message":"failed to lazily initialize a collection of role could not initialize proxy - no Session"}}
-        });
-        System.out.println("************************* " + categoryService.getCategory(86).getProducts().size());
-
-        return categoryService.getCategories();
-    }
+//    @GetMapping("/api/all")
+//    @ResponseBody
+//    public List<Category> testapi() {
+//        System.out.println("==========================");
+//        categoryService.getCategories().get(0).getProducts().forEach((p) -> {
+//            System.out.println("*************************"+p.getName());
+//            //with EAGER can get with get method but can not render json because open-session-in-view-layer= false
+//            //bug:,"products":[{"createAt":"2022-03-29T15:26:12.056281","updateAt":"2022-03-29T15:26:12.057278","id":8,"name":"ip13","price":30.00,"image":null
+//            // ,"description":null,"images"}]}]{"meta":{"message":"Could not write JSON: failed to lazily initialize a collection of role:
+//            // com.tmt.tmdt.entities.Product.images, could not initialize proxy - no Session; nested
+//            // exception is com.fasterxml.jackson.databind.JsonMappingException: failed to lazily initialize a collection of role:
+//            // com.tmt.tmdt.entities.Product.images, could not initialize proxy -
+//            // no Session (through reference chain: java.util.ArrayList[0]->com.tmt.tmdt.entities.Category[\"products\"]->
+//            // org.hibernate.collection.internal.PersistentSet[0]->com.tmt.tmdt.entities.Product[\"images\"])"}}
+//
+//            //LAZY CANNOT call getMethod even in java code
+//            //bug {"meta":{"message":"failed to lazily initialize a collection of role could not initialize proxy - no Session"}}
+//        });
+//        System.out.println("************************* " + categoryService.getCategory(86).getProducts().size());
+//
+//        return categoryService.getCategories();
+//    }
 
     @GetMapping("")
     public String index() {
@@ -97,25 +92,18 @@ public class CategoryController {
     //rest api save => add(post), edit(put)
     public String save(@Valid @ModelAttribute("category") Category category, BindingResult result) {
         if (categoryService.existByName(category.getName())) {
-
             result.rejectValue("name", "nameIsExist");
-
         }
         if (!result.hasErrors()) {
-
             categoryService.save(category);
             return "redirect:/admin/category";
         }
-
         return "admin/category/add";
-
-
     }
 
     @PostMapping("update")
     //rest api save => add(post), edit(put)
     public String update(@Valid @ModelAttribute("category") Category category, BindingResult result) {
-
         if (!result.hasErrors()) {
             categoryService.save(category);
             return "redirect:/admin/category";
@@ -123,26 +111,21 @@ public class CategoryController {
         return "admin/category/edit";
     }
 
+
     @PostMapping("api/delete/{id}")
+    @ResponseBody
     //call with ajax
     public ResponseEntity<Integer> deleteCategory(@PathVariable Integer id) {
-
-
-        Integer deletedId = categoryService.deleteById(id);
-        return new ResponseEntity<>(deletedId, HttpStatus.OK);
-        //handle a error or runtimeException by return a bad request in Global Exception handleling
-
-
+        categoryService.deleteById(id);
+        //nếu xảy ra lỗi client sẽ nhận lõi 500
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
 
     @PostMapping("api/delete")
     public ResponseEntity<Integer[]> deleteCategories(@RequestBody Integer[] ids) {
-        //Neu xay ra loi thi tra ve 1 response bad request trnog GlobalExceptionHandler
         categoryService.deleteCategories(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);
-
-
     }
 
 

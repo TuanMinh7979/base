@@ -1,8 +1,12 @@
 package com.tmt.tmdt.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.tmt.tmdt.entities.ImageDetail;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
 import com.tmt.tmdt.repository.ProductRepo;
+import com.tmt.tmdt.service.ImageDetailService;
 import com.tmt.tmdt.service.ProductService;
 import com.tmt.tmdt.util.TextUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +15,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.List;
 
 @Slf4j
@@ -19,15 +32,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableTransactionManagement
 public class ProductServiceImpl implements ProductService {
+    private final ImageDetailService imageDetailService;
+    private final Cloudinary cloudinary;
     private final ProductRepo productRepo;
 
     @Override
     public Product getProduct(Long id) {
         return productRepo.findById(id)
-                .orElseThrow(() -> {
-                    log.warn(">>>Product with id" + id + " not found");
-                    return new ResourceNotFoundException("Product with id " + id + " not found");
-                });
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product with id " + id + " not found")
+                );
     }
 
     @Override
@@ -57,9 +71,28 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Product save(Product product) {
+    @Transactional
+    public Product save(Product product) throws IOException {
         product.setCode(TextUtil.generateCode(product.getName()));
-        return productRepo.save(product);
+
+        if (!product.getFile().isEmpty()) {
+            Map rs = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            product.setImage((String) rs.get("url"));
+        }
+        Product productSaved = productRepo.save(product);
+
+        List<ImageDetail> imageDetails = new ArrayList<>();
+        for (MultipartFile filei : product.getFiles()) {
+            if (!filei.isEmpty()) {
+                Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                ImageDetail imageDetail = new ImageDetail();
+                imageDetail.setLink((String) rsi.get("url"));
+                imageDetail.setProduct(productSaved);
+            }
+        }
+
+
+        return productSaved;
     }
 
     @Override
@@ -74,11 +107,11 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Long deleteById(Long id) {
+    public void deleteById(Long id) {
         //sql error
         //return null to sign that error happened
         productRepo.deleteById(id);
-        return id;
+
     }
 
     @Override
@@ -87,6 +120,7 @@ public class ProductServiceImpl implements ProductService {
             productRepo.deleteById(id);
         }
     }
+
 
     @Override
     public Page<Product> getProductsByName(String name, Pageable pageable) {
@@ -102,4 +136,22 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductByName(String name) {
         return productRepo.getProductByName(name);
     }
+
+    @Override
+    public Product addImageDetailToProduct(Long productId, Long imageDetailId) {
+        Product product = getProduct(productId);
+        ImageDetail imageDetail = imageDetailService.getImageDetail(imageDetailId);
+        product.getImages().add(imageDetail);
+        return product;
+    }
+
+    @Override
+    public Product removeImageDetailFromProduct(Long productId, Long imageDetailId) {
+        Product product = getProduct(productId);
+        ImageDetail imageDetail = imageDetailService.getImageDetail(imageDetailId);
+        product.getImages().remove(imageDetail);
+        return product;
+    }
+
+
 }

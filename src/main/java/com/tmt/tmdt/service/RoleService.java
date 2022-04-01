@@ -4,25 +4,30 @@ import com.tmt.tmdt.entities.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface RoleService {
     Role save(Role role);
 
     boolean existByName(String name);
 
-    Page getRolesByNameLike(String searchNameTerm, Pageable pageable);
+    Page<Role> getRolesByNameLike(String searchNameTerm, Pageable pageable);
 
-    Page getRoles(Pageable pageable);
+    Page<Role> getRoles(Pageable pageable);
 
 
-    Integer deleteById(Integer id);
+    void deleteById(Integer id);
 
-    Integer[] deleteRoles(Integer[] ids);
+    void deleteRoles(Integer[] ids);
 
     Role getRole(Integer id);
 
     Role getRoleByName(String name);
 
+    Role getRoleWithPermissions(Integer id);
+
+    Role getRoleByNameWithPermissions(String name);
 
 
-
+    List<String> getRoleNamesByKw(String kw);
 }

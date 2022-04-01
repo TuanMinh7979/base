@@ -25,7 +25,7 @@ function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm) {
     }
 
 
-    console.log(url);
+
     $.ajax({
         type: "get",
         url: url,
@@ -131,11 +131,11 @@ $(function () {
 
 
     $("#main-search-inp").autocomplete({
-        source: "/ajax/autocomplete-search/product",
+        source: "/ajax/autocomplete-search/role",
 
         //can not fail
         select: function (event, ui) {
-            window.location.href = "/admin/product/edit/" + ui.item.value;
+            window.location.href = "/admin/role/edit/" + ui.item.value;
 
         }
     })

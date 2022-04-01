@@ -3,5 +3,7 @@ package com.tmt.tmdt.service;
 import com.tmt.tmdt.entities.ImageDetail;
 
 public interface ImageDetailService {
-void save(ImageDetail imageDetail);
+ImageDetail save(ImageDetail imageDetail);
+
+ImageDetail getImageDetail(Long id);
 }

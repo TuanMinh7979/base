@@ -19,18 +19,20 @@ public interface CategoryService {
 
     void save(Category category);
 
-    Integer deleteById(Integer id);
+    void deleteById(Integer id);
 
-    Integer[] deleteCategories(Integer[] ids);
+    void deleteCategories(Integer[] ids);
 
     boolean existByName(String name);
 
     List<String> getCategoryNamesByKw(String kw);
+
     Category getCategoryByName(String name);
 
 
     Page<Category> getCategoriesByNameLike(String name, Pageable pageable);
 
     Category addProductToCategory(Integer cateId, Long productId);
+
     Category removeProductFromCategory(Integer cateId, Long productId);
 }

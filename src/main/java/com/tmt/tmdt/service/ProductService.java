@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -28,13 +29,18 @@ public interface ProductService {
 
     boolean existByName(String name);
 
-    Product save(Product product);
+    Product save(Product product) throws IOException;
 
     Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable);
 
     Page getProducts(Pageable pageable);
 
-    Long deleteById(Long id);
+    void deleteById(Long id);
 
     void deleteProducts(Long[] ids);
+
+    Product addImageDetailToProduct(Long productId, Long imageDetailId );
+    Product removeImageDetailFromProduct(Long productId, Long imageDetailId );
+
+
 }

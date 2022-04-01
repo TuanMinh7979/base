@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 
@@ -26,32 +29,33 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Page getRolesByNameLike(String searchNameTerm, Pageable pageable) {
+    public Page<Role> getRolesByNameLike(String searchNameTerm, Pageable pageable) {
         return roleRepo.getRolesByNameLike(searchNameTerm, pageable);
     }
 
     @Override
-    public Page getRoles(Pageable pageable) {
+    public Page<Role> getRoles(Pageable pageable) {
         return roleRepo.findAll(pageable);
     }
 
     @Override
-    public Integer deleteById(Integer id) {
+    public void deleteById(Integer id) {
         roleRepo.deleteById(id);
-        return id;
+
     }
 
 
-    public Integer[] deleteRoles(Integer[] ids) {
+    public void deleteRoles(Integer[] ids) {
         for (Integer id : ids) {
             roleRepo.deleteById(id);
         }
-        return ids;
+
     }
 
     @Override
     public Role getRole(Integer id) {
-        return roleRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Role with id "+id+" not found"));
+        return roleRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role with id " + id + " not found"));
     }
 
     @Override
@@ -59,7 +63,22 @@ public class RoleServiceImpl implements RoleService {
         return roleRepo.getRoleByName(name);
     }
 
+    @Override
+    public Role getRoleWithPermissions(Integer id) {
+        return Optional.ofNullable(roleRepo.getRoleWithPermissions(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Role with id " + id + " not found"));
+    }
 
+    @Override
+    public Role getRoleByNameWithPermissions(String name) {
+        return Optional.ofNullable(roleRepo.getRoleByNameWithPermissions(name))
+                .orElseThrow(() -> new ResourceNotFoundException("Role with name" + name + "not found"));
+    }
+
+    @Override
+    public List<String> getRoleNamesByKw(String kw) {
+        return roleRepo.getRoleNamesByKw(kw);
+    }
 
 
 }

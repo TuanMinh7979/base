@@ -34,10 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
         //ta cũng có thể custom để return 1 page ngay trong service
 
         return cateRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn(">>>Category with id" + id + " not found");
-                    return new ResourceNotFoundException("Category with id " + id + " not found");
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found")
+                );
 
 
     }
@@ -60,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Integer deleteById(Integer id) {
+    public void deleteById(Integer id) {
 
         // có thể try catch và return null nếu không thể xóa
 //        try {
@@ -74,20 +72,16 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         cateRepository.deleteById(id);
-        return id;
+
 
 
     }
 
     @Override
-    public Integer[] deleteCategories(Integer[] ids) {
-
-
+    public void deleteCategories(Integer[] ids) {
         for (Integer id : ids) {
             cateRepository.deleteById(id);
         }
-        return ids;
-
     }
 
     @Override
@@ -115,7 +109,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-
     public Category addProductToCategory(Integer cateId, Long productId) {
         Category cate = getCategory(cateId);
         Product product = productService.getProduct(productId);
@@ -124,8 +117,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-
-
+    @Transactional
     public Category removeProductFromCategory(Integer cateId, Long productId) {
         Category cate = getCategory(cateId);
         Product product = productService.getProduct(productId);

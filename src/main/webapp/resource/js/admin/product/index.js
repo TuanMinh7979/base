@@ -27,7 +27,7 @@ function callViewApi(page, limit, sortBy, sortDirection, searchNameTerm, categor
         url +=`&category=${category}`;
     }
 
-    console.log(url);
+
     $.ajax({
         type: "get",
         url: url,
@@ -124,9 +124,6 @@ $(function () {
 
 })
 
-//Use event delegation for dynamically created elements(bind event on ajax loaded content)
-
-//Use event delegation for dynamically created elements:
 
 
 //autocomplete

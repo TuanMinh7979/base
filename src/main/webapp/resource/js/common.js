@@ -24,6 +24,7 @@ function deleteOnTable(event) {
                 },
                 error: function (data) {
 
+
                     // console.log(data.responseJSON);
                     Swal.fire({
                         icon: 'error',
@@ -79,7 +80,8 @@ function deleteManyOnTable(event) {
 
 
                 },
-                error: function () {
+                error: function (data) {
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Can not delete',

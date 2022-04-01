@@ -1,5 +1,6 @@
 package com.tmt.tmdt.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,10 @@ public class ImageDetail {
     private Long id;
     private String link;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ImageDetail(String link, Product product) {
-        this.link = link;
-        this.product = product;
-    }
+
 }

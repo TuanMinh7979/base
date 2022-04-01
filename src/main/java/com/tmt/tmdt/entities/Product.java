@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,10 +29,11 @@ public class Product extends BaseEntity implements Serializable {
     private BigDecimal price;
     private String image;
     private String description;
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    private Set<ImageDetail> images;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ImageDetail> images= new HashSet<>();
+
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
