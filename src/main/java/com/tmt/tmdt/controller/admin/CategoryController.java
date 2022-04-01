@@ -32,11 +32,28 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-//    @GetMapping("/api/all")
-//    @ResponseBody
-//    public List<Category> data() {
-//        return categoryService.getCategories();
-//    }
+    @GetMapping("/api/all")
+    @ResponseBody
+    public List<Category> testapi() {
+        System.out.println("==========================");
+        categoryService.getCategories().get(0).getProducts().forEach((p) -> {
+            System.out.println("*************************"+p.getName());
+            //with EAGER can get with get method but can not render json because open-session-in-view-layer= false
+            //bug:,"products":[{"createAt":"2022-03-29T15:26:12.056281","updateAt":"2022-03-29T15:26:12.057278","id":8,"name":"ip13","price":30.00,"image":null
+            // ,"description":null,"images"}]}]{"meta":{"message":"Could not write JSON: failed to lazily initialize a collection of role:
+            // com.tmt.tmdt.entities.Product.images, could not initialize proxy - no Session; nested
+            // exception is com.fasterxml.jackson.databind.JsonMappingException: failed to lazily initialize a collection of role:
+            // com.tmt.tmdt.entities.Product.images, could not initialize proxy -
+            // no Session (through reference chain: java.util.ArrayList[0]->com.tmt.tmdt.entities.Category[\"products\"]->
+            // org.hibernate.collection.internal.PersistentSet[0]->com.tmt.tmdt.entities.Product[\"images\"])"}}
+
+            //LAZY CANNOT call getMethod even in java code
+            //bug {"meta":{"message":"failed to lazily initialize a collection of role could not initialize proxy - no Session"}}
+        });
+        System.out.println("************************* " + categoryService.getCategory(86).getProducts().size());
+
+        return categoryService.getCategories();
+    }
 
     @GetMapping("")
     public String index() {
