@@ -81,11 +81,14 @@ public class ProductServiceImpl implements ProductService {
         }
         Product productSaved = productRepo.save(product);
 
-        List<ImageDetail> imageDetails = new ArrayList<>();
+
         for (MultipartFile filei : product.getFiles()) {
             if (!filei.isEmpty()) {
                 Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+
+
                 ImageDetail imageDetail = new ImageDetail();
+                imageDetail.setPublicId((String) rsi.get("public_id"));
                 imageDetail.setLink((String) rsi.get("url"));
                 imageDetail.setProduct(productSaved);
             }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +26,8 @@ public class Role extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false, unique = true)
+
+    @NotBlank
     private String name;
     private String description;
 

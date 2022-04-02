@@ -52,8 +52,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void save(Category category) {
-        //uncheckend exception handler
+
         category.setCode(TextUtil.generateCode(category.getName()));
+        //code is unique also it not null if have no it -> ConstraintViolationException
+
+        //=> use checknameexist in controller to send to client and not blak in name
         cateRepository.save(category);
     }
 

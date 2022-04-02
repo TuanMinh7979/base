@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class Permission extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank
     private String name;
 
     private String description;

@@ -20,6 +20,7 @@ public class ImageDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String link;
+    private String publicId;
 
     @JsonIgnore
     @ManyToOne
