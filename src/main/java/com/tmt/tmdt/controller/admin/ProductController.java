@@ -2,6 +2,7 @@ package com.tmt.tmdt.controller.admin;
 
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
+import com.tmt.tmdt.entities.ImageDetail;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
 import com.tmt.tmdt.service.ProductService;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -117,6 +119,28 @@ public class ProductController {
 
     }
 
+    @PostMapping("update")
+    public String update(Model model, @Valid @ModelAttribute("product") Product product, BindingResult result) {
+        //Phai dat block nay o tren vi blog se phat sinh loi xuat hien o block duoi
+
+
+        if (!result.hasErrors()) {
+            try {
+                productService.save(product);
+            } catch (IOException e) {
+                model.addAttribute("message", "Can not read your file, try again please!");
+                //ioe
+
+                return "admin/product/edit";
+            }
+            //success
+            return "redirect:/admin/product";
+        }
+        //handle loi bindding
+        return "admin/product/edit";
+
+    }
+
 
     @GetMapping("edit/{idx}")
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
@@ -127,13 +151,13 @@ public class ProductController {
             //Catch casting exception
             Long id = Long.parseLong(idx);
             product = productService.getProduct(id);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             product = productService.getProductByName(idx);
         }
         //other exception will be handled in service
-
         model.addAttribute("product", product);
+        model.addAttribute("images",product.getImages());
         return "admin/product/edit";
 
     }

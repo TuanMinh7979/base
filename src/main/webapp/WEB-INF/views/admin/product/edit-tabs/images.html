@@ -1,0 +1,37 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="row" th:fragment="content" th:remove="tag">
+    <br/>
+    <div class="col-12">
+        <button id="addNewImageExtraBtn" class="btn btn-info">Add new extra image</button>
+    </div>
+    <br/>
+    <div id="imageWrapper" class="row col-12">
+        <div class="col-6">
+            <input type="file" name="image" class="file_inp"/>
+            <div class="image-preview">
+                <input type="checkbox" />
+                <i class="close-i fas fa-times"></i>
+                <img src="" alt="alt" class="image-preview__img"/>
+                <span class="image-preview__def-text">Image Preview1</span>
+
+
+            </div>
+        </div>
+        <div class="col-6">
+            <input type="file" name="image" class="file_inp"/>
+            <div class="image-preview">
+                <input type="checkbox" />
+                <i class="close-i fas fa-times"></i>
+                <img src="" alt="alt" class="image-preview__img"/>
+                <span class="image-preview__def-text">Image Preview1</span>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" th:remove="tag">
+    <!--    <form th:action="@{/admin/product/save}" th:object="${product}" method="post"-->
+    <!--          enctype="multipart/form-data">-->
+    <div class="form-group">
+        <label>Id</label>
+        <input class="form-control" type="text" th:field="*{id}" readonly="true">
+        <span th:if="${#fields.hasErrors('id')}" class="form-control alert alert-warning"
+              th:errors="*{id}"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Name</label>
+        <input class="form-control" type="text" th:field="*{name}">
+        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
+              th:errors="*{name}"></span>
+    </div>
+    <div class="form-group">
+        <label>Price</label>
+        <input class="form-control" type="text" th:field="*{price}">
+        <span th:if="${#fields.hasErrors('price')}" class="form-control alert alert-warning"
+              th:errors="*{name}"></span>
+    </div>
+    <div class="form-group">
+        <label>Main Image</label>
+
+        <input type="file" name="image" class="file_inp"/>
+        <div class="image-preview">
+            <img src="" alt="alt" class="image-preview__img"/>
+            <span class="image-preview__def-text">Image Previe</span>
+        </div>
+
+
+        <span th:if="${#fields.hasErrors('file')}" class="form-control alert alert-warning"
+              th:errors="*{file}"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <select th:field="*{category}" id="category-sel">
+            <th:block th:each="catei : ${categories}">
+                <option th:text="${catei.name}" th:value="${catei.id}"></option>
+            </th:block>
+
+        </select>
+    </div>
+    <!--        <div class="form-group">-->
+    <!--            <input type="submit" value="save">-->
+
+    <!--        </div>-->
+    <!--    </form>-->
+</div>
+</body>
+</html>

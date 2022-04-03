@@ -3,6 +3,7 @@ package com.tmt.tmdt.controller.admin;
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Product;
+import com.tmt.tmdt.exception.ResourceNotFoundException;
 import com.tmt.tmdt.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -104,6 +105,7 @@ public class CategoryController {
     @PostMapping("update")
     //rest api save => add(post), edit(put)
     public String update(@Valid @ModelAttribute("category") Category category, BindingResult result) {
+
         if (!result.hasErrors()) {
             categoryService.save(category);
             return "redirect:/admin/category";
@@ -132,18 +134,15 @@ public class CategoryController {
     @GetMapping("edit/{idx}")
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
     public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
-
         Category category = null;
         try {
             //Catch casting exception
             Integer id = Integer.parseInt(idx);
             category = categoryService.getCategory(id);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             category = categoryService.getCategoryByName(idx);
         }
-
-
         model.addAttribute("category", category);
         return "admin/category/edit";
 

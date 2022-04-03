@@ -137,7 +137,7 @@ public class RoleController {
             //Catch casting exception
             Integer id = Integer.parseInt(idx);
             role = roleService.getRoleWithPermissions(id);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             role = roleService.getRoleByNameWithPermissions(idx);
         }
