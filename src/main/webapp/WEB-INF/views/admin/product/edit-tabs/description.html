@@ -3,7 +3,7 @@
 <div th:fragment="content" th:remove="tag">
     <div>
         <label>Description</label>
-        <textarea th:field="*{description}" name="" id="description-text" cols="30" rows="10"></textarea>
+        <textarea th:field="*{description}"  id="description-text" cols="30" rows="10"></textarea>
     </div>
     <span th:if="${#fields.hasErrors('description')}" class="form-control alert alert-warning" -->
 

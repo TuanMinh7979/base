@@ -31,6 +31,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @EnableTransactionManagement
+@Transactional
 public class ProductServiceImpl implements ProductService {
     private final ImageDetailService imageDetailService;
     private final Cloudinary cloudinary;
@@ -72,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product save(Product product) throws IOException {
+    public Product save(Product product, MultipartFile[] files) throws IOException {
         product.setCode(TextUtil.generateCode(product.getName()));
 
         if (!product.getFile().isEmpty()) {
@@ -82,7 +83,8 @@ public class ProductServiceImpl implements ProductService {
         Product productSaved = productRepo.save(product);
 
 
-        for (MultipartFile filei : product.getFiles()) {
+        for (MultipartFile filei : files) {
+
             if (!filei.isEmpty()) {
                 Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
 
@@ -91,6 +93,7 @@ public class ProductServiceImpl implements ProductService {
                 imageDetail.setPublicId((String) rsi.get("public_id"));
                 imageDetail.setLink((String) rsi.get("url"));
                 imageDetail.setProduct(productSaved);
+                imageDetailService.save(imageDetail);
             }
         }
 
@@ -149,7 +152,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product removeImageDetailFromProduct(Long productId, Long imageDetailId) {
+    public Product removeImageDetailFromProduct(Long productId, Long imageDetailId) throws IOException {
+        imageDetailService.deleteFromCloud(imageDetailId);
         Product product = getProduct(productId);
         ImageDetail imageDetail = imageDetailService.getImageDetail(imageDetailId);
         product.getImages().remove(imageDetail);

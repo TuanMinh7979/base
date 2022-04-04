@@ -33,7 +33,7 @@ public class Product extends BaseEntity implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ImageDetail> images= new HashSet<>();
+    private Set<ImageDetail> images = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -46,6 +46,11 @@ public class Product extends BaseEntity implements Serializable {
 
     @Transient
     private MultipartFile[] files;
+
+    @Transient
+    public String defaultImage() {
+        return "/resource/img/default.png";
+    }
 
 
 }

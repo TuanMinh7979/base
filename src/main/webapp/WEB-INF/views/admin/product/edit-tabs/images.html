@@ -3,31 +3,61 @@
 <div class="row" th:fragment="content" th:remove="tag">
     <br/>
     <div class="col-12">
-        <button id="addNewImageExtraBtn" class="btn btn-info">Add new extra image</button>
+        <button id="addNewImageExtraBtn" class="btn btn-info ">Add new extra image</button>
+        <button id="removeImageExtraBtn" class="float-right btn btn-danger ">Delete</button>
+
+
     </div>
     <br/>
     <div id="imageWrapper" class="row col-12">
         <div class="col-6">
-            <input type="file" name="image" class="file_inp"/>
-            <div class="image-preview">
-                <input type="checkbox" />
-                <i class="close-i fas fa-times"></i>
-                <img src="" alt="alt" class="image-preview__img"/>
-                <span class="image-preview__def-text">Image Preview1</span>
+            <span>Main</span>
+            <div class="image-preview saved-image-preview">
 
+                <th:block th:if="${product.image!=null}">
+                    <img th:src="${product.image}" alt="alt" class="image-preview__img"/>
+                </th:block>
+
+                <th:block th:if="${product.image==null}">
+                    <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
+
+                </th:block>
 
             </div>
+            <input type="file" th:field="*{file}" class="file_inp"/>
         </div>
+        <th:block th:each="extraImagei : ${images}">
+            <div class="col-6">
+                <span>1.</span>
+                <input type="hidden" name="${extraImagei.id}">
+                <div class="image-preview saved-image">
+                    <i class="close-i fas fa-times"></i>
+
+                    <th:block th:if="${extraImagei.link!=null}">
+                        <img th:src="${extraImagei.link}" alt="alt" class="image-preview__img"/>
+                    </th:block>
+
+                    <th:block th:if="${extraImagei.link==null}">
+                        <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
+
+                    </th:block>
+
+                </div>
+                <input type="file" name="imageFiles" class="file_inp"/>
+            </div>
+
+        </th:block>
+
         <div class="col-6">
-            <input type="file" name="image" class="file_inp"/>
+
+            <span>1.</span>
             <div class="image-preview">
-                <input type="checkbox" />
                 <i class="close-i fas fa-times"></i>
-                <img src="" alt="alt" class="image-preview__img"/>
-                <span class="image-preview__def-text">Image Preview1</span>
+                <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
 
 
             </div>
+            <input type="file" name="imageFiles" class="file_inp"/>
         </div>
 
 

@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Product</title>
+    <th:block layout:fragment="addcss">
+        <link rel="stylesheet" th:href="@{/resource/plugins/rich-text-editor/richtext.min.css}">
+        <link rel="stylesheet" th:href="@{/resource/css/admin/product/add-edit.css}">
+    </th:block>
 </head>
 <body>
 <div class="content-wrapper" layout:fragment="content">
@@ -24,72 +28,82 @@
     </div>
 
     <div class="container-fluid">
-
         <div class="row">
-            <div class="col-md-6 ml-5">
-                <div class="col-12" th:if="${message != null}">
-                    <p class="alert alert-warning" th:text="${message}"></p>
-                </div>
-                <form th:action="@{/admin/product/save}" th:object="${product}" method="post"
+
+            <div class="col-10 m-auto ml-5">
+
+                <!-- Nav tabs -->
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                    <li class="nav-item" role="presentation">
+                        <a class="maintab nav-link active" data-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">General</a>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <a class="maintab nav-link" data-toggle="tab" href="#description" role="tab"
+                           aria-controls="messages" aria-selected="false">Detail</a>
+                    </li>
+
+
+                    <li class="nav-item" role="presentation">
+                        <a id="images-a" class="nav-link" data-toggle="tab" href="#images" role="tab"
+                           aria-controls="profile" aria-selected="false">Images</a>
+                    </li>
+
+
+                </ul>
+
+
+                <!-- Tab panes -->
+
+                <form id="main-form" th:action="@{/admin/product/save}" th:object="${product}" method="post"
                       enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input class="form-control" type="text" th:field="*{name}">
-                        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
-                              th:errors="*{name}"></span>
-                    </div>
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input class="form-control" type="text" th:field="*{price}">
-                        <span th:if="${#fields.hasErrors('price')}" class="form-control alert alert-warning"
-                              th:errors="*{name}"></span>
-                    </div>
-                    <div class="form-group">
-                        <label>Main Image</label>
-                        <input class="form-control" type="file" th:field="*{file}">
-                        <span th:if="${#fields.hasErrors('file')}" class="form-control alert alert-warning"
-                              th:errors="*{file}"></span>
-                    </div>
-                    <div class="form-group">
-                        <label>Detail Images</label>
-                        <input class="form-control" type="file" th:field="*{files}" multiple>
-                        <span th:if="${#fields.hasErrors('files')}" class="form-control alert alert-warning"
-                              th:errors="*{files}"></span>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home" role="tabpanel">
+                            <div th:replace="admin/product/edit-tabs/general :: content"></div>
+
+                        </div>
+
+                        <div class="tab-pane" id="description" role="tabpanel">
+                            <div th:replace="admin/product/edit-tabs/description :: content"></div>
+
+                        </div>
+
+                        <div class="tab-pane" id="images" role="tabpanel">
+                            <div th:replace="admin/product/edit-tabs/images :: content"></div>
+                        </div>
+
+
                     </div>
 
 
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" rows="7"></textarea>
-                        <span th:if="${#fields.hasErrors('description')}" class="form-control alert alert-warning"
-                              th:errors="*{description}"></span>
-                    </div>
+
 
                     <div class="form-group">
-                        <label>Category</label>
-                        <select th:field="*{category}" id="category-sel">
-                            <th:block th:each="catei : ${categories}">
-                                <option th:text="${catei.name}" th:value="${catei.id}"></option>
-                            </th:block>
-
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="add">
-
+                        <input class="btn btn-success" type="submit" value="save">
                     </div>
                 </form>
 
-            </div>
-            <div class="col-6">
 
 
             </div>
+
+
         </div>
+
     </div>
 
 </div>
+
 <th:block layout:fragment="addscript">
+
+    <script th:inline="javascript"> 	// Enable Thymeleaf inlining
+    var defaultImage = [[${product.defaultImage}]]; 	// Behaves just like in HTML
+    </script>
     <script th:src="@{/resource/plugins/rich-text-editor/jquery.richtext.min.js}"></script>
     <script th:src="@{/resource/js/admin/product/add-edit.js}"></script>
 </th:block>

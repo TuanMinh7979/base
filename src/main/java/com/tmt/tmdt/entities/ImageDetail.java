@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 
-public class ImageDetail {
+public class ImageDetail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

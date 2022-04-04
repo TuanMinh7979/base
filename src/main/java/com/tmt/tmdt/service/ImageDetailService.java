@@ -2,8 +2,17 @@ package com.tmt.tmdt.service;
 
 import com.tmt.tmdt.entities.ImageDetail;
 
-public interface ImageDetailService {
-ImageDetail save(ImageDetail imageDetail);
+import java.io.IOException;
 
-ImageDetail getImageDetail(Long id);
+public interface ImageDetailService {
+    ImageDetail save(ImageDetail imageDetail);
+
+    ImageDetail getImageDetail(Long id);
+
+    boolean existById(Long id);
+
+    void deleteById(Long id) throws IOException;
+
+    void deleteFromCloud(Long id) throws IOException;
+
 }

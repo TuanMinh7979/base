@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.awt.*;
@@ -96,8 +97,11 @@ public class ProductController {
 
 
     @PostMapping("save")
-    public String save(Model model, @Valid @ModelAttribute("product") Product product, BindingResult result) {
+    public String save(Model model, @RequestParam("imageFiles") MultipartFile[] files,
+                       @Valid @ModelAttribute("product") Product product, BindingResult result) {
         //Phai dat block nay o tren vi blog se phat sinh loi xuat hien o block duoi
+
+
         if (productService.existByName(product.getName())) {
             result.rejectValue("name", "nameIsExist");
 
@@ -105,38 +109,39 @@ public class ProductController {
 
         if (!result.hasErrors()) {
             try {
-                productService.save(product);
+                productService.save(product, files);
+                return "redirect:/admin/product";
             } catch (IOException e) {
                 model.addAttribute("message", "Can not read your file, try again please!");
                 //ioe
                 return "admin/product/add";
             }
             //success
-            return "redirect:/admin/product";
+
         }
+
         //handle loi bindding
         return "admin/product/add";
 
     }
 
     @PostMapping("update")
-    public String update(Model model, @Valid @ModelAttribute("product") Product product, BindingResult result) {
-        //Phai dat block nay o tren vi blog se phat sinh loi xuat hien o block duoi
-
+    public String update(Model model,@RequestParam("imageFiles") MultipartFile[] files, @Valid @ModelAttribute("product") Product product, BindingResult result) {
 
         if (!result.hasErrors()) {
             try {
-                productService.save(product);
+                productService.save(product, files);
             } catch (IOException e) {
                 model.addAttribute("message", "Can not read your file, try again please!");
-                //ioe
 
                 return "admin/product/edit";
             }
             //success
             return "redirect:/admin/product";
         }
-        //handle loi bindding
+
+        System.out.println("---------------------------------------------");
+        result.getAllErrors().forEach(System.out::println);
         return "admin/product/edit";
 
     }
@@ -157,7 +162,7 @@ public class ProductController {
         }
         //other exception will be handled in service
         model.addAttribute("product", product);
-        model.addAttribute("images",product.getImages());
+        model.addAttribute("images", product.getImages());
         return "admin/product/edit";
 
     }

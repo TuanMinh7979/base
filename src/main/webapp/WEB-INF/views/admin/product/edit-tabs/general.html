@@ -3,12 +3,14 @@
 <div th:fragment="content" th:remove="tag">
     <!--    <form th:action="@{/admin/product/save}" th:object="${product}" method="post"-->
     <!--          enctype="multipart/form-data">-->
-    <div class="form-group">
-        <label>Id</label>
-        <input class="form-control" type="text" th:field="*{id}" readonly="true">
-        <span th:if="${#fields.hasErrors('id')}" class="form-control alert alert-warning"
-              th:errors="*{id}"></span>
-    </div>
+    <th:block th:if="${product.id !=null }">
+        <div class="form-group">
+            <label>Id</label>
+            <input class="form-control" type="text" th:field="*{id}" readonly="true">
+            <span th:if="${#fields.hasErrors('id')}" class="form-control alert alert-warning"
+                  th:errors="*{id}"></span>
+        </div>
+    </th:block>
 
     <div class="form-group">
         <label>Name</label>
@@ -22,19 +24,6 @@
         <span th:if="${#fields.hasErrors('price')}" class="form-control alert alert-warning"
               th:errors="*{name}"></span>
     </div>
-    <div class="form-group">
-        <label>Main Image</label>
-
-        <input type="file" name="image" class="file_inp"/>
-        <div class="image-preview">
-            <img src="" alt="alt" class="image-preview__img"/>
-            <span class="image-preview__def-text">Image Previe</span>
-        </div>
-
-
-        <span th:if="${#fields.hasErrors('file')}" class="form-control alert alert-warning"
-              th:errors="*{file}"></span>
-    </div>
 
     <div class="form-group">
         <label>Category</label>
@@ -45,11 +34,7 @@
 
         </select>
     </div>
-    <!--        <div class="form-group">-->
-    <!--            <input type="submit" value="save">-->
 
-    <!--        </div>-->
-    <!--    </form>-->
 </div>
 </body>
 </html>
