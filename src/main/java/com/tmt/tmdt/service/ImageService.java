@@ -1,13 +1,13 @@
 package com.tmt.tmdt.service;
 
-import com.tmt.tmdt.entities.ImageDetail;
+import com.tmt.tmdt.entities.Image;
 
 import java.io.IOException;
 
-public interface ImageDetailService {
-    ImageDetail save(ImageDetail imageDetail);
+public interface ImageService {
+    Image save(Image image);
 
-    ImageDetail getImageDetail(Long id);
+    Image getImageDetail(Long id);
 
     boolean existById(Long id);
 

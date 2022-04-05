@@ -74,7 +74,7 @@ function renderData(data) {
 
         rs += `<td class="col-3" >${producti.name}</td>`
         rs += `<td class = "col-1" >${producti.price} </td>`
-        rs += `<td class = "col-1" >${producti.image} </td>`
+        rs += `<td class = "col-1" >${producti.mainImageLink} </td>`
         rs += `<td class="col-3"> ${producti.code}</td>`
         rs += `<td class="col-1"> ${producti.category.name}</td>`
 

@@ -30,7 +30,9 @@ public interface ProductService {
 
     boolean existByName(String name);
 
-    Product save(Product product, MultipartFile[] files) throws IOException;
+    Product save(Product product, MultipartFile file,  MultipartFile[] files) throws IOException;
+
+    Product update(Product product, MultipartFile file, MultipartFile[] files, String ids) throws IOException;
 
     Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable);
 
@@ -40,8 +42,9 @@ public interface ProductService {
 
     void deleteProducts(Long[] ids);
 
-    Product addImageDetailToProduct(Long productId, Long imageDetailId );
-    Product removeImageDetailFromProduct(Long productId, Long imageDetailId ) throws IOException;
+    void addImageDetailToProduct(Long productId, Long imageDetailId);
+
+    void removeImageDetailFromProduct(Long productId, Long imageDetailId) throws IOException;
 
 
 }

@@ -9,23 +9,25 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "imagedetails")
+@Table(name = "test")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 
-public class ImageDetail extends BaseEntity {
+
+public class Test extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String link;
-    private String publicId;
+
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+
 
 
 }

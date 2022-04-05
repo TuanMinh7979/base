@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +24,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+@Controller
 @RequestMapping("/admin/role")
 @RequiredArgsConstructor
 public class RoleController {
     private final PermissionService permissionService;
     private final RoleService roleService;
 
-    @ModelAttribute
-    public void commonAtr(Model model) {
-        List<Permission> permissions = permissionService.getPermissionByParent(0);
-        model.addAttribute("permissionList", permissions.subList(1, permissions.size()));
-    }
+//    @ModelAttribute
+//    public void commonAtr(Model model) {
+//        List<Permission> permissions = permissionService.getPermissionByParent(0);
+//        model.addAttribute("permissionList", permissions.subList(1, permissions.size()));
+//    }
 
     @GetMapping("api/viewApi")
     @ResponseBody

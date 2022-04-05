@@ -1,19 +1,16 @@
 package com.tmt.tmdt.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -29,11 +26,15 @@ public class Product extends BaseEntity implements Serializable {
     @NotBlank
     private String name;
     private BigDecimal price;
-    private String image;
+    private String mainImageLink;
     private String description;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ImageDetail> images = new HashSet<>();
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+//    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private Set<Image> images = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Test> tests = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -41,15 +42,31 @@ public class Product extends BaseEntity implements Serializable {
 
     private String code;
 
-    @Transient
-    private MultipartFile file;
-
-    @Transient
-    private MultipartFile[] files;
+//    @Transient
+//    private MultipartFile file;
+//
+//    @Transient
+//    private MultipartFile[] files;
 
     @Transient
     public String defaultImage() {
         return "/resource/img/default.png";
+    }
+
+
+    public void addImage(Image img) {
+        this.images.add(img);
+        img.setProduct(this);
+    }
+
+
+    public void removeImage(Image img) {
+        this.images.remove(img);
+    }
+
+    public void removeTest(Test img) {
+//        img.setProduct(null);
+        this.tests.remove(img);
     }
 
 

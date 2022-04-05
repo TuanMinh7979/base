@@ -2,11 +2,11 @@ package com.tmt.tmdt.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.tmt.tmdt.entities.ImageDetail;
+import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
 import com.tmt.tmdt.repository.ProductRepo;
-import com.tmt.tmdt.service.ImageDetailService;
+import com.tmt.tmdt.service.ImageService;
 import com.tmt.tmdt.service.ProductService;
 import com.tmt.tmdt.util.TextUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,22 +18,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @EnableTransactionManagement
-@Transactional
+
 public class ProductServiceImpl implements ProductService {
-    private final ImageDetailService imageDetailService;
+    private final ImageService imageService;
     private final Cloudinary cloudinary;
     private final ProductRepo productRepo;
 
@@ -73,31 +69,87 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product save(Product product, MultipartFile[] files) throws IOException {
+    public Product save(Product product, MultipartFile file, MultipartFile[] files) throws IOException {
         product.setCode(TextUtil.generateCode(product.getName()));
-
-        if (!product.getFile().isEmpty()) {
-            Map rs = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-            product.setImage((String) rs.get("url"));
-        }
         Product productSaved = productRepo.save(product);
 
 
+        if (file != null && !file.isEmpty()) {
+            Map rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            productSaved.setMainImageLink((String) rs.get("url"));
+
+            Image mainImage = new Image();
+            mainImage.setPublicId((String) rs.get("public_id"));
+            mainImage.setLink((String) rs.get("url"));
+            mainImage.setProduct(productSaved);
+            mainImage.setMain(true);
+            imageService.save(mainImage);
+        }
+//        System.out.println("LENGH+++++++++++++++++++++++++++++" + files.length);
+        if (files == null) return productSaved;
         for (MultipartFile filei : files) {
 
             if (!filei.isEmpty()) {
                 Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-
-
-                ImageDetail imageDetail = new ImageDetail();
-                imageDetail.setPublicId((String) rsi.get("public_id"));
-                imageDetail.setLink((String) rsi.get("url"));
-                imageDetail.setProduct(productSaved);
-                imageDetailService.save(imageDetail);
+                String namei = filei.getOriginalFilename();
+//                System.out.println(filei.getOriginalFilename());
+                Image image = new Image();
+                image.setPublicId((String) rsi.get("public_id"));
+                image.setLink((String) rsi.get("url"));
+                image.setProduct(productSaved);
+                imageService.save(image);
             }
+        }
+        return productSaved;
+    }
+
+    @Override
+    @Transactional
+    public Product update(Product product, MultipartFile file, MultipartFile[] files, String delImageIds) throws IOException {
+        product.setCode(TextUtil.generateCode(product.getName()));
+//
+
+
+        if (delImageIds != null && !delImageIds.isEmpty()) {
+            delImageIds = delImageIds.trim();
+            List<String> strIds = Arrays.asList(delImageIds.split(" "));
+            List<Long> ids = strIds.stream().map(Long::parseLong).collect(Collectors.toList());
+
+            //remove image from database (orphan removeal and deleit in cloud)
+            for (Long idToDel : ids) {
+                removeImageDetailFromProduct(product.getId(), imageService.getImageDetail(idToDel).getId());
+            }
+
+        }
+        Product productSaved = productRepo.save(product);
+
+
+        if (file != null && !file.isEmpty()) {
+            Map rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            productSaved.setMainImageLink((String) rs.get("url"));
+
+            Image mainImage = new Image();
+            mainImage.setPublicId((String) rs.get("public_id"));
+            mainImage.setLink((String) rs.get("url"));
+            mainImage.setProduct(productSaved);
+            mainImage.setMain(true);
+            imageService.save(mainImage);
         }
 
 
+        //set and save product extra image
+        if (files == null) return productSaved;
+        for (MultipartFile filei : files) {
+            if (!filei.isEmpty()) {
+                Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                String namei = filei.getOriginalFilename();
+                Image image = new Image();
+                image.setPublicId((String) rsi.get("public_id"));
+                image.setLink((String) rsi.get("url"));
+                image.setProduct(productSaved);
+                imageService.save(image);
+            }
+        }
         return productSaved;
     }
 
@@ -144,20 +196,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product addImageDetailToProduct(Long productId, Long imageDetailId) {
+    public void addImageDetailToProduct(Long productId, Long imageDetailId) {
         Product product = getProduct(productId);
-        ImageDetail imageDetail = imageDetailService.getImageDetail(imageDetailId);
-        product.getImages().add(imageDetail);
-        return product;
+        Image image = imageService.getImageDetail(imageDetailId);
+        product.addImage(image);
+        productRepo.save(product);
     }
 
     @Override
-    public Product removeImageDetailFromProduct(Long productId, Long imageDetailId) throws IOException {
-        imageDetailService.deleteFromCloud(imageDetailId);
+    public void removeImageDetailFromProduct(Long productId, Long imageDetailId) throws IOException {
+        imageService.deleteFromCloud(imageDetailId);
+
         Product product = getProduct(productId);
-        ImageDetail imageDetail = imageDetailService.getImageDetail(imageDetailId);
-        product.getImages().remove(imageDetail);
-        return product;
+        Image image = imageService.getImageDetail(imageDetailId);
+        product.removeImage(image);
+        productRepo.save(product);
+
     }
 
 

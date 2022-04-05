@@ -1,11 +1,13 @@
 package com.tmt.tmdt.controller;
 
+import com.tmt.tmdt.entities.Product;
+import com.tmt.tmdt.repository.ProductRepo;
+import com.tmt.tmdt.repository.TestRepo;
 import com.tmt.tmdt.service.CategoryService;
-import com.tmt.tmdt.service.ImageDetailService;
+import com.tmt.tmdt.service.ImageService;
 import com.tmt.tmdt.service.ProductService;
 import com.tmt.tmdt.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -18,7 +20,10 @@ public class AjaxController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final RoleService roleService;
-    private final ImageDetailService imageDetailService;
+    private final ImageService imageService;
+
+    private final ProductRepo productRepo;
+    private final TestRepo testRepo;
 
 
     @GetMapping("autocomplete-search/product")
@@ -39,7 +44,7 @@ public class AjaxController {
     @GetMapping("test/deleteImg/{id}")
     public String delete(@PathVariable("id") Long id) {
         try {
-            imageDetailService.deleteById(id);
+            imageService.deleteById(id);
             return "delete succeess";
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,6 +53,7 @@ public class AjaxController {
 
 
     }
+
     @GetMapping("test/deleteImgfromProduct/{pid}/{iid}")
     public String delete(@PathVariable("pid") Long pid, @PathVariable("iid") Long iid) {
         try {
@@ -58,6 +64,25 @@ public class AjaxController {
             return "failed ";
         }
 
+
+    }
+
+    @GetMapping("abc/{pid}/{cid}")
+    public String deltest(@PathVariable("pid") Long pid, @PathVariable("cid") Long cid) {
+        Product product = productService.getProduct(pid);
+        product.removeImage(imageService.getImageDetail(cid));
+        productRepo.save(product);
+        return "sucess";
+
+    }
+
+    //
+    @GetMapping("abc1/{pid}/{cid}")
+    public String deltest1(@PathVariable("pid") Long pid, @PathVariable("cid") Long cid) {
+        Product product = productService.getProduct(pid);
+        product.removeTest(testRepo.findById(cid).get());
+        productRepo.save(product);
+        return "sucess";
 
     }
 

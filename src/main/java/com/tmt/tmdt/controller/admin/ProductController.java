@@ -2,7 +2,7 @@ package com.tmt.tmdt.controller.admin;
 
 import com.tmt.tmdt.dto.response.ViewApi;
 import com.tmt.tmdt.entities.Category;
-import com.tmt.tmdt.entities.ImageDetail;
+import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
 import com.tmt.tmdt.service.ProductService;
@@ -13,17 +13,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -97,52 +101,47 @@ public class ProductController {
 
 
     @PostMapping("save")
-    public String save(Model model, @RequestParam("imageFiles") MultipartFile[] files,
+
+    public String save(Model model,
+                       @RequestParam(value = "file", required = false) MultipartFile file,
+                       @RequestParam(value = "files", required = false) MultipartFile[] files,
                        @Valid @ModelAttribute("product") Product product, BindingResult result) {
-        //Phai dat block nay o tren vi blog se phat sinh loi xuat hien o block duoi
-
-
         if (productService.existByName(product.getName())) {
             result.rejectValue("name", "nameIsExist");
-
         }
-
         if (!result.hasErrors()) {
             try {
-                productService.save(product, files);
+                productService.save(product, file, files);
                 return "redirect:/admin/product";
             } catch (IOException e) {
                 model.addAttribute("message", "Can not read your file, try again please!");
-                //ioe
+
                 return "admin/product/add";
             }
-            //success
-
         }
-
         //handle loi bindding
         return "admin/product/add";
-
     }
 
-    @PostMapping("update")
-    public String update(Model model,@RequestParam("imageFiles") MultipartFile[] files, @Valid @ModelAttribute("product") Product product, BindingResult result) {
+    @PostMapping(value = "update")
+    public String update(Model model, @RequestParam(value = "file", required = false) MultipartFile file,
+                         @RequestParam(value = "files", required = false) MultipartFile[] files,
+                         @RequestParam("delImageIds") String delImageIds,
+                         @Valid @ModelAttribute("product") Product product,
+                         BindingResult result) throws IOException {
+
+//if have no validate error
 
         if (!result.hasErrors()) {
-            try {
-                productService.save(product, files);
-            } catch (IOException e) {
-                model.addAttribute("message", "Can not read your file, try again please!");
+            productService.update(product, file, files, delImageIds);
 
-                return "admin/product/edit";
-            }
-            //success
+            //regard if statement success
             return "redirect:/admin/product";
         }
 
-        System.out.println("---------------------------------------------");
-        result.getAllErrors().forEach(System.out::println);
+
         return "admin/product/edit";
+
 
     }
 
@@ -162,20 +161,29 @@ public class ProductController {
         }
         //other exception will be handled in service
         model.addAttribute("product", product);
-        model.addAttribute("images", product.getImages());
+        List<Image> extraImages = new ArrayList<>();
+        for (Image imagei : product.getImages()) {
+            if (!imagei.isMain()) {
+                extraImages.add(imagei);
+            } else {
+                model.addAttribute("mainImageId", imagei.getId());
+            }
+        }
+        model.addAttribute("images", extraImages);
+//                .filter(img -> img.getIsMain() == false).collect(Collectors.toSet()));
         return "admin/product/edit";
 
     }
 
     @PostMapping("api/delete/{id}")
     //call with ajax
-    public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Long> deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @PostMapping("api/delete")
-    public ResponseEntity<Long[]> deleteProduct(@RequestBody Long[] ids) {
+    public ResponseEntity<Long[]> deleteProducts(@RequestBody Long[] ids) {
 
         productService.deleteProducts(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);

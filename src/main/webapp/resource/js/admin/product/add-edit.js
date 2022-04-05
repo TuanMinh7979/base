@@ -1,8 +1,12 @@
 var numOfImage = 1;
 var MAX_FILE_SIZE = 512000;
+var mode = "";
 $(function () {
 
     $("#description-text").richText();
+    if (document.getElementById("productId") != null) {
+        mode = "edit";
+    }
 
 
 })
@@ -22,16 +26,16 @@ function createNewEmptyExtraImage() {
 
 
     event.preventDefault();
-    let html ='       <div class="col-6">\n' +
+    let html = '       <div class="col-6">\n' +
         '\n' +
-        '            <span>1.</span>\n' +
+
         '            <div class="image-preview">\n' +
         '                <i class="close-i fas fa-times"></i>\n' +
         `                <img src="${defaultImage}" alt="alt" class="image-preview__img"/>\n` +
         '\n' +
         '\n' +
         '            </div>\n' +
-        '            <input type="file" name="imageFiles" class="file_inp"/>\n' +
+        '            <input type="file" name="files" class="file_inp"/>\n' +
         '        </div>'
 
 
@@ -63,7 +67,16 @@ function loadImg() {
         });
         reader.readAsDataURL(file);
 
-        createNewEmptyExtraImage();
+        //on reupload existed image
+        if (previewContainer.className.includes("saved-image-preview") && mode === "edit") {
+            // alert(previewContainer.parentElement);
+            // alert(previewContainer.parentElement.id);
+            // console.log(previewContainer.parentElement);
+
+            document.getElementById("delImageIds").value += previewContainer.parentElement.id + " ";
+        }
+
+        // createNewEmptyExtraImage();
     } else {
 
         previewImage.setAttribute("src", "");
@@ -75,10 +88,12 @@ function loadImg() {
 $(document).on("click", "#addNewImageExtraBtn", createNewEmptyExtraImage);
 
 
-
-
 $(document).on("click", ".image-preview .close-i", function () {
     // alert(productId);
+    if ($(this).parent().hasClass("saved-image-preview") && mode === "edit") {
+        document.getElementById("delImageIds").value += this.parentElement.parentElement.id + " ";
+    }
+
     $(this).parent().parent().hide();
 })
 

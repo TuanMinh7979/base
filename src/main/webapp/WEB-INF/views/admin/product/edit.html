@@ -48,7 +48,7 @@
 
 
                     <li class="nav-item" role="presentation">
-                        <a id="images-a" class="nav-link" data-toggle="tab" href="#images" role="tab"
+                        <a id="image-a" class="nav-link" data-toggle="tab" href="#image" role="tab"
                            aria-controls="profile" aria-selected="false">Images</a>
                     </li>
 
@@ -73,7 +73,7 @@
 
                         </div>
 
-                        <div class="tab-pane" id="images" role="tabpanel">
+                        <div class="tab-pane" id="image" role="tabpanel">
                             <div th:replace="admin/product/edit-tabs/images :: content"></div>
                         </div>
 
@@ -81,7 +81,7 @@
                     </div>
 
 
-                    <input type="hidden" name="deleteImageIds">
+                    <input id="delImageIds" value="" type="hidden" name="delImageIds">
                     <div class="form-group">
                         <input class="btn btn-success" type="submit" value="save">
                     </div>

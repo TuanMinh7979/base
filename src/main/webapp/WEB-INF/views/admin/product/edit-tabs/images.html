@@ -10,55 +10,72 @@
     </div>
     <br/>
     <div id="imageWrapper" class="row col-12">
-        <div class="col-6">
-            <span>Main</span>
-            <div class="image-preview saved-image-preview">
+        <th:block th:if="${product.id!=null}">
+            <div th:id="${mainImageId}" class="col-6">
+                <span>Main</span>
 
-                <th:block th:if="${product.image!=null}">
-                    <img th:src="${product.image}" alt="alt" class="image-preview__img"/>
-                </th:block>
-
-                <th:block th:if="${product.image==null}">
-                    <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
-
-                </th:block>
-
-            </div>
-            <input type="file" th:field="*{file}" class="file_inp"/>
-        </div>
-        <th:block th:each="extraImagei : ${images}">
-            <div class="col-6">
-                <span>1.</span>
-                <input type="hidden" name="${extraImagei.id}">
-                <div class="image-preview saved-image">
-                    <i class="close-i fas fa-times"></i>
-
-                    <th:block th:if="${extraImagei.link!=null}">
-                        <img th:src="${extraImagei.link}" alt="alt" class="image-preview__img"/>
+                <div class="image-preview saved-image-preview">
+                    <th:block th:if="${product.mainImageLink!=null}">
+                        <img th:src="${product.mainImageLink}" alt="alt" class="image-preview__img"/>
                     </th:block>
 
-                    <th:block th:if="${extraImagei.link==null}">
+                    <th:block th:if="${product.mainImageLink==null}">
                         <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
 
                     </th:block>
 
                 </div>
-                <input type="file" name="imageFiles" class="file_inp"/>
+                <input type="file" name="file" class="file_inp"/>
+            </div>
+        </th:block>
+
+        <th:block th:if="${product.id==null}">
+            <div class="col-6">
+                <span>Main</span>
+
+                <div class="image-preview saved-image-preview">
+                    <th:block th:if="${product.mainImageLink!=null}">
+                        <img th:src="${product.mainImageLink}" alt="alt" class="image-preview__img"/>
+                    </th:block>
+
+                    <th:block th:if="${product.mainImageLink==null}">
+                        <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
+
+                    </th:block>
+
+                </div>
+                <input type="file" name="file" class="file_inp"/>
+            </div>
+        </th:block>
+
+
+        <th:block th:each="imagei : ${images}">
+
+            <div th:id="${imagei.id}" class="col-6">
+
+                <span>Extra</span>
+
+                <div class="image-preview saved-image-preview">
+                    <span style="color: black" th:text="${imagei.publicId}"></span>
+                    <i class="close-i fas fa-times"></i>
+                    <img th:src="${imagei.link}" alt="alt" class="image-preview__img"/>
+                </div>
+                <input type="file" name="files" class="file_inp"/>
             </div>
 
         </th:block>
 
-        <div class="col-6">
+        <!--        <div class="col-6">-->
 
-            <span>1.</span>
-            <div class="image-preview">
-                <i class="close-i fas fa-times"></i>
-                <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>
+        <!--            <span>1.</span>-->
+        <!--            <div class="image-preview">-->
+        <!--                <i class="close-i fas fa-times"></i>-->
+        <!--                <img th:src="${product.defaultImage}" alt="alt" class="image-preview__img"/>-->
 
 
-            </div>
-            <input type="file" name="imageFiles" class="file_inp"/>
-        </div>
+        <!--            </div>-->
+        <!--            <input type="file" name="imageFiles" class="file_inp"/>-->
+        <!--        </div>-->
 
 
     </div>
