@@ -85,14 +85,12 @@ public class ProductServiceImpl implements ProductService {
             mainImage.setMain(true);
             imageService.save(mainImage);
         }
-//        System.out.println("LENGH+++++++++++++++++++++++++++++" + files.length);
+
         if (files == null) return productSaved;
         for (MultipartFile filei : files) {
 
             if (!filei.isEmpty()) {
                 Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                String namei = filei.getOriginalFilename();
-//                System.out.println(filei.getOriginalFilename());
                 Image image = new Image();
                 image.setPublicId((String) rsi.get("public_id"));
                 image.setLink((String) rsi.get("url"));
@@ -107,23 +105,17 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Product update(Product product, MultipartFile file, MultipartFile[] files, String delImageIds) throws IOException {
         product.setCode(TextUtil.generateCode(product.getName()));
-//
-
-
         if (delImageIds != null && !delImageIds.isEmpty()) {
             delImageIds = delImageIds.trim();
             List<String> strIds = Arrays.asList(delImageIds.split(" "));
             List<Long> ids = strIds.stream().map(Long::parseLong).collect(Collectors.toList());
-
             //remove image from database (orphan removeal and deleit in cloud)
             for (Long idToDel : ids) {
-                removeImageDetailFromProduct(product.getId(), imageService.getImageDetail(idToDel).getId());
+                imageService.deleteById(idToDel);
             }
 
         }
         Product productSaved = productRepo.save(product);
-
-
         if (file != null && !file.isEmpty()) {
             Map rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
             productSaved.setMainImageLink((String) rs.get("url"));
@@ -142,7 +134,7 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile filei : files) {
             if (!filei.isEmpty()) {
                 Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                String namei = filei.getOriginalFilename();
+
                 Image image = new Image();
                 image.setPublicId((String) rsi.get("public_id"));
                 image.setLink((String) rsi.get("url"));
@@ -193,25 +185,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductByName(String name) {
         return productRepo.getProductByName(name);
-    }
-
-    @Override
-    public void addImageDetailToProduct(Long productId, Long imageDetailId) {
-        Product product = getProduct(productId);
-        Image image = imageService.getImageDetail(imageDetailId);
-        product.addImage(image);
-        productRepo.save(product);
-    }
-
-    @Override
-    public void removeImageDetailFromProduct(Long productId, Long imageDetailId) throws IOException {
-        imageService.deleteFromCloud(imageDetailId);
-
-        Product product = getProduct(productId);
-        Image image = imageService.getImageDetail(imageDetailId);
-        product.removeImage(image);
-        productRepo.save(product);
-
     }
 
 

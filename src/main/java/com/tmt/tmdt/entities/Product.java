@@ -29,12 +29,9 @@ public class Product extends BaseEntity implements Serializable {
     private String mainImageLink;
     private String description;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
-//    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private Set<Image> images = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Test> tests = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -42,31 +39,10 @@ public class Product extends BaseEntity implements Serializable {
 
     private String code;
 
-//    @Transient
-//    private MultipartFile file;
-//
-//    @Transient
-//    private MultipartFile[] files;
 
     @Transient
     public String defaultImage() {
         return "/resource/img/default.png";
-    }
-
-
-    public void addImage(Image img) {
-        this.images.add(img);
-        img.setProduct(this);
-    }
-
-
-    public void removeImage(Image img) {
-        this.images.remove(img);
-    }
-
-    public void removeTest(Test img) {
-//        img.setProduct(null);
-        this.tests.remove(img);
     }
 
 

@@ -42,9 +42,7 @@ public interface ProductService {
 
     void deleteProducts(Long[] ids);
 
-    void addImageDetailToProduct(Long productId, Long imageDetailId);
 
-    void removeImageDetailFromProduct(Long productId, Long imageDetailId) throws IOException;
 
 
 }
