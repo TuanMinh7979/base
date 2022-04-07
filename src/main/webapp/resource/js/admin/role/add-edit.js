@@ -1,6 +1,10 @@
+var mode="";
 $(function () {
 
-    loadActivePermissionIds();
+    if (document.getElementById("id-inp") != null) {
+        mode = "edit";
+        loadActivePermissionIds();
+    }
 
 
 })
@@ -17,12 +21,13 @@ const loadActivePermissionIds = () => {
 
 
         success: function (data) {
+            console.log(data);
 
             data.map(function (idi) {
 
                     $.each(checkboxes, function (index, value) {
                         if (value.value == idi) {
-                            var jelm = $(value);
+                            jelm = $(value);
                             jelm.prop("checked", true);
                         }
 
@@ -48,4 +53,6 @@ $(function () {
         $(".parent_permission_chbx").prop("checked", $(this).prop("checked"));
         $(".child_permission_chbx").prop("checked", $(this).prop("checked"));
     })
+
+
 })

@@ -4,7 +4,7 @@
     <br/>
     <div class="col-12">
         <button id="addNewImageExtraBtn" class="btn btn-info ">Add new extra image</button>
-<!--        <button id="removeImageExtraBtn" class="float-right btn btn-danger ">Delete</button>-->
+        <!--        <button id="removeImageExtraBtn" class="float-right btn btn-danger ">Delete</button>-->
 
 
     </div>
@@ -56,7 +56,7 @@
                 <span>Extra</span>
 
                 <div class="image-preview saved-image-preview">
-                    <span style="color: black" th:text="${imagei.publicId}"></span>
+
                     <i class="close-i fas fa-times"></i>
                     <img th:src="${imagei.link}" alt="alt" class="image-preview__img"/>
                 </div>
@@ -64,7 +64,6 @@
             </div>
 
         </th:block>
-
 
 
     </div>

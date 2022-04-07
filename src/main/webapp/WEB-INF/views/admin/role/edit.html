@@ -28,7 +28,7 @@
     </div>
 
     <div class="container-fluid">
-        <form th:action="@{/admin/role/update}" method="post" th:object="${role}">
+        <form id="mainForm" th:action="@{/admin/role/update}" method="post" th:object="${role}">
             <div class="col-12">
                 <div class="form-group col-3">
                     <label>Id</label>
@@ -52,12 +52,12 @@
             <div class="col-12"><h5> Choose permissions </h5></div>
 
             <div id="permission-div" class="col-12 row flex-column">
-                <div class="col-12"><input id="all-chbx" value="0" type="checkbox"> <span>All</span>
+                <div class="col-12"><input id="all-chbx" type="checkbox"> <span>All</span>
                 </div>
 
                 <div th:each="permissioni : ${permissionList}" class="card col-6 ">
                     <div class="card-header ">
-                        <input class="parent_permission_chbx" th:value="${permissioni.id}"
+                        <input class="parent_permission_chbx"
                                type="checkbox" value="">
                         <span th:text="${permissioni.name}"></span>
                     </div>
@@ -89,6 +89,7 @@
 <th:block layout:fragment="addscript">
 
     <script th:src="@{/resource/js/admin/role/add-edit.js}"></script>
+    <script th:src="@{/resource/js/check-form-change.js}"></script>
 
 </th:block>
 

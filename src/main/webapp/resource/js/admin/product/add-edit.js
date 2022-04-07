@@ -28,10 +28,10 @@ function createNewEmptyExtraImage() {
     event.preventDefault();
     let html = '       <div class="col-6">\n' +
         '\n' +
-
+        '<span>Extra</span>' +
         '            <div class="image-preview">\n' +
         '                <i class="close-i fas fa-times"></i>\n' +
-        `                <img src="${defaultImage}" alt="alt" class="image-preview__img"/>\n` +
+        `                <img  src="${defaultImage}" alt="alt" class="image-preview__img"/>\n` +
         '\n' +
         '\n' +
         '            </div>\n' +
@@ -52,6 +52,7 @@ function loadImg() {
 
     let previewContainer = this.previousSibling.previousSibling;
 
+    console.log(previewContainer);
     let previewImage = previewContainer.querySelector(
         ".image-preview__img"
     );
@@ -63,6 +64,7 @@ function loadImg() {
 
         reader.addEventListener("load", function () {
 
+            console.log(previewImage);
             previewImage.setAttribute("src", this.result);
         });
         reader.readAsDataURL(file);

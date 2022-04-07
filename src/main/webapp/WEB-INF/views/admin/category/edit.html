@@ -27,17 +27,35 @@
 
         <div class="row">
             <div class="col-md-6">
-                <form th:action="@{/admin/category/update}" th:object="${category}" method="post">
+                <form th:id="mainForm" th:action="@{/admin/category/update}" th:object="${category}" method="post">
                     <div class="form-group">
                         <label>Id</label>
-                        <input class="form-control" type="text" th:field="*{id}" readonly="true" >
+                        <input class="form-control" type="text" th:field="*{id}" readonly="true">
                     </div>
 
                     <div class="form-group">
                         <label>Name</label>
-                        <input class="form-control" type="text" th:field="*{name}" >
-                        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning" th:errors="*{name}"></span>
+                        <input class="form-control" type="text" th:field="*{name}">
+                        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
+                              th:errors="*{name}"></span>
                     </div>
+
+                    <div class="form-group">
+                        <select  name="parent">
+                            <option value="1">No parent</option>
+<!--                            CÁc phần tử cha có phần tử cha có id là 1, ta handle th gới lên với id là 1
+                                còn trường họp view ra thì do ta không có thêm phần từ id là 1 nên ds bên dưới sẽ
+                                không có nên có thẻ thay thế bằng cách đặt no parent lên default-->
+                            <option th:each="cat : ${categoriesForForm}" th:value="${cat.id}" th:text="${cat.name}"
+                                    th:selected="${cat.id==category.parent.id}"></option>
+
+
+
+                        </select>
+                        <span th:if="${#fields.hasErrors('parent')}" class="form-control alert alert-warning"
+                              th:errors="*{parent}"></span>
+                    </div>
+
 
                     <div class="form-group">
                         <input type="submit" value="Save">
@@ -50,6 +68,10 @@
     </div>
 
 </div>
+
+<th:block layout:fragment="addscript">
+    <script th:src="@{/resource/js/check-form-change.js}"></script>
+</th:block>
 
 
 </html>

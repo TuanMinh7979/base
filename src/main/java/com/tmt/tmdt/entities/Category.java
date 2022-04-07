@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,10 +22,7 @@ public class Category extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //    @Column(nullable = false, unique = true)
-    //it not work when db is created first
 
-    //use unique in db , not blank and check nameExist in controller
     @NotBlank
     private String name;
 
@@ -35,4 +33,33 @@ public class Category extends BaseEntity implements Serializable {
 
     //auto-generate from name
     private String code;
+
+
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="parent_id")
+    private Category parent;
+
+    //one to one one one to many
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    private Set<Category> children = new HashSet<>();
+
+    public Category(String name) {
+        this.name = name;
+    }
+    public Category(String name, Category parent) {
+        this.parent= parent;
+        this.name = name;
+    }
+
+    public Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Category(Integer id) {
+        this.id = id;
+    }
 }

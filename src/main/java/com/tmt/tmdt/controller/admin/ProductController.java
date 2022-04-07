@@ -13,10 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -49,9 +45,10 @@ public class ProductController {
     @GetMapping("add")
     public String showAddForm(Model model) {
         Product product = new Product();
-        List<Category> categories = categoryService.getCategories();
+
         model.addAttribute("product", product);
-        model.addAttribute("categories", categories);
+
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/product/add";
 
     }
@@ -121,7 +118,9 @@ public class ProductController {
         }
         //handle loi bindding
         return "admin/product/add";
+
     }
+
 
     @PostMapping(value = "update")
     public String update(Model model, @RequestParam(value = "file", required = false) MultipartFile file,
@@ -169,6 +168,7 @@ public class ProductController {
                 model.addAttribute("mainImageId", imagei.getId());
             }
         }
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         model.addAttribute("images", extraImages);
 //                .filter(img -> img.getIsMain() == false).collect(Collectors.toSet()));
         return "admin/product/edit";
@@ -177,7 +177,8 @@ public class ProductController {
 
     @PostMapping("api/delete/{id}")
     //call with ajax
-    public ResponseEntity<Long> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Long> deleteProduct(@PathVariable("id") Long id) {
+
         productService.deleteById(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }

@@ -64,6 +64,8 @@ function HdleFilterBtn() {
 
 function renderData(data) {
     let rs = "";
+
+
     data.data.map(function (rolei) {
             rs += "<tr>"
             rs += `<td class="col-1"><input type="checkbox" value="${rolei.id}"></td>`

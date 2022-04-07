@@ -33,8 +33,8 @@ public class RoleController {
 
 //    @ModelAttribute
 //    public void commonAtr(Model model) {
-//        List<Permission> permissions = permissionService.getPermissionByParent(0);
-//        model.addAttribute("permissionList", permissions.subList(1, permissions.size()));
+//
+//
 //    }
 
     @GetMapping("api/viewApi")
@@ -75,6 +75,8 @@ public class RoleController {
     @GetMapping("add")
     public String add(Model model) {
         model.addAttribute("role", new Role());
+        List<Permission> parentPermissions = permissionService.getPermissionByParent(1);
+        model.addAttribute("permissionList", parentPermissions);
         return "admin/role/add";
     }
 
@@ -126,7 +128,7 @@ public class RoleController {
     @PostMapping("api/delete")
     @ResponseBody
     public ResponseEntity<Integer[]> deleteCategories(@RequestBody Integer[] ids) {
-         roleService.deleteRoles(ids);
+        roleService.deleteRoles(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);
     }
 
@@ -134,6 +136,8 @@ public class RoleController {
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
     public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
         Role role = null;
+        List<Permission> permissions = permissionService.getPermissionByParent(0);
+        model.addAttribute("permissionList", permissions.subList(1, permissions.size()));
         try {
             //Catch casting exception
             Integer id = Integer.parseInt(idx);
@@ -156,5 +160,6 @@ public class RoleController {
         return activePermissionIds;
 
     }
+
 
 }

@@ -1,0 +1,14 @@
+.image-container{
+    background-size: cover;
+   height: 100px;
+
+}
+.image-container__img{
+    width: 80%;
+    height: 100%;
+}
+tr input[type="checkbox"]{
+
+    width:30px;
+    height: 30px;
+}

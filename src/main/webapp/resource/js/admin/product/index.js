@@ -68,17 +68,18 @@ function HdleFilterBtn() {
 
 function renderData(data) {
     let rs = "";
+    console.log(data.data);
     data.data.map(function(producti) {
         rs += '<tr>'
         rs += `<td class="col-1"><input type="checkbox" value="${producti.id}"></td>`
 
-        rs += `<td class="col-3" >${producti.name}</td>`
+        rs += `<td class="col-2" >${producti.name}</td>`
         rs += `<td class = "col-1" >${producti.price} </td>`
-        rs += `<td class = "col-1" >${producti.mainImageLink} </td>`
-        rs += `<td class="col-3"> ${producti.code}</td>`
+        rs += `<td class = "image-container col-3" ><img class="image-container__img"src=${producti.mainImageLink} alt="No Image choosed"/> </td>`
+        rs += `<td class="col-2"> ${producti.code}</td>`
         rs += `<td class="col-1"> ${producti.category.name}</td>`
 
-        rs += '<td class="col-1">'
+        rs += '<td class="col-2">'
         rs += `<a class="btn btn-default"  href="/admin/product/edit/${producti.id}">Edit</a>`
         rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/product/api/delete/${producti.id}">Delete</a>`
         rs += "</td>"

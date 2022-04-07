@@ -1,7 +1,8 @@
 .tableBodyFixHeight {
     height: 360px;
-    display: block;
+    /*display: block;*/
     overflow-y: auto;
+
     overflow-x: hidden;
 }
 

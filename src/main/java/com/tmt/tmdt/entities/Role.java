@@ -40,6 +40,11 @@ public class Role extends BaseEntity implements Serializable {
     @ManyToMany(mappedBy = "roles")
     private Set<UserEntity> users = new HashSet<>();
 
+    public Role(String name) {
+        this.name = name;
+    }
 
-
+    public Role(Integer id) {
+        this.id = id;
+    }
 }

@@ -95,6 +95,7 @@ public class CategoryController {
         if (categoryService.existByName(category.getName())) {
             result.rejectValue("name", "nameIsExist");
         }
+
         if (!result.hasErrors()) {
             categoryService.save(category);
             return "redirect:/admin/category";
@@ -144,6 +145,7 @@ public class CategoryController {
             category = categoryService.getCategoryByName(idx);
         }
         model.addAttribute("category", category);
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/category/edit";
 
     }
@@ -152,6 +154,8 @@ public class CategoryController {
     public String showAddForm(Model model) {
         Category category = new Category();
         model.addAttribute("category", category);
+
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/category/add";
 
     }

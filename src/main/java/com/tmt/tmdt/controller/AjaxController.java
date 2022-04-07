@@ -1,5 +1,6 @@
 package com.tmt.tmdt.controller;
 
+import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.repository.ProductRepo;
 import com.tmt.tmdt.service.CategoryService;
@@ -7,6 +8,7 @@ import com.tmt.tmdt.service.ImageService;
 import com.tmt.tmdt.service.ProductService;
 import com.tmt.tmdt.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,7 +24,6 @@ public class AjaxController {
     private final ImageService imageService;
 
     private final ProductRepo productRepo;
-
 
 
     @GetMapping("autocomplete-search/product")
@@ -43,18 +44,11 @@ public class AjaxController {
 //
 
 
+    @GetMapping("test")
+    public List<Category> test(Model model) {
+        return categoryService.getCategoriesInHierarchical();
 
-//    @GetMapping("abc/{pid}/{cid}")
-//    public String deltest(@PathVariable("pid") Long pid, @PathVariable("cid") Long cid) {
-//        Product product = productService.getProduct(pid);
-//        product.removeImage(imageService.getImageDetail(cid));
-//        productRepo.save(product);
-//        return "sucess";
-//
-//    }
-
-    //
-
+    }
 
 
 }

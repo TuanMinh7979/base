@@ -26,7 +26,7 @@
     </div>
 
     <div class="form-group">
-        <label>Price</label>
+        <label>Image link</label>
         <input class="form-control" type="text" th:field="*{mainImageLink}" readonly="true">
         <span th:if="${#fields.hasErrors('mainImageLink')}" class="form-control alert alert-warning"
               th:errors="*{name}"></span>
@@ -34,10 +34,20 @@
 
     <div class="form-group">
         <label>Category</label>
-        <select th:field="*{category}" id="category-sel">
-            <th:block th:each="catei : ${categories}">
-                <option th:text="${catei.name}" th:value="${catei.id}"></option>
+        <select name="category" id="category-sel">
+            <!--            <th:block th:each="catei : ${categories}">-->
+            <!--                <option th:text="${catei.name}" th:value="${catei.id}"></option>-->
+            <!--            </th:block>-->
+
+            <th:block th:if="${product.id}">
+                <option th:each="cat : ${categoriesForForm}" th:value="${cat.id}" th:text="${cat.name}"
+                        th:selected="${cat.id==product.category.id}"></option>
             </th:block>
+            <th:block th:if="${product.id==null}">
+                <option th:each="cat : ${categoriesForForm}" th:value="${cat.id}" th:text="${cat.name}"
+                ></option>
+            </th:block>
+
 
         </select>
     </div>

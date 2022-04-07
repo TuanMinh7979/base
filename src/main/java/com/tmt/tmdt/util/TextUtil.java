@@ -6,7 +6,10 @@ import java.util.regex.Pattern;
 
 public class TextUtil {
     public static String generateCode(String text) {
-       text=text.toLowerCase(Locale.ROOT);
+        text = text.toLowerCase(Locale.ROOT);
+//
+        text = text.trim();
+//
         String result = Normalizer.normalize(text, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         result = pattern.matcher(result).replaceAll("");
@@ -17,5 +20,4 @@ public class TextUtil {
     }
 
 
-  
 }

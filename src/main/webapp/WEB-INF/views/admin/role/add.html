@@ -49,17 +49,17 @@
                 <div class="col-12"><input id="all-chbx" type="checkbox"> <span>All</span>
                 </div>
 
-                <div th:each="permissioni : ${permissionList}" class="card col-6 ">
+                <div th:each="permissioni : ${parentPermission}" class="card col-6 ">
                     <div class="card-header ">
-                        <input class="parent_permission_chbx" th:value="${permissioni.id}"
-                               type="checkbox" value="">
+                        <input class="parent_permission_chbx"
+                               type="checkbox" >
                         <span th:text="${permissioni.name}"></span>
                     </div>
                     <div class="card-body row justify-content-around">
-                        <div th:each="permissionSubi : ${permissioni.subPermissions}" class="col-3">
+                        <div th:each="permissionSubi : ${parentPermission.childs}" class="col-3">
                             <input class="child_permission_chbx"
                                    th:value="${permissionSubi.id}" name="permissions" type="checkbox">
-                            <span th:text="${permissionSubi.name}">
+                            <span th:text="${permissionSubi.id}">
 
                             </span>
                         </div>

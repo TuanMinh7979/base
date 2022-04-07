@@ -1,10 +1,7 @@
 function deleteOnTable(event) {
     event.preventDefault();
-
     let url = $(this).attr("href");
-
     let that = $(this);
-
     Swal.fire({
 
         title: 'Are you sure?',
@@ -17,7 +14,7 @@ function deleteOnTable(event) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                type: "post",
+                type: "POST",
                 url: url,
                 success: function (data) {
                     that.closest("tr").remove();
@@ -28,7 +25,7 @@ function deleteOnTable(event) {
                     // console.log(data.responseJSON);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Can not delete',
+                        title: 'Can not delete it',
                         // text: 'Something went wrong!',
 
                     })

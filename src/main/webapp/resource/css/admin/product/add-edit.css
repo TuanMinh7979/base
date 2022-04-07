@@ -43,3 +43,8 @@ i {
     border: 1px solid slategray;
 
 }
+.product__img{
+    width: 100%;
+    height: 100%;
+
+}

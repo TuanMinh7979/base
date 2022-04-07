@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -57,6 +58,8 @@ public class CategoryServiceImpl implements CategoryService {
         //code is unique also it not null if have no it -> ConstraintViolationException
 
         //=> use checknameexist in controller to send to client and not blak in name
+        System.out.println(category.getParent().getId());
+
         cateRepository.save(category);
     }
 
@@ -75,7 +78,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         cateRepository.deleteById(id);
-
 
 
     }
@@ -126,6 +128,27 @@ public class CategoryServiceImpl implements CategoryService {
         Product product = productService.getProduct(productId);
         cate.getProducts().remove(product);
         return cate;
+    }
+
+    @Override
+    public List<Category> getCategoriesInHierarchical() {
+        List<Category> categoriesRs = new ArrayList<>();
+        reRender(categoriesRs, cateRepository.findAll(), 1, "");
+        return categoriesRs;
+
+    }
+
+    public void reRender(List<Category> rs, List<Category> all, Integer id, String split) {
+        for (Category category : all) {
+            if (category.getParent() != null && category.getParent().getId() == id) {
+                String name = split + category.getName();
+                rs.add(new Category(category.getId(), name));
+                if (!category.getChildren().isEmpty()) reRender(rs, all, category.getId(), split.concat("--"));
+
+            }
+
+        }
+
     }
 
 

@@ -31,12 +31,27 @@
 
         <div class="row">
             <div class="col-md-6">
-                <form th:action="@{/admin/category/save}" th:object="${category}" method="post">
+                <form th:id="mainForm" th:action="@{/admin/category/save}" th:object="${category}" method="post">
                     <div class="form-group">
                         <label>Name</label>
-                        <input class="form-control" type="text" th:field="*{name}" placeholder="Tên danh mục">
-                        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning" th:errors="*{name}"></span>
+                        <input class="form-control" type="text" th:field="*{name}">
+                        <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
+                              th:errors="*{name}"></span>
                     </div>
+
+                    <div class="form-group">
+                        <select th:field="*{parent}">
+                            <option value="1">No parent</option>
+                            <thblock th:each="cat : ${categoriesForForm}">
+
+                                <option th:value="${cat.id}">[[${cat.name}]]</option>
+                            </thblock>
+
+                        </select>
+                        <span th:if="${#fields.hasErrors('parent')}" class="form-control alert alert-warning"
+                              th:errors="*{parent}"></span>
+                    </div>
+
                     <div class="form-group">
                         <input type="submit" value="add">
 
