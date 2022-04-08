@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,21 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Integer id) {
-
-        // có thể try catch và return null nếu không thể xóa
-//        try {
-//            cateRepository.deleteById(id);
-//            return id;
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            return null;
-//        }
-        //otherwise :  Có thể bắt runtime exception và trả về 1 page lỗi ngay trong service
-
-
         cateRepository.deleteById(id);
-
-
     }
 
     @Override
@@ -130,6 +117,7 @@ public class CategoryServiceImpl implements CategoryService {
         return cate;
     }
 
+    //category in hierarchical
     @Override
     public List<Category> getCategoriesInHierarchical() {
         List<Category> categoriesRs = new ArrayList<>();
@@ -149,6 +137,15 @@ public class CategoryServiceImpl implements CategoryService {
 
         }
 
+    }
+
+    @ResponseBody
+    public String checkUnique(Integer id, String name, String code) {
+        boolean isCreatingNew = (id == null || id == 0);
+        Category categoryByName = cateRepository.findByName(name);
+
+        if (isCreatingNew && categoryByName != null) return "Duplicate";
+        return "OK";
     }
 
 

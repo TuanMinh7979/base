@@ -25,9 +25,20 @@ public class Product extends BaseEntity implements Serializable {
     private Long id;
     @NotBlank
     private String name;
+
     private BigDecimal price;
+
     private String mainImageLink;
-    private String description;
+
+    @Lob
+    private String shortDescription;
+
+    @Lob
+    private String fullDescription;
+
+//    private boolean enable;
+
+    private Float discountPercent;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private Set<Image> images = new HashSet<>();

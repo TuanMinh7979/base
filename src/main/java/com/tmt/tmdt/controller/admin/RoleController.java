@@ -76,9 +76,6 @@ public class RoleController {
     public String add(Model model) {
         model.addAttribute("role", new Role());
         List<Permission> parentPermissions = permissionService.getPermissionByParent(1);
-
-//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println(parentPermissions.size());
         model.addAttribute("parentPermissions", parentPermissions);
         return "admin/role/add";
     }

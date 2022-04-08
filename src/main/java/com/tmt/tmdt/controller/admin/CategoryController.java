@@ -117,7 +117,7 @@ public class CategoryController {
 
     @PostMapping("api/delete/{id}")
     @ResponseBody
-    //call with ajax
+    //call by ajax
     public ResponseEntity<Integer> deleteCategory(@PathVariable Integer id) {
         categoryService.deleteById(id);
         //nếu xảy ra lỗi client sẽ nhận lõi 500

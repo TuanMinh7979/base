@@ -23,8 +23,7 @@ public class HomeController {
     @GetMapping("")
     public String index(Model model) {
 
-        List<Product> listProduct = productService.getProducts();
-        model.addAttribute("products", listProduct);
+
         return "home";
     }
 

@@ -41,14 +41,6 @@ public class AjaxController {
         return roleService.getRoleNamesByKw(kw);
     }
 
-//
-
-
-    @GetMapping("test")
-    public List<Category> test(Model model) {
-        return categoryService.getCategoriesInHierarchical();
-
-    }
 
 
 }

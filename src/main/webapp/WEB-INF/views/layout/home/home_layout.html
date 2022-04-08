@@ -2,13 +2,10 @@
 
 <html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout">
 <head>
-
     <th:block th:insert="~{layout/home/fragments/home_link.html :: link}"></th:block>
+    <th:block layout:fragment="addcss"></th:block>
 </head>
 <body>
-
-
-
 <!-- Header Section Begin -->
 <header class="header-section">
     <div class="header-top">
@@ -28,9 +25,11 @@
                 <div class="lan-selector">
                     <select class="language_drop" name="countries" id="countries" style="width:300px;">
                         <option value='yt' data-image="img/flag-1.jpg" data-imagecss="flag yt"
-                                data-title="English">English</option>
+                                data-title="English">English
+                        </option>
                         <option value='yu' data-image="img/flag-2.jpg" data-imagecss="flag yu"
-                                data-title="Bangladesh">German </option>
+                                data-title="Bangladesh">German
+                        </option>
                     </select>
                 </div>
                 <div class="top-social">
@@ -180,7 +179,7 @@
             <div class="col-lg-3">
                 <div class="footer-left">
                     <div class="footer-logo">
-                        <a href="#"><img src="img/footer-logo.png" alt="" /></a>
+                        <a href="#"><img src="img/footer-logo.png" alt=""/></a>
                     </div>
                     <ul>
                         <li>Address: 60-49 Road 11378 New York</li>
@@ -224,7 +223,7 @@
                         Get E-mail updates about our latest shop and special offers.
                     </p>
                     <form action="#" class="subscribe-form">
-                        <input type="text" placeholder="Enter Your Mail" />
+                        <input type="text" placeholder="Enter Your Mail"/>
                         <button type="button">Subscribe</button>
                     </form>
                 </div>
@@ -247,7 +246,7 @@
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
                     <div class="payment-pic">
-                        <img src="img/payment-method.png" alt="" />
+                        <img src="img/payment-method.png" alt=""/>
                     </div>
                 </div>
             </div>
@@ -258,6 +257,8 @@
 
 <!-- jQuery Plugins -->
 <th:block th:insert="~{layout/home/fragments/home_script.html :: script}"></th:block>
+
+<th:block layout:fragment="addscript"></th:block>
 </body>
 
 
