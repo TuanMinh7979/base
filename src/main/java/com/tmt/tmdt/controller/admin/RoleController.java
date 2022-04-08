@@ -76,7 +76,10 @@ public class RoleController {
     public String add(Model model) {
         model.addAttribute("role", new Role());
         List<Permission> parentPermissions = permissionService.getPermissionByParent(1);
-        model.addAttribute("permissionList", parentPermissions);
+
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println(parentPermissions.size());
+        model.addAttribute("parentPermissions", parentPermissions);
         return "admin/role/add";
     }
 
@@ -136,8 +139,8 @@ public class RoleController {
     //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
     public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
         Role role = null;
-        List<Permission> permissions = permissionService.getPermissionByParent(0);
-        model.addAttribute("permissionList", permissions.subList(1, permissions.size()));
+        List<Permission> permissions = permissionService.getPermissionByParent(1);
+        model.addAttribute("permissionList", permissions);
         try {
             //Catch casting exception
             Integer id = Integer.parseInt(idx);

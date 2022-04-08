@@ -12,15 +12,7 @@ $(function () {
 })
 $(document).on("change", ".file_inp", loadImg)
 
-function checkFileSize(fileInp) {
-    if (fileInp.files[0].size > MAX_FILE_SIZE) {
-        fileInp.setCustomValidity("Image must less than 500kb")
-        fileInp.reportValidity();
-        return false;
-    } else {
-        return true;
-    }
-}
+
 
 function createNewEmptyExtraImage() {
 
@@ -46,7 +38,7 @@ function createNewEmptyExtraImage() {
 
 function loadImg() {
     const file = this.files[0];
-    if (!checkFileSize(this)) {
+    if (!checkFileSize(this, 512000)) {
         return;
     }
 
@@ -61,10 +53,7 @@ function loadImg() {
     if (file) {
         const reader = new FileReader();
 
-
         reader.addEventListener("load", function () {
-
-            console.log(previewImage);
             previewImage.setAttribute("src", this.result);
         });
         reader.readAsDataURL(file);
@@ -77,10 +66,8 @@ function loadImg() {
 
             document.getElementById("delImageIds").value += previewContainer.parentElement.id + " ";
         }
-
         // createNewEmptyExtraImage();
     } else {
-
         previewImage.setAttribute("src", "");
     }
 

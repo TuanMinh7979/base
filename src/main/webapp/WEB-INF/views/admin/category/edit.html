@@ -35,7 +35,7 @@
 
                     <div class="form-group">
                         <label>Name</label>
-                        <input class="form-control" type="text" th:field="*{name}">
+                        <input class="form-control" type="text" th:field="*{name}" required>
                         <span th:if="${#fields.hasErrors('name')}" class="form-control alert alert-warning"
                               th:errors="*{name}"></span>
                     </div>

@@ -93,6 +93,17 @@ function deleteManyOnTable(event) {
     })
 }
 
+function checkFileSize(fileInp, maxsize) {
+    let maxsizeInKb= maxsize/1024;
+    if (fileInp.files[0].size > maxsize) {
+        fileInp.setCustomValidity("Image must less than "+maxsizeInKb+" Kb");
+        fileInp.reportValidity();
+        return false;
+    } else {
+        return true;
+    }
+}
+
 
 
 
