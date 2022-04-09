@@ -1,6 +1,9 @@
+var mode = "";
+
+//FOR IMAGES SCREEN
 var numOfImage = 1;
 var MAX_FILE_SIZE = 512000;
-var mode = "";
+
 $(function () {
 
     $("#shorDescription").richText();
@@ -8,11 +11,8 @@ $(function () {
     if (document.getElementById("productId") != null) {
         mode = "edit";
     }
-
-
 })
 $(document).on("change", ".file_inp", loadImg)
-
 
 
 function createNewEmptyExtraImage() {
@@ -86,6 +86,36 @@ $(document).on("click", ".image-preview .close-i", function () {
 
     $(this).parent().parent().hide();
 })
+
+//FOR DETAIL SCREEN
+
+
+
+$("#addNewRecordBtn").on("click", function (event) {
+    event.preventDefault();
+
+    const detailRecord = '  <div class="detail-record form-inline ">\n' +
+        '            <label>Name</label>\n' +
+        '            <input type="text" class="form-control" name="detailName" maxlength="255">\n' +
+        '            <label>Value</label>\n' +
+        '            <input type="text" class="form-control" name="detailValue" maxlength="255">\n' +
+        '\n' +
+        '            <i class="del-detail-record__btn fas fa-window-close"></i>\n' +
+        '\n' +
+        '        </div>';
+    $("#detailWrapper #detailWrapperContent").append(detailRecord);
+
+
+
+
+})
+$(document).on("click", ".detail-record .del-detail-record__btn", function () {
+    $(this).parent().hide();
+
+})
+
+
+
 
 
 

@@ -83,6 +83,10 @@
 
             </div>
             <input type="submit" class="btn btn-success" id="submit-btn" value="Edit">
+            <a style="margin-left: 100px" th:href="@{/admin/role/edit/{id}(id=${role.id})}"
+               type="reset" class="btn btn-default">
+                RESET
+            </a>
 
         </form>
 

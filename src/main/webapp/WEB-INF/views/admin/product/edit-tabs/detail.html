@@ -1,13 +1,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="content" th:remove="tag">
-    <div class="" form-inline>
-        <label>Name</label>
-        <input type="text" class="form-control" name="detailName" maxlength="255">
-        <label>Value</label>
-        <input type="text" class="form-control" name="detailValue" maxlength="255">
+
+
+    <div id="detailWrapper">
+
+        <div id="detailWrapperContent">
+
+        </div>
 
     </div>
+    <br/>
+
+    <div class="col-12">
+        <button id="addNewRecordBtn" class="btn btn-info ">Add record</button>
+    </div>
+    <br/>
 
 </div>
 </body>

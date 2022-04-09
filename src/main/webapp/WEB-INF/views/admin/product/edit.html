@@ -94,6 +94,12 @@
                     <input id="delImageIds" value="" type="hidden" name="delImageIds">
                     <div class="form-group">
                         <input class="btn btn-success" type="submit" value="save">
+
+                        <a style="margin-left: 100px" th:href="@{/admin/product/edit/{id}(id=${product.id})}"
+                           type="reset" class="btn btn-default">
+                            RESET
+                        </a>
+
                     </div>
                 </form>
 
