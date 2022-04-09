@@ -102,8 +102,6 @@ public class ProductController {
     public String save(Model model,
                        @RequestParam(value = "file", required = false) MultipartFile file,
                        @RequestParam(value = "files", required = false) MultipartFile[] files,
-                       @RequestParam(value="detail", required = false) List<String> detailNames,
-                       @RequestParam(value="")
                        @Valid @ModelAttribute("product") Product product, BindingResult result) {
         if (productService.existByName(product.getName())) {
             result.rejectValue("name", "nameIsExist");
@@ -194,6 +192,7 @@ public class ProductController {
         return new ResponseEntity<>(ids, HttpStatus.OK);
 
     }
+
 
 
 }
