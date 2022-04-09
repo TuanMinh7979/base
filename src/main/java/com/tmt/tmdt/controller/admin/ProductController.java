@@ -153,10 +153,12 @@ public class ProductController {
         try {
             //Catch casting exception
             Long id = Long.parseLong(idx);
-            product = productService.getProduct(id);
+            product = productService.getProductWithImages(id);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             product = productService.getProductByName(idx);
+            product = productService.getProductWithImages(product.getId());
+
         }
         //other exception will be handled in service
         model.addAttribute("product", product);

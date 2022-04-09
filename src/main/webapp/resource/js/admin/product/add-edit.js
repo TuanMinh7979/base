@@ -3,7 +3,8 @@ var MAX_FILE_SIZE = 512000;
 var mode = "";
 $(function () {
 
-    $("#description-text").richText();
+    $("#shorDescription").richText();
+    $("#fullDescription").richText();
     if (document.getElementById("productId") != null) {
         mode = "edit";
     }

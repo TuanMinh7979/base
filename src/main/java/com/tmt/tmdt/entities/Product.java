@@ -31,10 +31,10 @@ public class Product extends BaseEntity implements Serializable {
 
     private String mainImageLink;
 
-    @Lob
+
     private String shortDescription;
 
-    @Lob
+
     private String fullDescription;
 
 //    private boolean enable;
@@ -43,7 +43,9 @@ public class Product extends BaseEntity implements Serializable {
 
     //other way fetchlazy + orphan +cacasde All bc: image complete depend on product,
     // all operate on product affect to image
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    //(*) refactor to FetchType.Lazy
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
     private Set<Image> images = new HashSet<>();
 
     @JsonIgnore

@@ -40,9 +40,7 @@ public class Category extends BaseEntity implements Serializable {
     @OneToOne
     @JoinColumn(name="parent_id")
     private Category parent;
-
     //one to one one one to many
-
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     private Set<Category> children = new HashSet<>();
 
@@ -54,10 +52,14 @@ public class Category extends BaseEntity implements Serializable {
         this.name = name;
     }
 
+
+
     public Category(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
+
+    
 
     public Category(Integer id) {
         this.id = id;

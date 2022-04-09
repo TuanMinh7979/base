@@ -187,5 +187,12 @@ public class ProductServiceImpl implements ProductService {
         return productRepo.getProductByName(name);
     }
 
+    @Override
+    public Product getProductWithImages(Long id) {
+//        Product product = getProduct(id);
+        Product productWithImages = productRepo.getProductWithImages(id);
+        return productWithImages;
+    }
+
 
 }

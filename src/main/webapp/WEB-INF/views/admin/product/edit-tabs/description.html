@@ -2,10 +2,16 @@
 <body>
 <div th:fragment="content" th:remove="tag">
     <div>
-        <label>Description</label>
-        <textarea th:field="*{description}"  id="description-text" cols="30" rows="10"></textarea>
+        <label>Short Description</label>
+        <textarea th:field="*{shortDescription}"  id="shorDescription" cols="30" rows="10"></textarea>
     </div>
-    <span th:if="${#fields.hasErrors('description')}" class="form-control alert alert-warning" ></span>
+    <span th:if="${#fields.hasErrors('shortDescription')}" class="form-control alert alert-warning" ></span>
+
+    <div>
+        <label>Full Description</label>
+        <textarea th:field="*{fullDescription}"  id="fullDescription" cols="30" rows="10"></textarea>
+    </div>
+    <span th:if="${#fields.hasErrors('fullDescription')}" class="form-control alert alert-warning" ></span>
 
 </div>
 </body>

@@ -2,6 +2,7 @@ package com.tmt.tmdt.repository;
 
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Product;
+import com.tmt.tmdt.entities.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,7 +27,7 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     @Query(value = "select * from products where name like %?1%",
             countQuery = "select count(id) from products where name like %?1%",
             nativeQuery = true)
-    Page<Product> getProductsByName( String name, Pageable pageable);
+    Page<Product> getProductsByName(String name, Pageable pageable);
 
     @Query(value = "select * from products where category_id = ?1 "
             , countQuery = "select count(id) from products where category_id = ?1"
@@ -39,4 +40,7 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
             , countQuery = "select count(*) from products where category_id = ?1 and name like %?2%"
             , nativeQuery = true)
     Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable);
+
+    @Query("select p from Product p left join fetch p.images  where p.id= :id")
+    Product getProductWithImages(@Param("id") Long id);
 }

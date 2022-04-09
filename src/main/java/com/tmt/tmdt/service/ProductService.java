@@ -30,7 +30,7 @@ public interface ProductService {
 
     boolean existByName(String name);
 
-    Product save(Product product, MultipartFile file,  MultipartFile[] files) throws IOException;
+    Product save(Product product, MultipartFile file, MultipartFile[] files) throws IOException;
 
     Product update(Product product, MultipartFile file, MultipartFile[] files, String ids) throws IOException;
 
@@ -42,7 +42,7 @@ public interface ProductService {
 
     void deleteProducts(Long[] ids);
 
-
+    Product getProductWithImages(Long id);
 
 
 }
