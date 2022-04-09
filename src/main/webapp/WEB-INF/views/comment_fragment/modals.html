@@ -2,7 +2,7 @@
 <body>
 <div th:fragment="top-modal" th:remove="tag">
 
-    <button id="topModalBtn" type="button" class="btn btn-primary" data-toggle="modal"
+    <button id="topModalBtn" style="display: none" type="button" class="btn btn-primary" data-toggle="modal"
             data-target="#exampleModal">
         start modal
     </button>
@@ -34,7 +34,7 @@
 <!-- Button trigger modal -->
 
 <div th:fragment="center-modal" th:remove="tag">
-    <button id="centerModalBtn" type="button" class="btn btn-primary" data-toggle="modal"
+    <button id="centerModalBtn"  style="display: none" type="button" class="btn btn-primary" data-toggle="modal"
             data-target="#exampleModalCenter">
         Launch demo modal
     </button>

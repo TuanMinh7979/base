@@ -30,14 +30,16 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     // @JsonIgnore
 
-    @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+            //not consist delete
+
+    })
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public void redBalance(Integer amount) {
-        this.balance -= amount;
 
-    }
 
 
 }
