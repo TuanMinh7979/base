@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Category extends BaseEntity implements Serializable {
     private Integer id;
 
     @NotBlank
+    @Size(min=3)
     private String name;
 
 

@@ -31,20 +31,15 @@ public class RoleController {
     private final PermissionService permissionService;
     private final RoleService roleService;
 
-//    @ModelAttribute
-//    public void commonAtr(Model model) {
-//
-//
-//    }
 
     @GetMapping("api/viewApi")
     @ResponseBody
     public ViewApi<List<Category>> getRole(Model model,
-                                                 @RequestParam(name = "page", required = false) String pageParam,
-                                                 @RequestParam(name = "limit", required = false) String limitParam,
-                                                 @RequestParam(name = "sortBy", required = false) String sortBy,
-                                                 @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                                 @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
+                                           @RequestParam(name = "page", required = false) String pageParam,
+                                           @RequestParam(name = "limit", required = false) String limitParam,
+                                           @RequestParam(name = "sortBy", required = false) String sortBy,
+                                           @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                           @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -73,44 +68,57 @@ public class RoleController {
     }
 
     @GetMapping("add")
-    public String add(Model model) {
+    public String showAddForm(Model model) {
         model.addAttribute("role", new Role());
-        List<Permission> parentPermissions = permissionService.getPermissionByParent(1);
-        model.addAttribute("parentPermissions", parentPermissions);
+        model.addAttribute("parentPermissions", permissionService.getPermissionByParent(1));
         return "admin/role/add";
     }
 
     @PostMapping("save")
-    public String save(@RequestParam(name = "permissions", required = false) List<Integer> permissionIds, @Valid @ModelAttribute("role") Role role, BindingResult result) {
-//modelAttribute ko hieu cac asscociation mà không có trong chính bảng của nó
+    public String save(Model model, @Valid @ModelAttribute("role") Role role, BindingResult result) {
+
         if (roleService.existByName(role.getName())) {
             result.rejectValue("name", "nameIsExist");
         }
         if (!result.hasErrors()) {
-            Set<Permission> permissions = new HashSet<>();
-            for (Integer id : permissionIds) {
-                permissions.add(permissionService.getPermission(id));
-            }
-            role.setPermissions(permissions);
             roleService.save(role);
             return "redirect:/admin/role/";
         }
+        model.addAttribute("parentPermissions", permissionService.getPermissionByParent(1));
         return "admin/role/add";
 
 
     }
 
+    @GetMapping("edit/{idx}")
+    //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
+    public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
+        Role role = null;
+        model.addAttribute("parentPermissions", permissionService.getPermissionByParent(1));
+        try {
+            //Catch casting exception
+            role = roleService.getRoleWithPermissions(Integer.parseInt(idx));
+        } catch (NumberFormatException e) {
+            role = roleService.getRoleByNameWithPermissions(idx);
+        }
+        model.addAttribute("role", role);
+
+        return "admin/role/edit";
+
+    }
+
     @PostMapping("update")
-    public String update(@RequestParam(name = "permissions", required = false) List<Integer> permissionIds, @Valid @ModelAttribute("role") Role role, BindingResult result) {
+    public String update(Model model, @Valid @ModelAttribute("role") Role role, BindingResult result) {
+        if (roleService.existByName(role.getName())) {
+            result.rejectValue("name", "nameIsExist");
+        }
         if (!result.hasErrors()) {
-            Set<Permission> permissions = new HashSet<>();
-            for (Integer id : permissionIds) {
-                permissions.add(permissionService.getPermission(id));
-            }
-            role.setPermissions(permissions);
             roleService.save(role);
             return "redirect:/admin/role/";
         }
+
+        model.addAttribute("parentPermissions", permissionService.getPermissionByParent(1));
+
         return "admin/role/edit";
 
 
@@ -132,33 +140,14 @@ public class RoleController {
         return new ResponseEntity<>(ids, HttpStatus.OK);
     }
 
-    @GetMapping("edit/{idx}")
-    //rest api : showUpdateForm , showAddForm => getCategory(get)(just for update)
-    public String showUpdateForm(Model model, @PathVariable("idx") String idx) {
-        Role role = null;
-        List<Permission> permissions = permissionService.getPermissionByParent(1);
-        model.addAttribute("permissionList", permissions);
-        try {
-            //Catch casting exception
-            Integer id = Integer.parseInt(idx);
-            role = roleService.getRoleWithPermissions(id);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            role = roleService.getRoleByNameWithPermissions(idx);
-        }
-        model.addAttribute("role", role);
 
-        return "admin/role/edit";
-
-    }
-
-    @GetMapping("/api/active-permission-ids/{id}")
+    @GetMapping("/api/{id}/active-permission-ids")
     @ResponseBody
     public Set<Integer> getPermission(@PathVariable("id") Integer id) {
         Role role = roleService.getRoleWithPermissions(id);
-        Set<Integer> activePermissionIds = role.getPermissions().stream().map(p -> p.getId()).collect(Collectors.toSet());
-        return activePermissionIds;
-
+        return role.getPermissions().stream()
+                .map(p -> p.getId())
+                .collect(Collectors.toSet());
     }
 
 

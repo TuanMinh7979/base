@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface RoleRepo extends JpaRepository<Role, Integer> {
@@ -20,14 +21,11 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
     Page<Role> getRolesByNameLike(String searchNameTerm, Pageable pageable);
 
 
-    @Query("from Role where name= :name")
-    Role getRoleByName(@Param("name") String name);
-
     @Query("select r from Role r left join fetch r.permissions  where r.id= :id")
-    Role getRoleWithPermissions(@Param("id") Integer id);
+    Optional<Role> getRoleWithPermissions(@Param("id") Integer id);
 
     @Query("select r from Role r left join fetch r.permissions  where r.name= :name")
-    Role getRoleByNameWithPermissions(@Param("name") String name);
+    Optional<Role> getRoleByNameWithPermissions(@Param("name") String name);
 
     @Query("select name from Role where name like :kw% ")
     List<String> getRoleNamesByKw(@Param("kw") String kw);

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,33 +27,9 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-//    @GetMapping("/api/all")
-//    @ResponseBody
-//    public List<Category> testapi() {
-//        System.out.println("==========================");
-//        categoryService.getCategories().get(0).getProducts().forEach((p) -> {
-//            System.out.println("*************************"+p.getName());
-//            //with EAGER can get with get method but can not render json because open-session-in-view-layer= false
-//            //bug:,"products":[{"createAt":"2022-03-29T15:26:12.056281","updateAt":"2022-03-29T15:26:12.057278","id":8,"name":"ip13","price":30.00,"image":null
-//            // ,"description":null,"images"}]}]{"meta":{"message":"Could not write JSON: failed to lazily initialize a collection of role:
-//            // com.tmt.tmdt.entities.Product.images, could not initialize proxy - no Session; nested
-//            // exception is com.fasterxml.jackson.databind.JsonMappingException: failed to lazily initialize a collection of role:
-//            // com.tmt.tmdt.entities.Product.images, could not initialize proxy -
-//            // no Session (through reference chain: java.util.ArrayList[0]->com.tmt.tmdt.entities.Category[\"products\"]->
-//            // org.hibernate.collection.internal.PersistentSet[0]->com.tmt.tmdt.entities.Product[\"images\"])"}}
-//
-//            //LAZY CANNOT call getMethod even in java code
-//            //bug {"meta":{"message":"failed to lazily initialize a collection of role could not initialize proxy - no Session"}}
-//        });
-//        System.out.println("************************* " + categoryService.getCategory(86).getProducts().size());
-//
-//        return categoryService.getCategories();
-//    }
 
     @GetMapping("")
     public String index() {
-
-
         return "admin/category/index";
     }
 
@@ -89,7 +66,7 @@ public class CategoryController {
 
     @PostMapping("save")
     //rest api save => add(post), edit(put)
-    public String save(@Valid @ModelAttribute("category") Category category, BindingResult result) {
+    public String save(Model model, @Valid @ModelAttribute("category") Category category, BindingResult result) {
         if (categoryService.existByName(category.getName())) {
             result.rejectValue("name", "nameIsExist");
         }
@@ -98,17 +75,21 @@ public class CategoryController {
             categoryService.save(category);
             return "redirect:/admin/category";
         }
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
+
         return "admin/category/add";
     }
 
     @PostMapping("update")
     //rest api save => add(post), edit(put)
-    public String update(@Valid @ModelAttribute("category") Category category, BindingResult result) {
+    public String update(Model model, @Valid @ModelAttribute("category") Category category, BindingResult result) {
 
         if (!result.hasErrors()) {
             categoryService.save(category);
             return "redirect:/admin/category";
         }
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
+
         return "admin/category/edit";
     }
 
@@ -118,7 +99,7 @@ public class CategoryController {
     //call by ajax
     public ResponseEntity<Integer> deleteCategory(@PathVariable Integer id) {
         categoryService.deleteById(id);
-        //nếu xảy ra lỗi client sẽ nhận lõi 500
+
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
@@ -155,7 +136,6 @@ public class CategoryController {
 
         model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/category/add";
-
     }
 
 

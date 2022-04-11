@@ -1,8 +1,7 @@
-.tableBodyFixHeight {
+.tableFixHeight {
     height: 360px;
-    /*display: block;*/
+    display: block;
     overflow-y: auto;
-
     overflow-x: hidden;
 }
 
@@ -12,15 +11,14 @@
     table-layout: fixed;
 }
 
-#page500 {
 
-    background-image: url("../../img/500img.jpg");
-    background-size: cover;
-
-}
 #page400{
 
     background-image: url("../../img/404img.png");
     background-size: cover;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #28a745;
+    border-color: #3d9970;
+}

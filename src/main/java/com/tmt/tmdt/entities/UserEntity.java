@@ -32,10 +32,10 @@ public class UserEntity extends BaseEntity implements Serializable {
     @Size(max = 64)
     private String password;
 
-//    @Transient
-//    @NotBlank
-//    @Size(max = 5)
-//    private String confirmPassword;
+    @Transient
+    @NotBlank
+    @Size(max = 5)
+    private String confirmPassword;
 
     @NotBlank
     @Size(max = 128)
@@ -48,11 +48,7 @@ public class UserEntity extends BaseEntity implements Serializable {
     private UserStatus status;
 
     @JsonIgnore
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-            //not consist delete
-    })
+    @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
@@ -69,6 +65,12 @@ public class UserEntity extends BaseEntity implements Serializable {
         this.status = UserStatus.ENABLE;
 
     }
+
+    @Transient
+    public String defaultImage() {
+        return "/resource/img/default.png";
+    }
+
 
 
 }

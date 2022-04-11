@@ -1,15 +1,10 @@
 package com.tmt.tmdt.controller;
 
-import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
 import com.tmt.tmdt.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @ControllerAdvice
 @RequestMapping("")
@@ -20,7 +15,7 @@ public class HomeController {
 
     @GetMapping("")
     public String index(Model model) {
-        return "home";
+        return "home/home";
     }
 
     @GetMapping("tukhoa")
@@ -30,14 +25,14 @@ public class HomeController {
         }
         model.addAttribute("products", productService.getProductsByName(name));
 
-        return "home";
+        return "home/home";
     }
 
     @GetMapping("/danhmuc/{categoryId}")
     public String getProductsByCategory(Model model, @PathVariable("categoryId") Long categoryId) {
 //        List<Product> products = productService.getProductsByCategory(categoryId);
 //        model.addAttribute("products", products);
-        return "home";
+        return "home/home";
     }
 
 

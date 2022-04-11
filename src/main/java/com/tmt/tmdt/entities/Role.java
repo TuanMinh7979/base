@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +29,9 @@ public class Role extends BaseEntity implements Serializable {
     private Integer id;
 
     @NotBlank
+    @Size(min = 6, max=30)
     private String name;
+
     private String description;
 
     @JsonIgnore

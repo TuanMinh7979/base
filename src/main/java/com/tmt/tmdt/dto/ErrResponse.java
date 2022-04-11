@@ -11,22 +11,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ErrResponse {
 
-
-
     private Meta meta;
 
     @Getter
     @Setter
     @AllArgsConstructor
     public static class Meta {
-
         private Object message;
-
     }
 
     public static ErrResponse error(final Object message) {
         ErrResponse baseResponse = new ErrResponse();
-
         baseResponse.setMeta(new Meta(message));
         return baseResponse;
     }

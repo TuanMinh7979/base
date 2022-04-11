@@ -39,7 +39,7 @@
                     <label> Sort By Field</label>
                     <select id="by-sel" name="sortBy">
                         <option value="id">id</option>
-                        <option value="name">name</option>
+                        <option value="username">username</option>
 
 
                     </select>
@@ -72,7 +72,7 @@
             <div class="col-4"><a th:href="@{/admin/user/add}" class="btn btn-info float-right ">Add</a></div>
 
 
-            <div class="col-12">
+<!--            <div class="col-12">-->
                 <table class="table table-bordered tableFixHeight">
                     <thead>
                     <tr>
@@ -87,12 +87,12 @@
 
                     </tr>
                     </thead>
-                    <tbody id="tabledata" class="tableBodyFixHeight">
+                    <tbody id="tabledata" >
 
                     </tbody>
 
                 </table>
-            </div>
+<!--            </div>-->
             <div class="col-12"><a th:href="@{/admin/user/api/delete}" id="tag_delete_many"
                                    class="btn btn-danger float-right ml-2 ">Delete Many</a></div>
 

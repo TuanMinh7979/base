@@ -1,25 +1,41 @@
 package com.tmt.tmdt.service.impl;
 
+import com.tmt.tmdt.entities.Permission;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
 import com.tmt.tmdt.repository.RoleRepo;
+import com.tmt.tmdt.service.PermissionService;
 import com.tmt.tmdt.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 
 public class RoleServiceImpl implements RoleService {
     private final RoleRepo roleRepo;
+    private final PermissionService permissionService;
 
     @Override
     public Role save(Role role) {
+//        Set<Permission> permissions = new HashSet<>();
+//        if (permissionIds != null) {
+//            for (Integer id : permissionIds) {
+//                permissions.add(permissionService.getPermission(id));
+//            }
+//        }
+//        role.setPermissions(permissions);
+        System.out.println("______________________________");
+        System.out.println(role.getPermissions().size());
+
+
         return roleRepo.save(role);
     }
 
@@ -58,26 +74,31 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role with id " + id + " not found"));
     }
 
-    @Override
-    public Role getRoleByName(String name) {
-        return roleRepo.getRoleByName(name);
-    }
 
+    //for show update form, from id
     @Override
     public Role getRoleWithPermissions(Integer id) {
-        return Optional.ofNullable(roleRepo.getRoleWithPermissions(id))
+        return roleRepo.getRoleWithPermissions(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role with id " + id + " not found"));
+
     }
 
+    //for show update form, from name keyword
     @Override
     public Role getRoleByNameWithPermissions(String name) {
-        return Optional.ofNullable(roleRepo.getRoleByNameWithPermissions(name))
-                .orElseThrow(() -> new ResourceNotFoundException("Role with name" + name + "not found"));
+        return roleRepo.getRoleByNameWithPermissions(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Role with name " + name + "not found"));
     }
 
+    //for autocomplete data
     @Override
     public List<String> getRoleNamesByKw(String kw) {
         return roleRepo.getRoleNamesByKw(kw);
+    }
+
+    @Override
+    public List<Role> getRoles() {
+        return roleRepo.findAll();
     }
 
 

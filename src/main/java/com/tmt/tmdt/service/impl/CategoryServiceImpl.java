@@ -25,21 +25,10 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepo cateRepository;
     private final ProductService productService;
 
-    //có 2 chỗ cần handle exception : getById và thêm data dùng validation
     @Override
     public Category getCategory(Integer id) {
-        //nếu như findById là null thì ta không thể get()(exception)
-        //nếu v thì phải return Optional, vậy nên cần phải custom cho phải return null
-        //để controller còn biết mà xữ lý trả về.
-
-
-        //ta cũng có thể custom để return 1 page ngay trong service
-
         return cateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found")
-                );
-
-
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found"));
     }
 
     @Override

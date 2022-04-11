@@ -39,7 +39,7 @@ function createNewEmptyExtraImage() {
 
 function loadImg() {
     const file = this.files[0];
-    if (!checkFileSize(this, 512000)) {
+    if (!checkFileSize(this, MAX_FILE_SIZE)) {
         return;
     }
 
@@ -69,7 +69,8 @@ function loadImg() {
         }
         // createNewEmptyExtraImage();
     } else {
-        previewImage.setAttribute("src", "");
+        previewImage.style.display = null;
+        previewImage.setAttribute("src", `${defaultImage}`);
     }
 
 }

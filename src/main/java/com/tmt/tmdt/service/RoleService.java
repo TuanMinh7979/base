@@ -22,12 +22,12 @@ public interface RoleService {
 
     Role getRole(Integer id);
 
-    Role getRoleByName(String name);
-
     Role getRoleWithPermissions(Integer id);
 
     Role getRoleByNameWithPermissions(String name);
 
 
     List<String> getRoleNamesByKw(String kw);
+
+    List<Role> getRoles();
 }

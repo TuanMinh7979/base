@@ -11,7 +11,7 @@ $(function () {
 
 const loadActivePermissionIds = () => {
     let roleId = $("#id-inp").val();
-    url = `/admin/role/api/active-permission-ids/${roleId}`;
+    url = `/admin/role/api/${roleId}/active-permission-ids`;
     let checkboxes = $('.card-body input[type=checkbox]');
 
     $.ajax({

@@ -122,7 +122,7 @@ public class ProductController {
 
 
     @PostMapping(value = "update")
-    public String update(Model model, @RequestParam(value = "file", required = false) MultipartFile file,
+    public String update(@RequestParam(value = "file", required = false) MultipartFile file,
                          @RequestParam(value = "files", required = false) MultipartFile[] files,
                          @RequestParam("delImageIds") String delImageIds,
                          @Valid @ModelAttribute("product") Product product,

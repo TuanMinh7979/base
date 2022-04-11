@@ -3,15 +3,23 @@
 <div th:fragment="content" th:remove="tag">
     <div>
         <label>Short Description</label>
-        <textarea th:field="*{shortDescription}"  id="shorDescription" cols="30" rows="10"></textarea>
+        <textarea th:field="*{shortDescription}" id="shorDescription" cols="30" rows="10"></textarea>
     </div>
-    <span th:if="${#fields.hasErrors('shortDescription')}" class="form-control alert alert-warning" ></span>
+    <div th:if="${#fields.hasErrors('shortDescription')}"
+         class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span th:errors="*{shortDescription}"></span>
+        <div th:replace="comment_fragment/messages :: mes-btn"></div>
+    </div>
 
     <div>
         <label>Full Description</label>
-        <textarea th:field="*{fullDescription}"  id="fullDescription" cols="30" rows="10"></textarea>
+        <textarea th:field="*{fullDescription}" id="fullDescription" cols="30" rows="10"></textarea>
     </div>
-    <span th:if="${#fields.hasErrors('fullDescription')}" class="form-control alert alert-warning" ></span>
+    <div th:if="${#fields.hasErrors('fullDescription')}"
+         class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span th:errors="*{fullDescription}"></span>
+        <div th:replace="comment_fragment/messages :: mes-btn"></div>
+    </div>
 
 </div>
 </body>

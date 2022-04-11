@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -62,7 +63,6 @@ public class Product extends BaseEntity implements Serializable {
 
     //image is special case bc can not view the old file in update form now so can not use CascadeType.Persist
     //and do not use helper method
-
 
 
 }

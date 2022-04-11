@@ -1,21 +1,28 @@
 package com.tmt.tmdt.controller.admin;
 
+import com.tmt.tmdt.constant.UserStatus;
 import com.tmt.tmdt.dto.ViewApi;
+import com.tmt.tmdt.entities.Permission;
+import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.entities.UserEntity;
+import com.tmt.tmdt.service.RoleService;
 import com.tmt.tmdt.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import javax.persistence.PrePersist;
+import javax.validation.Valid;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/user")
@@ -23,6 +30,7 @@ import java.util.List;
 public class UserController {
 
     private final UserEntityService userEntityService;
+    private final RoleService roleService;
 
     @GetMapping("")
     public String index() {
@@ -70,6 +78,49 @@ public class UserController {
 
 
         return new ViewApi<>(totalPage, data);
+    }
+
+    @GetMapping("add")
+    public String add(Model model) {
+        model.addAttribute("user", new UserEntity());
+        model.addAttribute("rolesForForm", roleService.getRoles());
+        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
+        return "admin/user/add";
+    }
+
+    @PostMapping("/save")
+    public String save(Model model,
+                       @RequestParam(value = "file", required = false) MultipartFile file,
+                       @Valid @ModelAttribute("user") UserEntity userEntity,
+                       BindingResult result) {
+
+        if (userEntityService.existByUserName(userEntity.getUsername())) {
+            result.rejectValue("name", "nameIsExist");
+        }
+        if (!result.hasErrors()) {
+            userEntityService.save(userEntity);
+            return "redirect:/admin/user";
+        }
+        model.addAttribute("rolesForForm", roleService.getRoles());
+        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
+
+        return "admin/user/add";
+
+    }
+
+    @GetMapping("edit/{id}")
+    public String showUpdateForm(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("user", userEntityService.getUserEntity(id));
+        model.addAttribute("rolesForForm", roleService.getRoles());
+        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
+        return "admin/user/add";
+    }
+
+    @GetMapping("/api/{id}/active-role-ids")
+    public Set<Integer> getPermission(@PathVariable("id") Long id) {
+        return userEntityService.getUserEntity(id).getRoles().stream()
+                .map(r -> r.getId())
+                .collect(Collectors.toSet());
     }
 
 
