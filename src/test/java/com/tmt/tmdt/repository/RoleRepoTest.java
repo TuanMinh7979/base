@@ -20,7 +20,7 @@ class RoleRepoTest {
 
     @Test
     public void addMasterRole() {
-        Role masterrole = new Role("ROLE_EDITOR");
+        Role masterrole = new Role("ROLE_CUSTOMER");
 
         Role savedRole = roleRepo.save(masterrole);
 

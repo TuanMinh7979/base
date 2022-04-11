@@ -1,7 +1,6 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.response.ViewApi;
-import com.tmt.tmdt.entities.Category;
+import com.tmt.tmdt.dto.ViewApi;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
@@ -55,7 +54,7 @@ public class ProductController {
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewApi<List<Product>> getCategories(Model model,
+    public ViewApi<List<Product>> getProducts(Model model,
                                                 @RequestParam(name = "page", required = false) String pageParam,
                                                 @RequestParam(name = "limit", required = false) String limitParam,
                                                 @RequestParam(name = "sortBy", required = false) String sortBy,
@@ -192,6 +191,7 @@ public class ProductController {
         return new ResponseEntity<>(ids, HttpStatus.OK);
 
     }
+
 
 
 

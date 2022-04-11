@@ -66,6 +66,34 @@ public class ProductServiceImpl implements ProductService {
         return productRepo.existsByName(name);
     }
 
+    @Override
+    public Page<Product> getProductsByName(String name, Pageable pageable) {
+        return productRepo.getProductsByName(name, pageable);
+    }
+
+    @Override
+    public Page<Product> getProductsByCategory(Long categoryId, Pageable pageable) {
+        return productRepo.getProductsByCategory(categoryId, pageable);
+    }
+
+    @Override
+    public Product getProductByName(String name) {
+        return productRepo.getProductByName(name)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product with id " + name + " not found"));
+
+    }
+
+    @Override
+    public Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable) {
+        return productRepo.getProductsByCategoryAndNameLike(categoryId, name, pageable);
+    }
+
+    @Override
+    public Page getProducts(Pageable pageable) {
+        return productRepo.findAll(pageable);
+    }
+
 
     @Override
     @Transactional
@@ -145,15 +173,7 @@ public class ProductServiceImpl implements ProductService {
         return productSaved;
     }
 
-    @Override
-    public Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable) {
-        return productRepo.getProductsByCategoryAndNameLike(categoryId, name, pageable);
-    }
 
-    @Override
-    public Page getProducts(Pageable pageable) {
-        return productRepo.findAll(pageable);
-    }
 
 
     @Override
@@ -172,20 +192,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    @Override
-    public Page<Product> getProductsByName(String name, Pageable pageable) {
-        return productRepo.getProductsByName(name, pageable);
-    }
 
-    @Override
-    public Page<Product> getProductsByCategory(Long categoryId, Pageable pageable) {
-        return productRepo.getProductsByCategory(categoryId, pageable);
-    }
-
-    @Override
-    public Product getProductByName(String name) {
-        return productRepo.getProductByName(name);
-    }
 
     @Override
     public Product getProductWithImages(Long id) {

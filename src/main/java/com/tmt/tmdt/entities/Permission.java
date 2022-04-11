@@ -30,6 +30,7 @@ public class Permission extends BaseEntity implements Serializable {
 
     private String description;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
 

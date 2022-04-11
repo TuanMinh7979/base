@@ -14,8 +14,8 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
 
     boolean existsByName(String name);
 
-    @Query(value = "SELECT * FROM roles WHERE name like %?1%",
-            countQuery = "SELECT count(*) FROM roles WHERE name like %?1%",
+    @Query(value = "SELECT * FROM roles WHERE name like ?1%",
+            countQuery = "SELECT count(*) FROM roles WHERE name like ?1%",
             nativeQuery = true)
     Page<Role> getRolesByNameLike(String searchNameTerm, Pageable pageable);
 
@@ -29,6 +29,6 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
     @Query("select r from Role r left join fetch r.permissions  where r.name= :name")
     Role getRoleByNameWithPermissions(@Param("name") String name);
 
-    @Query("select name from Role where name like %:kw% ")
+    @Query("select name from Role where name like :kw% ")
     List<String> getRoleNamesByKw(@Param("kw") String kw);
 }

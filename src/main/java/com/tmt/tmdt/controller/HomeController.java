@@ -18,16 +18,10 @@ public class HomeController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-
-
     @GetMapping("")
     public String index(Model model) {
-
-
         return "home";
     }
-
-
 
     @GetMapping("tukhoa")
     public String getProductsByName(Model model, @RequestParam(value = "q") String name) {

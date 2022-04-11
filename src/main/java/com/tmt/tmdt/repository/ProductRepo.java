@@ -12,20 +12,21 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
-    @Query("select name from Product where name like %:kw% ")
+    @Query("select name from Product where name like :kw% ")
     List<String> getNamesByKw(@Param("kw") String kw);
 
-    @Query("from Product where name like %:name% ")
+    @Query("from Product where name like :name% ")
     List<Product> getProductsByName(@Param("name") String name);
 
-    Product getProductByName(String name);
+    Optional<Product> getProductByName(String name);
 
-    @Query(value = "select * from products where name like %?1%",
-            countQuery = "select count(id) from products where name like %?1%",
+    @Query(value = "select * from products where name like ?1%",
+            countQuery = "select count(id) from products where name like ?1%",
             nativeQuery = true)
     Page<Product> getProductsByName(String name, Pageable pageable);
 
@@ -36,8 +37,8 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
     boolean existsByName(String name);
 
-    @Query(value = "select * from products where category_id = ?1 and name like %?2%"
-            , countQuery = "select count(*) from products where category_id = ?1 and name like %?2%"
+    @Query(value = "select * from products where category_id = ?1 and name like ?2%"
+            , countQuery = "select count(*) from products where category_id = ?1 and name like ?2%"
             , nativeQuery = true)
     Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable);
 

@@ -1,4 +1,4 @@
-package com.tmt.tmdt.dto.response;
+package com.tmt.tmdt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

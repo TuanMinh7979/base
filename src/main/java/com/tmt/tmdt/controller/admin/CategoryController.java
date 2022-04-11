@@ -1,9 +1,7 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.response.ViewApi;
+import com.tmt.tmdt.dto.ViewApi;
 import com.tmt.tmdt.entities.Category;
-import com.tmt.tmdt.entities.Product;
-import com.tmt.tmdt.exception.ResourceNotFoundException;
 import com.tmt.tmdt.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

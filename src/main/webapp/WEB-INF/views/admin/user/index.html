@@ -3,9 +3,9 @@
       layout:decorate="~{layout/admin/admin_layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Product Manage</title>
+    <title>User Manage</title>
     <th:block layout:fragment="addcss">
-        <link rel="stylesheet" th:href="@{/resource/css/admin/product/index.css}">
+
     </th:block>
 
 </head>
@@ -18,7 +18,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Product</h1>
+                    <h1 class="m-0">User</h1>
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
@@ -27,22 +27,11 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12 row">
-                <div class="col-2 mb-5">
-                    <select id="category-sel" name="category">
-                        <option th:value="0" th:text="All"></option>
-                        <th:block th:each="catei : ${categories}">
-                            <option th:value="${catei.id}" th:text="${catei.name}"></option>
-
-                        </th:block>
-                    </select>
-                </div>
-
-                <div class=" input-group col-4 mb-5" style="margin: 0 auto">
+            <div class="col-12 ">
+                <div class="row input-group col-4 mb-5" style="margin: 0 auto">
                     <input id="main-search-inp" type="text" class="form-control" placeholder="Keyword">
                     <button id="main-search-btn" class="btn btn-danger">Search</button>
                 </div>
-
             </div>
             <div class="col-8 row mb-2">
 
@@ -71,7 +60,7 @@
                     <button id="btn-filter" class="btn btn-success">FILTER</button>
                 </div>
                 <div class="col-2">
-                    <a th:href="@{/admin/product}"
+                    <a th:href="@{/admin/user}"
                        type="reset" class="btn btn-default">
                         RESET
                     </a>
@@ -80,8 +69,7 @@
 
             </div>
 
-            <div class="col-2"><a th:href="@{/admin/product/add}" class="btn btn-info float-right ">Add</a></div>
-            <div class="col-2"><a th:href="@{/admin/product/product-detail}" class="btn btn-info float-right ">Product Detail</a></div>
+            <div class="col-4"><a th:href="@{/admin/user/add}" class="btn btn-info float-right ">Add</a></div>
 
 
             <div class="col-12">
@@ -89,12 +77,13 @@
                     <thead>
                     <tr>
                         <th class="col-1"></th>
-                        <th class="col-2">Name</th>
-                        <th class="col-1">Price</th>
-                        <th class="col-3">Image</th>
-                        <th class="col-2">Code</th>
-                        <th class="col-1">Category</th>
-                        <th class="col-2"></th>
+                        <th class="col-3">Avatar</th>
+                        <th class="col-2">Username</th>
+                        <th class="col-2">Email</th>
+                        <th class="col-2">Roles</th>
+                        <th class="col-1">Enable</th>
+                        <th class="col-1"></th>
+
 
                     </tr>
                     </thead>
@@ -104,11 +93,10 @@
 
                 </table>
             </div>
-            <div class="col-12"><a th:href="@{/admin/product/api/delete}" id="tag_delete_many"
-                                   class="btn btn-danger float-right ml-2 ">Delete Many</a>
+            <div class="col-12"><a th:href="@{/admin/user/api/delete}" id="tag_delete_many"
+                                   class="btn btn-danger float-right ml-2 ">Delete Many</a></div>
 
 
-            </div>
             <ul id="pagination-demo" class="pagination-sm col-12"></ul>
         </div>
     </div>
@@ -116,7 +104,7 @@
 
 
 <th:block layout:fragment="addscript">
-    <script th:src="@{/resource/js/admin/product/index.js}"></script>
+    <script th:src="@{/resource/js/admin/user/index.js}"></script>
 </th:block>
 </body>
 </html>

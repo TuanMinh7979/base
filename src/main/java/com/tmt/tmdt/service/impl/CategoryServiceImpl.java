@@ -54,13 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void save(Category category) {
-
         category.setCode(TextUtil.generateCode(category.getName()));
-        //code is unique also it not null if have no it -> ConstraintViolationException
-
-        //=> use checknameexist in controller to send to client and not blak in name
-        System.out.println(category.getParent().getId());
-
         cateRepository.save(category);
     }
 
@@ -89,7 +83,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getCategoryByName(String name) {
 
-        return cateRepository.findByName(name);
+        return cateRepository.findByName(name).
+                orElseThrow(() -> new ResourceNotFoundException("Category with name " + name + "not found"));
 
     }
 
@@ -139,14 +134,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    @ResponseBody
-    public String checkUnique(Integer id, String name, String code) {
-        boolean isCreatingNew = (id == null || id == 0);
-        Category categoryByName = cateRepository.findByName(name);
 
-        if (isCreatingNew && categoryByName != null) return "Duplicate";
-        return "OK";
-    }
 
 
 }

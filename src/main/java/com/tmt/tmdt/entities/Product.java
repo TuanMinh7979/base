@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.dao.DeadlockLoserDataAccessException;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -48,15 +47,6 @@ public class Product extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "product")
     private Set<Image> images = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-                    //not consist  delete
-    })
-    @JoinTable(name = "product_detail", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "detail_id"))
-    private Set<Detail> details = new HashSet<>();
-
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -73,14 +63,6 @@ public class Product extends BaseEntity implements Serializable {
     //image is special case bc can not view the old file in update form now so can not use CascadeType.Persist
     //and do not use helper method
 
-    public void addDetail(Detail detail) {
-        details.add(detail);
-        detail.getProduct().add(this);
-    }
 
-    public void removeDetail(Detail detail) {
-        details.remove(detail);
-        detail.getProduct().remove(this);
-    }
 
 }

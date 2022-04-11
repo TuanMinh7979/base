@@ -1,6 +1,6 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.response.ViewApi;
+import com.tmt.tmdt.dto.ViewApi;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Permission;
 import com.tmt.tmdt.entities.Role;
@@ -39,7 +39,7 @@ public class RoleController {
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewApi<List<Category>> getCategories(Model model,
+    public ViewApi<List<Category>> getRole(Model model,
                                                  @RequestParam(name = "page", required = false) String pageParam,
                                                  @RequestParam(name = "limit", required = false) String limitParam,
                                                  @RequestParam(name = "sortBy", required = false) String sortBy,
