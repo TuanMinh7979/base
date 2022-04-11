@@ -24,9 +24,11 @@ class UserRepoTest {
 
     @Test
     public void testCreateUser(){
-        Role admin =entityManager.find(Role.class, 1);
-        UserEntity userAdmin= new UserEntity("tuaneditor1","123","tuanmaila");
-        userAdmin.getRoles().add(admin);
+//        Role admin =entityManager.find(Role.class, 1);
+        Role editor =entityManager.find(Role.class, 3);
+        UserEntity userAdmin= new UserEntity("tuaneditor3","123","tuanmaila13");
+//        userAdmin.getRoles().add(admin);
+        userAdmin.getRoles().add(editor);
 
         for (Role role : userAdmin.getRoles()) {
             userAdmin.getRoleNameList().add(role.getName());

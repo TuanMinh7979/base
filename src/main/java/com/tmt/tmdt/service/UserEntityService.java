@@ -7,11 +7,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface UserEntityService {
-    Page<UserEntity> getUserEntitysByRoleAndNameLike(Long roleId, String searchNameTerm, Pageable pageable) ;
+    Page<UserEntity> getUserEntitysByRoleAndUserNameLike(Long roleId, String searchNameTerm, Pageable pageable) ;
 
      Page<UserEntity> getUserEntitysByRole(Long roleId, Pageable pageable) ;
 
-     Page<UserEntity> getProductsByUserName(String searchNameTerm, Pageable pageable) ;
+
 
     Page<UserEntity> getUserEntitys(Pageable pageable) ;
 
@@ -22,6 +22,5 @@ public interface UserEntityService {
     void save(UserEntity userEntity);
 
 
-
-
+    Page getUserEntityByUserName(String searchNameTerm, Pageable pageable);
 }

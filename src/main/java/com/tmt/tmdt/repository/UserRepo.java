@@ -16,14 +16,14 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
 
     @Query("select u from UserEntity u left join fetch u.roles r left join fetch r.permissions where u.username= :username")
-    Optional<UserEntity> findByUsernameWithPermission(@Param("username") String username);
+    Optional<UserEntity> getUserEntitysByUserNameWithPermissions(@Param("username") String username);
 
     boolean existsByUsername(String username);
 
     @Query(value = "select * from users where username like ?1%",
             countQuery = "select count(id) from users where username like ?1%",
             nativeQuery = true)
-    Page<UserEntity> getProductsByUserName(String username, Pageable pageable);
+    Page<UserEntity> getUserEntitysByUserName(String username, Pageable pageable);
 
     @Query(value = "select u.*, r.name from users u inner join user_role ur" +
             " on u.id = ur.user_id inner join roles r on ur.role_id = r.id and r.id= ?1"
@@ -31,4 +31,12 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
             " on u.id = ur.user_id inner join roles r on ur.role_id = r.id and r.id= ?1"
             , nativeQuery = true)
     Page<UserEntity> getUserEntitysByRole(Long roleId, Pageable pageable);
+
+
+    @Query(value = "select u.*, r.name from users u inner join user_role ur" +
+            " on u.id = ur.user_id and u.username like ?2% inner join roles r on ur.role_id = r.id and r.id = ?1"
+            , countQuery = "select count(u.id) from users u inner join user_role ur" +
+            " on u.id = ur.user_id and u.username like ?2% inner join roles r on ur.role_id = r.id and r.id = ?1"
+            , nativeQuery = true)
+    Page<UserEntity> getUserEntitysByRoleAndUserNameLike(Long roleId, String searchNameTerm, Pageable pageable);
 }

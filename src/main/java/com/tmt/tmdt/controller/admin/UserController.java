@@ -53,7 +53,7 @@ public class UserController {
 
             Long roleId = Long.parseLong(roleIdParam);
             if (searchNameTerm != null && !searchNameTerm.isEmpty()) {
-                userPage = userEntityService.getUserEntitysByRoleAndNameLike(roleId, searchNameTerm, pageable);
+                userPage = userEntityService.getUserEntitysByRoleAndUserNameLike(roleId, searchNameTerm, pageable);
             } else {
                 userPage = userEntityService.getUserEntitysByRole(roleId, pageable);
             }
@@ -61,7 +61,7 @@ public class UserController {
 
         } else if (searchNameTerm != null && !searchNameTerm.isEmpty()) {
 
-            userPage = userEntityService.getProductsByUserName(searchNameTerm, pageable);
+            userPage = userEntityService.getUserEntityByUserName(searchNameTerm, pageable);
         } else {
             userPage = userEntityService.getUserEntitys(pageable);
         }

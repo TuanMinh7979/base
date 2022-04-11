@@ -25,31 +25,9 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public Page<UserEntity> getUserEntitysByRoleAndNameLike(Long roleId, String searchNameTerm, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public Page<UserEntity> getUserEntitysByRole(Long roleId, Pageable pageable) {
-        return userRepo.getUserEntitysByRole(roleId, pageable);
-    }
-
-    @Override
-    public Page<UserEntity> getProductsByUserName(String searchNameTerm, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public Page<UserEntity> getUserEntitys(Pageable pageable) {
-        return userRepo.findAll(pageable);
-    }
-
-
-    @Override
     public List<UserEntity> getUserEntitys() {
         return userRepo.findAll();
     }
-
 
     @Override
     public void save(UserEntity userEntity) {
@@ -58,6 +36,29 @@ public class UserEntityServiceImpl implements UserEntityService {
             userEntity.getRoleNameList().add(role.getName());
         }
         userRepo.save(userEntity);
+    }
+
+
+    @Override
+    public Page<UserEntity> getUserEntitysByRole(Long roleId, Pageable pageable) {
+        return userRepo.getUserEntitysByRole(roleId, pageable);
+    }
+
+
+    @Override
+    public Page<UserEntity> getUserEntitys(Pageable pageable) {
+        return userRepo.findAll(pageable);
+    }
+
+
+    @Override
+    public Page<UserEntity> getUserEntitysByRoleAndUserNameLike(Long roleId, String searchNameTerm, Pageable pageable) {
+        return userRepo.getUserEntitysByRoleAndUserNameLike(roleId, searchNameTerm, pageable);
+    }
+
+    @Override
+    public Page getUserEntityByUserName(String searchNameTerm, Pageable pageable) {
+        return userRepo.getUserEntitysByUserName(searchNameTerm, pageable);
     }
 
 
