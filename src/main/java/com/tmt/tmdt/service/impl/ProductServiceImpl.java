@@ -102,13 +102,14 @@ public class ProductServiceImpl implements ProductService {
         Product productSaved = productRepo.save(product);
 
 
-        if (file != null && !file.isEmpty()) {
-            Map rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-            productSaved.setMainImageLink((String) rs.get("url"));
+        if (!file.isEmpty()) {
+            //away ! = null(alway have image even it empty in payload)
+            Map<String, String> rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            productSaved.setMainImageLink(rs.get("url"));
 
             Image mainImage = new Image();
-            mainImage.setPublicId((String) rs.get("public_id"));
-            mainImage.setLink((String) rs.get("url"));
+            mainImage.setPublicId(rs.get("public_id"));
+            mainImage.setLink(rs.get("url"));
             mainImage.setProduct(productSaved);
             mainImage.setMain(true);
             imageService.save(mainImage);
@@ -118,10 +119,10 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile filei : files) {
 
             if (!filei.isEmpty()) {
-                Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                Map<String, String> rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 Image image = new Image();
-                image.setPublicId((String) rsi.get("public_id"));
-                image.setLink((String) rsi.get("url"));
+                image.setPublicId(rsi.get("public_id"));
+                image.setLink(rsi.get("url"));
                 image.setProduct(productSaved);
                 imageService.save(image);
             }
@@ -145,12 +146,12 @@ public class ProductServiceImpl implements ProductService {
         }
         Product productSaved = productRepo.save(product);
         if (file != null && !file.isEmpty()) {
-            Map rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-            productSaved.setMainImageLink((String) rs.get("url"));
+            Map<String, String> rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+            productSaved.setMainImageLink(rs.get("url"));
 
             Image mainImage = new Image();
-            mainImage.setPublicId((String) rs.get("public_id"));
-            mainImage.setLink((String) rs.get("url"));
+            mainImage.setPublicId(rs.get("public_id"));
+            mainImage.setLink(rs.get("url"));
             mainImage.setProduct(productSaved);
             mainImage.setMain(true);
             imageService.save(mainImage);
@@ -161,19 +162,17 @@ public class ProductServiceImpl implements ProductService {
         if (files == null) return productSaved;
         for (MultipartFile filei : files) {
             if (!filei.isEmpty()) {
-                Map rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                Map<String, String> rsi = cloudinary.uploader().upload(filei.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
 
                 Image image = new Image();
-                image.setPublicId((String) rsi.get("public_id"));
-                image.setLink((String) rsi.get("url"));
+                image.setPublicId(rsi.get("public_id"));
+                image.setLink(rsi.get("url"));
                 image.setProduct(productSaved);
                 imageService.save(image);
             }
         }
         return productSaved;
     }
-
-
 
 
     @Override
@@ -190,8 +189,6 @@ public class ProductServiceImpl implements ProductService {
             productRepo.deleteById(id);
         }
     }
-
-
 
 
     @Override

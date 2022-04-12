@@ -42,6 +42,8 @@ public class UserEntity extends BaseEntity implements Serializable {
     private String email;
     private String imageLink;
 
+    @OneToOne
+    private Image image;
 
     @Enumerated(EnumType.STRING)
     @NotNull

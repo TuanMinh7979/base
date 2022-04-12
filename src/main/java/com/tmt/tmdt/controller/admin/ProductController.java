@@ -55,12 +55,12 @@ public class ProductController {
     @GetMapping("api/viewApi")
     @ResponseBody
     public ViewApi<List<Product>> getProducts(Model model,
-                                                @RequestParam(name = "page", required = false) String pageParam,
-                                                @RequestParam(name = "limit", required = false) String limitParam,
-                                                @RequestParam(name = "sortBy", required = false) String sortBy,
-                                                @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                                @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
-                                                @RequestParam(name = "category", required = false) String categoryIdParam) {
+                                              @RequestParam(name = "page", required = false) String pageParam,
+                                              @RequestParam(name = "limit", required = false) String limitParam,
+                                              @RequestParam(name = "sortBy", required = false) String sortBy,
+                                              @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                              @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
+                                              @RequestParam(name = "category", required = false) String categoryIdParam) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -99,8 +99,11 @@ public class ProductController {
     @PostMapping("save")
 
     public String save(Model model,
-                       @RequestParam(value = "file", required = false) MultipartFile file,
+                       //away. it is empty(check empty file for this)
+                       @RequestParam(value = "file") MultipartFile file,
+                       //sometime check null(required -> checknull)
                        @RequestParam(value = "files", required = false) MultipartFile[] files,
+
                        @Valid @ModelAttribute("product") Product product, BindingResult result) {
         if (productService.existByName(product.getName())) {
             result.rejectValue("name", "nameIsExist");
@@ -191,8 +194,6 @@ public class ProductController {
         return new ResponseEntity<>(ids, HttpStatus.OK);
 
     }
-
-
 
 
 }

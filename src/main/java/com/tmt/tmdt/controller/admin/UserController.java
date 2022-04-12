@@ -1,14 +1,16 @@
 package com.tmt.tmdt.controller.admin;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.tmt.tmdt.constant.UserStatus;
+import com.tmt.tmdt.dto.ImageRequestDto;
 import com.tmt.tmdt.dto.ViewApi;
-import com.tmt.tmdt.entities.Permission;
-import com.tmt.tmdt.entities.Role;
+import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.UserEntity;
+import com.tmt.tmdt.mapper.ImageMapper;
 import com.tmt.tmdt.service.RoleService;
 import com.tmt.tmdt.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +19,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.PrePersist;
 import javax.validation.Valid;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,6 +35,9 @@ public class UserController {
 
     private final UserEntityService userEntityService;
     private final RoleService roleService;
+    private final ImageMapper imageMapper;
+    private final Cloudinary cloudinary;
+
 
     @GetMapping("")
     public String index() {
@@ -88,19 +95,29 @@ public class UserController {
         return "admin/user/add";
     }
 
+
     @PostMapping("/save")
     public String save(Model model,
-                       @RequestParam(value = "file", required = false) MultipartFile file,
+                       ImageRequestDto imageRequestDto,
                        @Valid @ModelAttribute("user") UserEntity userEntity,
-                       BindingResult result) {
-
+                       BindingResult result) throws IOException {
         if (userEntityService.existByUserName(userEntity.getUsername())) {
             result.rejectValue("name", "nameIsExist");
         }
         if (!result.hasErrors()) {
-            userEntityService.save(userEntity);
+            if(!imageRequestDto.getFile().isEmpty()) {
+                imageRequestDto.setUploadRs(cloudinary.uploader().
+                        upload(imageRequestDto.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto")));
+            }else{
+                //tuc la ta remove hoac chua tao file.(ta can check neu id da ton tai thi ta xoa file, con
+                // khong thi tra cho save ma khong co anh)
+
+            }
+            Image image= imageMapper.toModel(imageRequestDto);
+            userEntityService.save(userEntity, image);
             return "redirect:/admin/user";
         }
+
         model.addAttribute("rolesForForm", roleService.getRoles());
         model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
 

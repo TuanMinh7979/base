@@ -25,17 +25,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(Role role) {
-//        Set<Permission> permissions = new HashSet<>();
-//        if (permissionIds != null) {
-//            for (Integer id : permissionIds) {
-//                permissions.add(permissionService.getPermission(id));
-//            }
-//        }
-//        role.setPermissions(permissions);
-        System.out.println("______________________________");
-        System.out.println(role.getPermissions().size());
-
-
         return roleRepo.save(role);
     }
 

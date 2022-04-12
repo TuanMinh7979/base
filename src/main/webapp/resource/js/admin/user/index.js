@@ -72,8 +72,8 @@ function renderData(data) {
     data.data.map(function (useri) {
         // let roleStr= useri.role
         rs += "<tr>";
-        rs += `<td class="col-1"><input type="checkbox" value="${useri.id}"></td>`;
-        rs += `<td class="col-3"><img class="image-container__img" src=${useri.imageLink}</td>`;
+        rs += `<td class="col-1"><input class="tr__checkbox"type="checkbox" value="${useri.id}"></td>`;
+        rs += `<td  class="avatar-container col-3"><img class="avatar__img" src="${useri.imageLink}"</td>`;
         rs += `<td class="col-2">${useri.username}</td>`;
         rs += `<td class="col-2">${useri.email}</td>`;
         rs += `<td class="col-2">${useri.roleNameList.toString()}</td>`;

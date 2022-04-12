@@ -1,5 +1,6 @@
 package com.tmt.tmdt.service;
 
+import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,12 @@ public interface UserEntityService {
 
     List<UserEntity> getUserEntitys();
 
-    void save( UserEntity userEntity);
+    void save(UserEntity userEntity, Image image);
 
 
     Page getUserEntityByUserName(String searchNameTerm, Pageable pageable);
 
 
     boolean existByUserName(String username);
+    boolean existById(Long id);
 }

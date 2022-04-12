@@ -1,5 +1,6 @@
 package com.tmt.tmdt.service.impl;
 
+import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.entities.UserEntity;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -20,7 +20,7 @@ import java.util.Set;
 public class UserEntityServiceImpl implements UserEntityService {
 
     private final UserRepo userRepo;
-    private final RoleService roleService;
+
 
     private List<String> setRoleNameListHelper(List<String> currentRoleNameList, Set<Role> roles) {
         //use for 2 case add new or remove all
@@ -52,8 +52,10 @@ public class UserEntityServiceImpl implements UserEntityService {
 
 
     @Override
-    public void save(UserEntity userEntity) {
+    public void save(UserEntity userEntity, Image image) {
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
+        userEntity.setImage(image);
+        userEntity.setImageLink(image.getLink());
         userRepo.save(userEntity);
     }
 
@@ -83,6 +85,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Override
     public boolean existByUserName(String username) {
         return userRepo.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existById(Long id) {
+        return userRepo.existsById(id);
     }
 
 
