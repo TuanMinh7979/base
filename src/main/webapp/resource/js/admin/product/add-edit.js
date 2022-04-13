@@ -43,10 +43,10 @@ function loadImg() {
         return;
     }
 
-    let previewContainer = this.previousSibling.previousSibling;
+    let imagePreview = this.previousSibling.previousSibling;
 
-    console.log(previewContainer);
-    let previewImage = previewContainer.querySelector(
+
+    let imagePreviewImg = imagePreview.querySelector(
         ".image-preview__img"
     );
 
@@ -55,22 +55,22 @@ function loadImg() {
         const reader = new FileReader();
 
         reader.addEventListener("load", function () {
-            previewImage.setAttribute("src", this.result);
+            imagePreviewImg.setAttribute("src", this.result);
         });
         reader.readAsDataURL(file);
 
         //on reupload existed image
-        if (previewContainer.className.includes("saved-image-preview") && mode === "edit") {
+        if (imagePreview.className.includes("saved-image-preview") && mode === "edit") {
             // alert(previewContainer.parentElement);
             // alert(previewContainer.parentElement.id);
             // console.log(previewContainer.parentElement);
 
-            document.getElementById("delImageIds").value += previewContainer.parentElement.id + " ";
+            document.getElementById("delImageIds").value += imagePreview.parentElement.id + " ";
         }
         // createNewEmptyExtraImage();
     } else {
-        previewImage.style.display = null;
-        previewImage.setAttribute("src", `${defaultImage}`);
+        imagePreviewImg.style.display = null;
+        imagePreviewImg.setAttribute("src", `${defaultImage}`);
     }
 
 }

@@ -30,4 +30,6 @@ public interface RoleService {
     List<String> getRoleNamesByKw(String kw);
 
     List<Role> getRoles();
+
+    List<Integer> getRoleIdsByUserId(Long userId);
 }

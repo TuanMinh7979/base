@@ -36,5 +36,11 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionRepo.getPermissionsByParent(parentId);
     }
 
+    //for api
+    @Override
+    public List<Integer> getPermissionIdsByRoleId(Integer roleId) {
+        return permissionRepo.getPermissionIdsByRoleId(roleId);
+    }
+
 
 }

@@ -29,4 +29,8 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
 
     @Query("select name from Role where name like :kw% ")
     List<String> getRoleNamesByKw(@Param("kw") String kw);
+
+    //for api
+    @Query("select r.id from Role r join r.users u where u.id = :userId")
+    List<Integer> getRoleIdsByUserId(@Param("userId") Long userId);
 }

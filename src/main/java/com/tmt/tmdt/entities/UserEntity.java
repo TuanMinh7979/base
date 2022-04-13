@@ -33,7 +33,6 @@ public class UserEntity extends BaseEntity implements Serializable {
     private String password;
 
     @Transient
-    @NotBlank
     @Size(max = 5)
     private String confirmPassword;
 
@@ -43,6 +42,7 @@ public class UserEntity extends BaseEntity implements Serializable {
     private String imageLink;
 
     @OneToOne
+    //unibidirectional-> this is second model it has image_id column
     private Image image;
 
     @Enumerated(EnumType.STRING)
@@ -70,9 +70,8 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     @Transient
     public String defaultImage() {
-        return "/resource/img/default.png";
+        return "/resource/img/defaultAvatar.jpg";
     }
-
 
 
 }

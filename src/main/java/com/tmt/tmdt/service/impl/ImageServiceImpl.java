@@ -8,6 +8,7 @@ import com.tmt.tmdt.repository.ImageRepo;
 import com.tmt.tmdt.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getImageDetail(Long id) {
+    public Image getImage(Long id) {
         return imageRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Image with id " + id + " not found"));
     }
@@ -39,16 +40,14 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void deleteById(Long id) throws IOException {
 
-        Image image = getImageDetail(id);
+        Image image = getImage(id);
         String publicId = image.getPublicId();
         cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
         imageRepo.deleteById(id);
     }
 
-    @Override
-    public void deleteFromCloud(Long id) throws IOException {
-        Image image = getImageDetail(id);
-        String publicId = image.getPublicId();
-        cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-    }
+
+
+
+
 }

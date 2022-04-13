@@ -32,7 +32,7 @@
             <div class="col-12">
                 <div class="form-group col-3">
                     <label>Id</label>
-                    <input class="form-control" type="text" id="id-inp" th:field="*{id}" readonly="true">
+                    <input class="form-control" type="text" id="roleId-inp" th:field="*{id}" readonly="true">
                     <span th:if="${#fields.hasErrors('id')}" class="form-control alert alert-warning"
                           th:errors="*{id}"></span>
                 </div>

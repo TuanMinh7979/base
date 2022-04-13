@@ -1,7 +1,7 @@
 var mode="";
 $(function () {
 
-    if (document.getElementById("id-inp") != null) {
+    if (document.getElementById("roleId-inp") != null) {
         mode = "edit";
         loadActivePermissionIds();
     }
@@ -10,7 +10,7 @@ $(function () {
 })
 
 const loadActivePermissionIds = () => {
-    let roleId = $("#id-inp").val();
+    let roleId = $("#roleId-inp").val();
     url = `/admin/role/api/${roleId}/active-permission-ids`;
     let checkboxes = $('.card-body input[type=checkbox]');
 
@@ -21,14 +21,13 @@ const loadActivePermissionIds = () => {
 
 
         success: function (data) {
-            console.log(data);
-
             data.map(function (idi) {
 
                     $.each(checkboxes, function (index, value) {
                         if (value.value == idi) {
                             jelm = $(value);
-                            jelm.prop("checked", true);
+                            jelm.prop("checked", true)
+                            return;
                         }
 
                     })

@@ -13,4 +13,8 @@ public interface PermissionRepo extends JpaRepository<Permission, Integer> {
 
     @Query("from  Permission  where parent.id = :parent ")
     List<Permission> getPermissionsByParent(@Param("parent") Integer parentId);
+
+    //for api
+    @Query("select p.id from Permission p join p.roles r where r.id = :roleId")
+    List<Integer> getPermissionIdsByRoleId(@Param("roleId") Integer roleId);
 }

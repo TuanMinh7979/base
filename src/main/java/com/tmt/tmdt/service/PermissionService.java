@@ -13,4 +13,8 @@ public interface PermissionService {
     Permission getPermission(Integer id);
 
     List<Permission> getPermissionByParent(Integer parentId);
+
+    //for api
+    List<Integer> getPermissionIdsByRoleId(Integer roleId);
+
 }

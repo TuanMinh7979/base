@@ -144,12 +144,12 @@ public class RoleController {
 
     @GetMapping("/api/{id}/active-permission-ids")
     @ResponseBody
-    public Set<Integer> getPermission(@PathVariable("id") Integer id) {
-        Role role = roleService.getRoleWithPermissions(id);
-        return role.getPermissions().stream()
-                .map(p -> p.getId())
-                .collect(Collectors.toSet());
+    public List<Integer> getPermission(@PathVariable("id") Integer roleId) {
+
+        return permissionService.getPermissionIdsByRoleId(roleId);
     }
+
+
 
 
 }

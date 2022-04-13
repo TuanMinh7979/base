@@ -27,4 +27,6 @@ public interface UserEntityService {
 
     boolean existByUserName(String username);
     boolean existById(Long id);
+
+
 }

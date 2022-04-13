@@ -21,7 +21,6 @@ import java.util.Set;
 
 public class RoleServiceImpl implements RoleService {
     private final RoleRepo roleRepo;
-    private final PermissionService permissionService;
 
     @Override
     public Role save(Role role) {
@@ -88,6 +87,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getRoles() {
         return roleRepo.findAll();
+    }
+
+    @Override
+    public List<Integer> getRoleIdsByUserId(Long userId) {
+        return roleRepo.getRoleIdsByUserId(userId);
     }
 
 

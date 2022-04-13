@@ -8,7 +8,9 @@ import com.tmt.tmdt.dto.ViewApi;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.UserEntity;
 import com.tmt.tmdt.mapper.ImageMapper;
+import com.tmt.tmdt.service.ImageService;
 import com.tmt.tmdt.service.RoleService;
+import com.tmt.tmdt.service.UploadService;
 import com.tmt.tmdt.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +40,8 @@ public class UserController {
     private final RoleService roleService;
     private final ImageMapper imageMapper;
     private final Cloudinary cloudinary;
+    private final ImageService imageService;
+    private final UploadService uploadService;
 
 
     @GetMapping("")
@@ -101,26 +106,26 @@ public class UserController {
                        ImageRequestDto imageRequestDto,
                        @Valid @ModelAttribute("user") UserEntity userEntity,
                        BindingResult result) throws IOException {
+//        boolean isExist= userEntityService.existById(userEntity.getId());
         if (userEntityService.existByUserName(userEntity.getUsername())) {
-            result.rejectValue("name", "nameIsExist");
+            result.rejectValue("username", "nameIsExist");
         }
         if (!result.hasErrors()) {
-            if(!imageRequestDto.getFile().isEmpty()) {
-                imageRequestDto.setUploadRs(cloudinary.uploader().
-                        upload(imageRequestDto.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto")));
-            }else{
-                //tuc la ta remove hoac chua tao file.(ta can check neu id da ton tai thi ta xoa file, con
-                // khong thi tra cho save ma khong co anh)
+            //only upload if no binđing error occurs
+            Image image = null;
+            if (!imageRequestDto.getFile().isEmpty()) {
+
+                imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
+                image = imageMapper.toModel(imageRequestDto);
+                imageService.save(image);
 
             }
-            Image image= imageMapper.toModel(imageRequestDto);
             userEntityService.save(userEntity, image);
+
             return "redirect:/admin/user";
         }
-
         model.addAttribute("rolesForForm", roleService.getRoles());
         model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
-
         return "admin/user/add";
 
     }
@@ -130,14 +135,56 @@ public class UserController {
         model.addAttribute("user", userEntityService.getUserEntity(id));
         model.addAttribute("rolesForForm", roleService.getRoles());
         model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
-        return "admin/user/add";
+        return "admin/user/edit";
     }
 
+    @Transactional
+    @PostMapping("/update")
+    public String update(Model model,
+                         @RequestParam(value = "delImageId", required = false) String delImageId,
+                         ImageRequestDto imageRequestDto,
+                         @Valid @ModelAttribute("user") UserEntity userEntity,
+                         BindingResult result) throws IOException {
+
+        String oldUserName = userEntityService.getUserEntity(userEntity.getId()).getUsername();
+        if ((userEntity.getUsername() == oldUserName)
+                && userEntityService.existByUserName(userEntity.getUsername())) {
+            result.rejectValue("username", "nameIsExist");
+        }
+        if (!result.hasErrors()) {
+            System.out.println("________________________");
+            if (delImageId != null && !delImageId.isEmpty()) {
+                System.out.println("+++++++++++++++++++++++++++");
+                delImageId = delImageId.trim();
+                Long imageIdToDel = Long.parseLong(delImageId);
+                uploadService.deleteFromCloud(imageIdToDel);
+                userEntity.setImage(null);
+                imageService.deleteById(imageIdToDel);
+
+            }
+            Image image = null;
+            if (!imageRequestDto.getFile().isEmpty()) {
+
+                imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
+                image = imageMapper.toModel(imageRequestDto);
+                imageService.save(image);
+
+            }
+            userEntityService.save(userEntity, image);
+
+            return "redirect:/admin/user";
+        }
+        model.addAttribute("rolesForForm", roleService.getRoles());
+        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
+        return "admin/user/add";
+
+    }
+
+
     @GetMapping("/api/{id}/active-role-ids")
-    public Set<Integer> getPermission(@PathVariable("id") Long id) {
-        return userEntityService.getUserEntity(id).getRoles().stream()
-                .map(r -> r.getId())
-                .collect(Collectors.toSet());
+    @ResponseBody
+    public List<Integer> getPermission(@PathVariable("id") Long id) {
+        return roleService.getRoleIdsByUserId(id);
     }
 
 

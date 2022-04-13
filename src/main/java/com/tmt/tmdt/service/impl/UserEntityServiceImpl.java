@@ -53,11 +53,15 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Override
     public void save(UserEntity userEntity, Image image) {
+        if (image != null) {
+            userEntity.setImage(image);
+            userEntity.setImageLink(image.getLink());
+        }
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
-        userEntity.setImage(image);
-        userEntity.setImageLink(image.getLink());
         userRepo.save(userEntity);
     }
+
+
 
 
     @Override
