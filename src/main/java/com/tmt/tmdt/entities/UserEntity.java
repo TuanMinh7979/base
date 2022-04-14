@@ -41,8 +41,13 @@ public class UserEntity extends BaseEntity implements Serializable {
     private String email;
     private String imageLink;
 
-    @OneToOne
-    //unibidirectional-> this is second model it has image_id column
+
+    @JsonIgnore
+    @OneToOne(
+            mappedBy = "userEntity",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private Image image;
 
     @Enumerated(EnumType.STRING)

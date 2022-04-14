@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,6 +145,10 @@ public class ProductServiceImpl implements ProductService {
             }
 
         }
+        System.out.println("____________________________");
+
+//        product.getImages().forEach(i -> System.out.println(i.getPublicId()));
+        System.out.println("____________________________");
         Product productSaved = productRepo.save(product);
         if (file != null && !file.isEmpty()) {
             Map<String, String> rs = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));

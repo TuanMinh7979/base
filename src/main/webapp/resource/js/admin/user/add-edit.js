@@ -39,25 +39,19 @@ function selectNoneImage(btn) {
 }
 
 function loadFile() {
-    const file = this.files[0];
+    let file = this.files[0];
 
-    // let imagePreview = this.previousSibling.previousSibling;
     let imagePreview = $(this).parent().parent();
-    // let imagePreviewImg = imagePreview.querySelector(
-    //     ".image-preview__img"
-    // );
+
     let imagePreviewImg = imagePreview.find(".image-preview__img");
-    if (!checkFileSize(this, MAX_FILE_SIZE)) {
+    if (!checkFileSize(file, this, MAX_FILE_SIZE)) {
         return;
     }
 
     if (file) {
         const reader = new FileReader();
 
-        // reader.addEventListener("load", function () {
-        //     imagePreviewImg.setAttribute("src", this.result);
-        //
-        // });
+
         let readerJo = $(reader);
         readerJo.on("load", function () {
             imagePreviewImg.attr("src", this.result);
@@ -66,27 +60,15 @@ function loadFile() {
 
         reader.readAsDataURL(file);
 
-        //on reupload existed image
 
-
-        // if (imagePreview.className.includes("saved-image-preview") && mode === "edit") {
-        //     //delete old image
-        //     document.getElementById("delImageId").value = imagePreview.parentElement.id;
-        // }
         if (imagePreview.hasClass("saved-image-preview") && mode === "edit") {
             $("#delImageId").val(imagePreview.parent().attr('id'));
         }
 
-        // if (imagePreview.className.includes("saved-image-preview") && mode === "edit") {
-        //     //delete old image
-        //     document.getElementById("delImageId").value = imagePreview.parentElement.id;
-        // }
-
     } else {
 
         imagePreviewImg.attr("src", `${defaultImage}`)
-        // imagePreviewImg.style.display = null;
-        // imagePreviewImg.setAttribute("src", `${defaultImage}`);
+
     }
 
 }

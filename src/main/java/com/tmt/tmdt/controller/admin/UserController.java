@@ -1,16 +1,11 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.tmt.tmdt.constant.UserStatus;
 import com.tmt.tmdt.dto.ImageRequestDto;
 import com.tmt.tmdt.dto.ViewApi;
-import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.UserEntity;
-import com.tmt.tmdt.mapper.ImageMapper;
-import com.tmt.tmdt.service.ImageService;
+import com.tmt.tmdt.repository.UserRepo;
 import com.tmt.tmdt.service.RoleService;
-import com.tmt.tmdt.service.UploadService;
 import com.tmt.tmdt.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,8 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/user")
@@ -38,10 +31,7 @@ public class UserController {
 
     private final UserEntityService userEntityService;
     private final RoleService roleService;
-    private final ImageMapper imageMapper;
-    private final Cloudinary cloudinary;
-    private final ImageService imageService;
-    private final UploadService uploadService;
+    private final UserRepo userRepo;
 
 
     @GetMapping("")
@@ -106,21 +96,13 @@ public class UserController {
                        ImageRequestDto imageRequestDto,
                        @Valid @ModelAttribute("user") UserEntity userEntity,
                        BindingResult result) throws IOException {
-//        boolean isExist= userEntityService.existById(userEntity.getId());
+
         if (userEntityService.existByUserName(userEntity.getUsername())) {
             result.rejectValue("username", "nameIsExist");
         }
         if (!result.hasErrors()) {
             //only upload if no binđing error occurs
-            Image image = null;
-            if (!imageRequestDto.getFile().isEmpty()) {
-
-                imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
-                image = imageMapper.toModel(imageRequestDto);
-                imageService.save(image);
-
-            }
-            userEntityService.save(userEntity, image);
+            userEntityService.add(userEntity, imageRequestDto);
 
             return "redirect:/admin/user";
         }
@@ -130,16 +112,37 @@ public class UserController {
 
     }
 
+//    @GetMapping("edit/{id}")
+//    public String showUpdateForm(Model model, @PathVariable("id") Long id) {
+//        UserEntity userEntity = userEntityService.getUserEntityWithImage(id);
+//        model.addAttribute("user", userEntity);
+//        model.addAttribute("rolesForForm", roleService.getRoles());
+//        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
+//        return "admin/user/edit";
+//
+//    }
+
     @GetMapping("edit/{id}")
-    public String showUpdateForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userEntityService.getUserEntity(id));
-        model.addAttribute("rolesForForm", roleService.getRoles());
-        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
-        return "admin/user/edit";
+    @ResponseBody
+    public UserEntity showUpdateForma(Model model, @PathVariable("id") Long id) {
+        UserEntity userEntity = userEntityService.getUserEntityWithImage(id);
+        model.addAttribute("user", userEntity);
+
+        return userEntity;
     }
+
+    @PostMapping("edit/{id}")
+    @ResponseBody
+    public UserEntity update(Model model, @RequestBody  UserEntity user) {
+
+        userRepo.save(user);
+        return null;
+    }
+
 
     @Transactional
     @PostMapping("/update")
+
     public String update(Model model,
                          @RequestParam(value = "delImageId", required = false) String delImageId,
                          ImageRequestDto imageRequestDto,
@@ -152,26 +155,7 @@ public class UserController {
             result.rejectValue("username", "nameIsExist");
         }
         if (!result.hasErrors()) {
-            System.out.println("________________________");
-            if (delImageId != null && !delImageId.isEmpty()) {
-                System.out.println("+++++++++++++++++++++++++++");
-                delImageId = delImageId.trim();
-                Long imageIdToDel = Long.parseLong(delImageId);
-                uploadService.deleteFromCloud(imageIdToDel);
-                userEntity.setImage(null);
-                imageService.deleteById(imageIdToDel);
-
-            }
-            Image image = null;
-            if (!imageRequestDto.getFile().isEmpty()) {
-
-                imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
-                image = imageMapper.toModel(imageRequestDto);
-                imageService.save(image);
-
-            }
-            userEntityService.save(userEntity, image);
-
+            userEntityService.update(userEntity, imageRequestDto, delImageId);
             return "redirect:/admin/user";
         }
         model.addAttribute("rolesForForm", roleService.getRoles());

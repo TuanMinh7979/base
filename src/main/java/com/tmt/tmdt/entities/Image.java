@@ -27,7 +27,13 @@ public class Image extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
     private boolean isMain;
+
 
 
 

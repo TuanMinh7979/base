@@ -39,4 +39,7 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
             " on u.id = ur.user_id and u.username like ?2% inner join roles r on ur.role_id = r.id and r.id = ?1"
             , nativeQuery = true)
     Page<UserEntity> getUserEntitysByRoleAndUserNameLike(Long roleId, String searchNameTerm, Pageable pageable);
+
+    @Query(value = "from UserEntity u join fetch u.image where u.id= :id")
+    Optional<UserEntity> getUserEntityWithImage(Long id);
 }

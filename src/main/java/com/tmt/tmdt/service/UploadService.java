@@ -11,4 +11,6 @@ public interface UploadService {
     void deleteFromCloud(Long id) throws IOException;
 
 
+
+
 }
