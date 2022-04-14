@@ -65,35 +65,35 @@ public class UserEntityServiceImpl implements UserEntityService {
     public void update(UserEntity userEntity, ImageRequestDto imageRequestDto, String delImageId) throws IOException {
 
         //delete old image if have
+
+        //+ delete old image(del !null, dto ==null)
+        //3 case : + add new image from none (del = null, dto !=null)
+
+        ///this case is connecting of 2 previous case
+        //+ del old image and add new image(del !=null, dto != null )
+
+        //+ del = null  && dto ==null
         if (delImageId != null && !delImageId.isEmpty()) {
+            //delete old imag
             delImageId = delImageId.trim();
             Long imageIdToDel = Long.parseLong(delImageId);
-            uploadService.deleteFromCloud(imageIdToDel);
 
+            uploadService.deleteFromCloud(imageIdToDel);
             userEntity.setImage(null);
+            userEntity.setImageLink(userEntity.defaultImage());
             imageService.deleteById(imageIdToDel);
         }
-
-        //add new image if have
-        //if dont change image get file still empty and userEntity image == null
-
-
         if (!imageRequestDto.getFile().isEmpty()) {
-            //reset
+            //add new image
             imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
             Image image = imageMapper.toModel(imageRequestDto);
 
-
+            image.setUserEntity(userEntity);
             Image savedImage = imageService.save(image);
-            savedImage.setUserEntity(userEntity);
-            //persistence
-//            savedUser.setImage(savedImage);
-//            savedUser.setImageLink(savedImage.getLink());
 
             userEntity.setImageLink(savedImage.getLink());
-
-
-        } else {
+        }
+        if ((delImageId == null || delImageId.isEmpty()) && imageRequestDto.getFile().isEmpty()) {
             userEntity.setImage(getUserEntity(userEntity.getId()).getImage());
         }
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
@@ -116,11 +116,11 @@ public class UserEntityServiceImpl implements UserEntityService {
             Image imageSaved = imageService.save(image);
             imageSaved.setUserEntity(userEntity);
             //persistence
-
             userEntity.setImageLink(imageSaved.getLink());
-
-
+        } else {
+            userEntity.setImageLink(userEntity.defaultImage());
         }
+
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
 //        userEntity.setImage(null);
         UserEntity usersaved = userRepo.save(userEntity);
@@ -166,5 +166,15 @@ public class UserEntityServiceImpl implements UserEntityService {
                 orElseThrow(() -> new ResourceNotFoundException("user with id " + id + " not found"));
     }
 
+    @Override
+    public void delete(Long id) {
+        userRepo.deleteById(id);
+    }
 
+    @Override
+    public void deletes(Long[] ids) {
+        for (Long idi : ids) userRepo.deleteById(idi);
+
+
+    }
 }

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -170,6 +172,22 @@ public class UserController {
     public List<Integer> getPermission(@PathVariable("id") Long id) {
         return roleService.getRoleIdsByUserId(id);
     }
+
+    @PostMapping("api/delete/{id}")
+    @ResponseBody
+    //call by ajax
+    public ResponseEntity<Long> deleteCategory(@PathVariable Long id) {
+        userEntityService.delete(id);
+
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @PostMapping("api/delete")
+    public ResponseEntity<Long[]> deleteCategories(@RequestBody Long[] ids) {
+        userEntityService.deletes(ids);
+        return new ResponseEntity<>(ids, HttpStatus.OK);
+    }
+
 
 
 }

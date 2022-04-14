@@ -38,5 +38,7 @@ public interface UserEntityService {
     UserEntity getUserEntityWithImage(Long id);
 
 
+    void delete(Long id);
 
+    void deletes(Long[] ids);
 }

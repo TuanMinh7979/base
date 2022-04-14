@@ -8,13 +8,12 @@ $(function () {
     if (document.getElementById("userId-inp") != null) {
         mode = "edit";
         loadActiveRoleIds();
-
-        $("#selectnone-btn").on("click", function (event) {
-            event.preventDefault();
-
-            selectNoneImage(this);
-        })
     }
+
+    $("#selectnone-btn").on("click", function (event) {
+        event.preventDefault();
+        selectNoneImage(this);
+    })
 
 
 })
@@ -41,7 +40,7 @@ function selectNoneImage(btn) {
 function loadFile() {
     let file = this.files[0];
 
-    let imagePreview = $(this).parent().parent();
+    let imagePreview = $(this).parent();
 
     let imagePreviewImg = imagePreview.find(".image-preview__img");
     if (!checkFileSize(file, this, MAX_FILE_SIZE)) {
@@ -63,8 +62,9 @@ function loadFile() {
         reader.readAsDataURL(file);
 
 
-        if (imagePreview.hasClass("saved-image-preview") && mode === "edit") {
-            $("#delImageId").val(imagePreview.parent().attr('id'));
+        if (imagePreview.find("saved-image-preview") != null && mode === "edit") {
+
+            $("#delImageId").val(imagePreview.attr('id'));
         }
 
     } else {
