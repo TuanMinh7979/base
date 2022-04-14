@@ -79,39 +79,52 @@ public class UserEntityServiceImpl implements UserEntityService {
 
 
         if (!imageRequestDto.getFile().isEmpty()) {
+            //reset
             imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
             Image image = imageMapper.toModel(imageRequestDto);
 
+
             Image savedImage = imageService.save(image);
+            savedImage.setUserEntity(userEntity);
+            //persistence
 //            savedUser.setImage(savedImage);
 //            savedUser.setImageLink(savedImage.getLink());
-            userEntity.setImage(image);
-            userEntity.setImageLink(image.getLink());
-            userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
+
+            userEntity.setImageLink(savedImage.getLink());
 
 
+        } else {
+            userEntity.setImage(getUserEntity(userEntity.getId()).getImage());
         }
+        userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
         userRepo.save(userEntity);
 
 
     }
 
 
+    @Transactional
     @Override
     public void add(UserEntity userEntity, ImageRequestDto imageRequestDto) throws IOException {
+
 
         //add image if have , imageRequestDto away !=null but for scable -> execute fully checking
         if (imageRequestDto != null && !imageRequestDto.getFile().isEmpty()) {
             imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
             Image image = imageMapper.toModel(imageRequestDto);
-            imageService.save(image);
-            userEntity.setImage(image);
-            userEntity.setImageLink(image.getLink());
+
+            Image imageSaved = imageService.save(image);
+            imageSaved.setUserEntity(userEntity);
+            //persistence
+
+            userEntity.setImageLink(imageSaved.getLink());
+
+
         }
-
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
+//        userEntity.setImage(null);
+        UserEntity usersaved = userRepo.save(userEntity);
 
-        userRepo.save(userEntity);
     }
 
 

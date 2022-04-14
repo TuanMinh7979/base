@@ -45,6 +45,8 @@ function loadFile() {
 
     let imagePreviewImg = imagePreview.find(".image-preview__img");
     if (!checkFileSize(file, this, MAX_FILE_SIZE)) {
+        // alert(this.files);
+
         return;
     }
 

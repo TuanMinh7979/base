@@ -112,32 +112,32 @@ public class UserController {
 
     }
 
+    @GetMapping("edit/{id}")
+    public String showUpdateForm(Model model, @PathVariable("id") Long id) {
+        UserEntity userEntity = userEntityService.getUserEntity(id);
+        model.addAttribute("user", userEntity);
+        model.addAttribute("rolesForForm", roleService.getRoles());
+        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
+        return "admin/user/edit";
+
+    }
+
 //    @GetMapping("edit/{id}")
-//    public String showUpdateForm(Model model, @PathVariable("id") Long id) {
-//        UserEntity userEntity = userEntityService.getUserEntityWithImage(id);
+//    @ResponseBody
+//    public UserEntity showUpdateForma(Model model, @PathVariable("id") Long id) {
+//        UserEntity userEntity = userEntityService.getUserEntity(id);
 //        model.addAttribute("user", userEntity);
-//        model.addAttribute("rolesForForm", roleService.getRoles());
-//        model.addAttribute("status", new ArrayList<>(Arrays.asList(UserStatus.values())));
-//        return "admin/user/edit";
 //
+//        return userEntity;
 //    }
 
-    @GetMapping("edit/{id}")
-    @ResponseBody
-    public UserEntity showUpdateForma(Model model, @PathVariable("id") Long id) {
-        UserEntity userEntity = userEntityService.getUserEntityWithImage(id);
-        model.addAttribute("user", userEntity);
-
-        return userEntity;
-    }
-
-    @PostMapping("edit/{id}")
-    @ResponseBody
-    public UserEntity update(Model model, @RequestBody  UserEntity user) {
-
-        userRepo.save(user);
-        return null;
-    }
+//    @PostMapping("edit/{id}")
+//    @ResponseBody
+//    public UserEntity update(Model model, @RequestBody  UserEntity user) {
+//
+//        userRepo.save(user);
+//        return null;
+//    }
 
 
     @Transactional
