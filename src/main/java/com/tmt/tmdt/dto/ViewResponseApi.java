@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class ViewApi<T> {
+public class ViewResponseApi<T> {
     private int totalPage;
     T data;
 }

@@ -109,6 +109,12 @@
             <version>1.4.2.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.3.4</version>
+        </dependency>
+
 
 
     </dependencies>

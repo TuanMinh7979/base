@@ -1,8 +1,8 @@
 package com.tmt.tmdt.controller.admin;
 
 import com.tmt.tmdt.constant.UserStatus;
-import com.tmt.tmdt.dto.ImageRequestDto;
-import com.tmt.tmdt.dto.ViewApi;
+import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.ViewResponseApi;
 import com.tmt.tmdt.entities.UserEntity;
 import com.tmt.tmdt.repository.UserRepo;
 import com.tmt.tmdt.service.RoleService;
@@ -43,13 +43,13 @@ public class UserController {
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewApi<List<UserEntity>> getUsers(Model model,
-                                              @RequestParam(name = "page", required = false) String pageParam,
-                                              @RequestParam(name = "limit", required = false) String limitParam,
-                                              @RequestParam(name = "sortBy", required = false) String sortBy,
-                                              @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                              @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
-                                              @RequestParam(name = "role", required = false) String roleIdParam) {
+    public ViewResponseApi<List<UserEntity>> getUsers(Model model,
+                                                      @RequestParam(name = "page", required = false) String pageParam,
+                                                      @RequestParam(name = "limit", required = false) String limitParam,
+                                                      @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                      @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                                      @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
+                                                      @RequestParam(name = "role", required = false) String roleIdParam) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -81,7 +81,7 @@ public class UserController {
         int totalPage = userPage.getTotalPages();
 
 
-        return new ViewApi<>(totalPage, data);
+        return new ViewResponseApi<>(totalPage, data);
     }
 
     @GetMapping("add")
@@ -95,7 +95,7 @@ public class UserController {
 
     @PostMapping("/save")
     public String save(Model model,
-                       ImageRequestDto imageRequestDto,
+                       @RequestParam("file") FileRequestDto fileRequestDto,
                        @Valid @ModelAttribute("user") UserEntity userEntity,
                        BindingResult result) throws IOException {
 
@@ -104,7 +104,7 @@ public class UserController {
         }
         if (!result.hasErrors()) {
             //only upload if no binđing error occurs
-            userEntityService.add(userEntity, imageRequestDto);
+            userEntityService.add(userEntity, fileRequestDto);
 
             return "redirect:/admin/user";
         }
@@ -147,17 +147,17 @@ public class UserController {
 
     public String update(Model model,
                          @RequestParam(value = "delImageId", required = false) String delImageId,
-                         ImageRequestDto imageRequestDto,
+                         @RequestParam("file") FileRequestDto fileRequestDto,
                          @Valid @ModelAttribute("user") UserEntity userEntity,
                          BindingResult result) throws IOException {
 
         String oldUserName = userEntityService.getUserEntity(userEntity.getId()).getUsername();
-        if ((userEntity.getUsername() == oldUserName)
+        if (!(userEntity.getUsername().equals(oldUserName))
                 && userEntityService.existByUserName(userEntity.getUsername())) {
             result.rejectValue("username", "nameIsExist");
         }
         if (!result.hasErrors()) {
-            userEntityService.update(userEntity, imageRequestDto, delImageId);
+            userEntityService.update(userEntity, fileRequestDto, delImageId);
             return "redirect:/admin/user";
         }
         model.addAttribute("rolesForForm", roleService.getRoles());
@@ -187,7 +187,6 @@ public class UserController {
         userEntityService.deletes(ids);
         return new ResponseEntity<>(ids, HttpStatus.OK);
     }
-
 
 
 }

@@ -39,7 +39,7 @@ public class UserEntity extends BaseEntity implements Serializable {
     @NotBlank
     @Size(max = 128)
     private String email;
-    private String imageLink;
+    private String imageLink =defaultImage();
 
 
     @JsonIgnore

@@ -109,6 +109,80 @@ function checkFileSize(file, fileInp, maxsize) {
     }
 }
 
+//SELECT DEFAULT IMAGE
+function handleSelectDefaultBtn(btn, mode, delIdsInpId, defaultImage) {
+
+
+    let imageInputWrapper = $(btn).parent();
+
+    let imagePreview = imageInputWrapper.find(".image-preview");
+    let imagePreviewImg = imagePreview.find(".image-preview__img");
+    let idTodel = imageInputWrapper.attr("id") != null ? imageInputWrapper.attr("id") : null;
+
+
+    if (idTodel != null && imagePreviewImg.attr("src") != defaultImage && mode === "edit"  ) {
+        addIdToDel(idTodel, delIdsInpId);
+    }
+
+
+    imageInputWrapper.find(".file_inp").val(null);
+    imagePreviewImg.attr("src", defaultImage)
+}
+
+
+///SELECT DEFAULT IMAGE
+
+function addIdToDel(idToAdd, delIdsInpId) {
+    let delIdsInp = $("#".concat(delIdsInpId));
+    let oldVal = delIdsInp.val();
+    if (delIdsInpId.charAt(delIdsInpId.length - 1) === 's') {
+        delIdsInp.val(oldVal.concat(" ", idToAdd));
+    } else {
+        delIdsInp.val(idToAdd);
+    }
+    alert(delIdsInp.val())
+
+}
+
+function changeImage(file, fileInp, mode, delIdsInpId, defaultImage) {
+
+
+    let imageInputWrapper = $(fileInp).parent();
+    let imagePreview = imageInputWrapper.find(".image-preview")
+    let imagePreviewImg = imagePreview.find(".image-preview__img");
+    if (!checkFileSize(file, fileInp, MAX_FILE_SIZE)) {
+        return;
+    }
+
+    if (file) {
+        const reader = new FileReader();
+
+
+        let readerJo = $(reader);
+        readerJo.on("load", function () {
+
+            imagePreviewImg.attr("src", this.result);
+        })
+
+
+        reader.readAsDataURL(file);
+
+
+        if (imagePreviewImg.attr("src") != defaultImage && mode === "edit") {
+            addIdToDel(imageInputWrapper.attr('id'), delIdsInpId);
+        }
+
+    } else {
+
+        imagePreviewImg.attr("src", defaultImage)
+
+    }
+
+}
+
+
+
+
 
 
 

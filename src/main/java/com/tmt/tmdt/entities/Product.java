@@ -29,7 +29,7 @@ public class Product extends BaseEntity implements Serializable {
 
     private BigDecimal price;
 
-    private String mainImageLink;
+    private String mainImageLink = defaultImage();
 
 
     private String shortDescription;
@@ -41,11 +41,10 @@ public class Product extends BaseEntity implements Serializable {
 
     private Float discountPercent;
 
-    //other way fetchlazy + orphan +cacasde All bc: image complete depend on product,
-    // all operate on product affect to image
-    //(*) refactor to FetchType.Lazy
+
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    //delete image when delete product
     private Set<Image> images = new HashSet<>();
 
 

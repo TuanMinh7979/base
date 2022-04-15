@@ -23,6 +23,7 @@
 
                 </div>
                 <input type="file" name="file" class="file_inp"/>
+                <button class="float-right" id="selectnone-btn">Select default</button>
             </div>
         </th:block>
 
@@ -42,11 +43,12 @@
 
                 </div>
                 <input type="file" name="file" class="file_inp"/>
+                <button class="float-right" id="selectnone-btn">Select default</button>
             </div>
         </th:block>
 
 
-        <th:block th:each="imagei : ${images}">
+        <th:block th:if="${images != null}" th:each="imagei : ${images}">
 
             <div th:id="${imagei.id}" class="col-6">
 
@@ -58,7 +60,10 @@
                     <img th:src="${imagei.link}" alt="alt" class="image-preview__img"/>
                 </div>
                 <input type="file" name="files" class="file_inp"/>
+
             </div>
+
+
 
         </th:block>
 

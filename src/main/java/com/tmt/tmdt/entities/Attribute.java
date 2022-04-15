@@ -7,18 +7,16 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "attributes ")
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Attribute {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    private String name;
+    private Object value;
+    private int active;
 
 
 }

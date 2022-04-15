@@ -1,8 +1,7 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.ViewApi;
+import com.tmt.tmdt.dto.ViewResponseApi;
 import com.tmt.tmdt.entities.Category;
-import com.tmt.tmdt.entities.Permission;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.service.PermissionService;
 import com.tmt.tmdt.service.RoleService;
@@ -19,10 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/role")
@@ -34,12 +30,12 @@ public class RoleController {
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewApi<List<Category>> getRole(Model model,
-                                           @RequestParam(name = "page", required = false) String pageParam,
-                                           @RequestParam(name = "limit", required = false) String limitParam,
-                                           @RequestParam(name = "sortBy", required = false) String sortBy,
-                                           @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                           @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
+    public ViewResponseApi<List<Category>> getRole(Model model,
+                                                   @RequestParam(name = "page", required = false) String pageParam,
+                                                   @RequestParam(name = "limit", required = false) String limitParam,
+                                                   @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                   @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                                   @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -59,7 +55,7 @@ public class RoleController {
         List data = rolePage.getContent();
         int totalPage = rolePage.getTotalPages();
 
-        return new ViewApi<>(totalPage, data);
+        return new ViewResponseApi<>(totalPage, data);
     }
 
     @GetMapping("")

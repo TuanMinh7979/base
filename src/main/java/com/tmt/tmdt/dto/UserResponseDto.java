@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class UserResponseDto extends BaseDto {
+public class UserResponseDto  {
     private Long id;
     private String username;
     private String email;

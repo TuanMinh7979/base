@@ -1,16 +1,21 @@
 package com.tmt.tmdt.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -19,13 +24,14 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Category extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotBlank
-    @Size(min=3)
+    @Size(min = 3)
     private String name;
 
 
@@ -33,14 +39,18 @@ public class Category extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "category")
     private Set<Product> products;
 
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", name = "attributes")
+    private Set<Attribute> attributes = new HashSet<>();
+
     //auto-generate from name
     private String code;
 
 
-
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name="parent_id")
+    @JoinColumn(name = "parent_id")
     private Category parent;
     //one to one one one to many
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
@@ -49,11 +59,11 @@ public class Category extends BaseEntity implements Serializable {
     public Category(String name) {
         this.name = name;
     }
+
     public Category(String name, Category parent) {
-        this.parent= parent;
+        this.parent = parent;
         this.name = name;
     }
-
 
 
     public Category(Integer id, String name) {
@@ -61,7 +71,6 @@ public class Category extends BaseEntity implements Serializable {
         this.name = name;
     }
 
-    
 
     public Category(Integer id) {
         this.id = id;

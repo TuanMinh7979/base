@@ -75,7 +75,9 @@ function renderData(data) {
 
 
         }
+
     )
+    console.log(data.data)
     $("#tabledata").html(rs);
     let newTotalPage = data.totalPage;
     if (newTotalPage != GlobalTotalPage) {

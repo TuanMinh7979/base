@@ -37,4 +37,6 @@ public interface CategoryService {
     Category removeProductFromCategory(Integer cateId, Long productId);
 
     List<Category> getCategoriesInHierarchical();
+
+
 }

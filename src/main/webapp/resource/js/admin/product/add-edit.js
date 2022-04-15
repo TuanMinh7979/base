@@ -11,8 +11,22 @@ $(function () {
     if (document.getElementById("productId") != null) {
         mode = "edit";
     }
+
+    $("#selectnone-btn").on("click",
+        function (event) {
+            event.preventDefault();
+            handleSelectDefaultBtn(this, mode, "delImageIds", defaultImage);
+        })
 })
-$(document).on("change", ".file_inp", loadImg)
+
+
+$(document).on("change", ".file_inp", function (event) {
+    event.preventDefault();
+    changeImage(this.files[0], this, mode, "delImageIds", defaultImage)
+
+});
+
+
 
 
 function createNewEmptyExtraImage() {
@@ -37,44 +51,6 @@ function createNewEmptyExtraImage() {
 
 }
 
-function loadImg() {
-    const file = this.files[0];
-    if (!checkFileSize(this, MAX_FILE_SIZE)) {
-        return;
-    }
-
-    let imagePreview = this.previousSibling.previousSibling;
-
-
-    let imagePreviewImg = imagePreview.querySelector(
-        ".image-preview__img"
-    );
-
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.addEventListener("load", function () {
-            imagePreviewImg.setAttribute("src", this.result);
-        });
-        reader.readAsDataURL(file);
-
-        //on reupload existed image
-        if (imagePreview.className.includes("saved-image-preview") && mode === "edit") {
-            // alert(previewContainer.parentElement);
-            // alert(previewContainer.parentElement.id);
-            // console.log(previewContainer.parentElement);
-
-            document.getElementById("delImageIds").value += imagePreview.parentElement.id + " ";
-        }
-        // createNewEmptyExtraImage();
-    } else {
-        imagePreviewImg.style.display = null;
-        imagePreviewImg.setAttribute("src", `${defaultImage}`);
-    }
-
-}
-
 
 $(document).on("click", "#addNewImageExtraBtn", createNewEmptyExtraImage);
 
@@ -91,7 +67,6 @@ $(document).on("click", ".image-preview .close-i", function () {
 //FOR DETAIL SCREEN
 
 
-
 $("#addNewRecordBtn").on("click", function (event) {
     event.preventDefault();
 
@@ -105,8 +80,6 @@ $("#addNewRecordBtn").on("click", function (event) {
         '\n' +
         '        </div>';
     $("#detailWrapper #detailWrapperContent").append(detailRecord);
-
-
 
 
 })

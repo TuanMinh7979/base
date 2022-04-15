@@ -1,6 +1,7 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.ViewApi;
+import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.ViewResponseApi;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -54,13 +54,13 @@ public class ProductController {
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewApi<List<Product>> getProducts(Model model,
-                                              @RequestParam(name = "page", required = false) String pageParam,
-                                              @RequestParam(name = "limit", required = false) String limitParam,
-                                              @RequestParam(name = "sortBy", required = false) String sortBy,
-                                              @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                              @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
-                                              @RequestParam(name = "category", required = false) String categoryIdParam) {
+    public ViewResponseApi<List<Product>> getProducts(Model model,
+                                                      @RequestParam(name = "page", required = false) String pageParam,
+                                                      @RequestParam(name = "limit", required = false) String limitParam,
+                                                      @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                      @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                                      @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
+                                                      @RequestParam(name = "category", required = false) String categoryIdParam) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -92,25 +92,22 @@ public class ProductController {
         int totalPage = productPage.getTotalPages();
 
 
-        return new ViewApi<>(totalPage, data);
+        return new ViewResponseApi<>(totalPage, data);
     }
 
 
     @PostMapping("save")
 
     public String save(Model model,
-                       //away. it is empty(check empty file for this)
-                       @RequestParam(value = "file") MultipartFile file,
-                       //sometime check null(required -> checknull)
-                       @RequestParam(value = "files", required = false) MultipartFile[] files,
-
+                       @RequestParam("file") FileRequestDto mainImageDto,
+                       @RequestParam(value = "files", required = false) List<FileRequestDto> extraImageDtos,
                        @Valid @ModelAttribute("product") Product product, BindingResult result) {
         if (productService.existByName(product.getName())) {
             result.rejectValue("name", "nameIsExist");
         }
         if (!result.hasErrors()) {
             try {
-                productService.save(product, file, files);
+                productService.save(product, mainImageDto, extraImageDtos);
                 return "redirect:/admin/product";
             } catch (IOException e) {
                 model.addAttribute("message", "Can not read your file, try again please!");
@@ -125,16 +122,17 @@ public class ProductController {
 
 
     @PostMapping(value = "update")
-    public String update(@RequestParam(value = "file", required = false) MultipartFile file,
-                         @RequestParam(value = "files", required = false) MultipartFile[] files,
+    public String update(Model model,
+                         @RequestParam("file") FileRequestDto mainImageDto,
+                         @RequestParam(value = "files", required = false) List<FileRequestDto> extraImageDtos,
+                 
                          @RequestParam("delImageIds") String delImageIds,
                          @Valid @ModelAttribute("product") Product product,
                          BindingResult result) throws IOException {
 
-//if have no validate error
 
         if (!result.hasErrors()) {
-            productService.update(product, file, files, delImageIds);
+            productService.update(product, mainImageDto, extraImageDtos, delImageIds);
 
             //regard if statement success
             return "redirect:/admin/product";

@@ -9,71 +9,19 @@ $(function () {
         mode = "edit";
         loadActiveRoleIds();
     }
-
-    $("#selectnone-btn").on("click", function (event) {
-        event.preventDefault();
-        selectNoneImage(this);
-    })
-
-
+    $("#selectnone-btn").on("click",
+        function (event) {
+            event.preventDefault();
+            handleSelectDefaultBtn(this, mode, "delImageId", defaultImage);
+        })
 })
 
 
-$(document).on("change", ".file_inp", loadFile)
+$(document).on("change", ".file_inp", function (event) {
+    event.preventDefault();
+    changeImage(this.files[0], this, mode, "delImageId", defaultImage)
 
-function selectNoneImage(btn) {
-    let imagePreview = $(btn).parent().find(".image-preview");
-    let imagePreviewImg = imagePreview.find(".image-preview__img");
-
-
-    imagePreview.parent().find(".file_inp").val(null);
-
-    imagePreviewImg.attr("src", `${defaultImage}`)
-
-
-    if (mode === "edit") {
-        $("#delImageId").val(imagePreview.parent().attr("id"));
-    }
-
-}
-
-function loadFile() {
-    let file = this.files[0];
-
-    let imagePreview = $(this).parent();
-
-    let imagePreviewImg = imagePreview.find(".image-preview__img");
-    if (!checkFileSize(file, this, MAX_FILE_SIZE)) {
-        // alert(this.files);
-
-        return;
-    }
-
-    if (file) {
-        const reader = new FileReader();
-
-
-        let readerJo = $(reader);
-        readerJo.on("load", function () {
-            imagePreviewImg.attr("src", this.result);
-        })
-
-
-        reader.readAsDataURL(file);
-
-
-        if (imagePreview.find("saved-image-preview") != null && mode === "edit") {
-
-            $("#delImageId").val(imagePreview.attr('id'));
-        }
-
-    } else {
-
-        imagePreviewImg.attr("src", `${defaultImage}`)
-
-    }
-
-}
+});
 
 
 const loadActiveRoleIds = () => {

@@ -1,6 +1,7 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.ViewApi;
+import com.tmt.tmdt.dto.ViewResponseApi;
+import com.tmt.tmdt.entities.Attribute;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,12 +36,12 @@ public class CategoryController {
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewApi<List<Category>> getCategories(Model model,
-                                                 @RequestParam(name = "page", required = false) String pageParam,
-                                                 @RequestParam(name = "limit", required = false) String limitParam,
-                                                 @RequestParam(name = "sortBy", required = false) String sortBy,
-                                                 @RequestParam(name = "sortDirection", required = false) String sortDirection,
-                                                 @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
+    public ViewResponseApi<List<Category>> getCategories(Model model,
+                                                         @RequestParam(name = "page", required = false) String pageParam,
+                                                         @RequestParam(name = "limit", required = false) String limitParam,
+                                                         @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                         @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                                         @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -60,7 +61,7 @@ public class CategoryController {
         List data = categoryPage.getContent();
         int totalPage = categoryPage.getTotalPages();
 
-        return new ViewApi<>(totalPage, data);
+        return new ViewResponseApi<>(totalPage, data);
     }
 
 
@@ -137,6 +138,13 @@ public class CategoryController {
         model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/category/add";
     }
+
+    @GetMapping("api/{id}/attributes")
+    @ResponseBody
+    public Set<Attribute> getAttributesByCategoryId(@PathVariable("id") Integer id) {
+        return categoryService.getCategory(id).getAttributes();
+    }
+
 
 
 }

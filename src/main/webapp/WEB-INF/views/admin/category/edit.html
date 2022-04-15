@@ -26,47 +26,45 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-10 ml-5">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                    <li class="nav-item" role="presentation">
+                        <a class="maintab nav-link active" data-toggle="tab" href="#general" role="tab"
+                           aria-controls="home" aria-selected="true">General</a>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <a class="maintab nav-link" data-toggle="tab" href="#detail" role="tab"
+                           aria-controls="messages" aria-selected="false">Detail</a>
+                    </li>
+
+
+                </ul>
+
                 <form th:id="mainForm" th:action="@{/admin/category/update}" th:object="${category}" method="post">
-                    <div class="form-group">
-                        <label>Id</label>
-                        <input class="form-control" type="text" th:field="*{id}" readonly="true">
-                    </div>
 
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input class="form-control" type="text" th:field="*{name}" required>
-                        <div th:if="${#fields.hasErrors('name')}"
-                             class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <span th:errors="*{name}"></span>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="general" role="tabpanel">
+                            <div th:replace="admin/category/tabs/general :: content"></div>
+
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <select  name="parent">
-                            <option value="1">No parent</option>
-<!--                            CÁc phần tử cha có phần tử cha có id là 1, ta handle th gới lên với id là 1
-                                còn trường họp view ra thì do ta không có thêm phần từ id là 1 nên ds bên dưới sẽ
-                                không có nên có thẻ thay thế bằng cách đặt no parent lên default-->
-                            <option th:each="cat : ${categoriesForForm}" th:value="${cat.id}" th:text="${cat.name}"
-                                    th:selected="${cat.id==category.parent.id}"></option>
+                        <div class="tab-pane" id="detail" role="tabpanel">
+                            <div th:replace="admin/category/tabs/detail :: content"></div>
+
+                        </div>
 
 
-
-                        </select>
-                        <span th:if="${#fields.hasErrors('parent')}" class="form-control alert alert-warning"
-                              th:errors="*{parent}"></span>
                     </div>
 
 
                     <div class="form-group">
                         <input type="submit" class="btn btn-success" value="Save">
                         <a style="margin-left: 100px" th:href="@{/admin/category/edit/{id}(id=${category.id})}"
-                            class="btn btn-default">
-                            RESET
+                           class="btn btn-default">
+                            CANCEL
                         </a>
 
                     </div>
@@ -79,7 +77,11 @@
 </div>
 
 <th:block layout:fragment="addscript">
+    <script th:inline="javascript">    // Enable Thymeleaf inlining
+    var categoryId = [[${category.id}]]; 	// Behaves just like in HTML
+    </script>
     <script th:src="@{/resource/js/check-form-change.js}"></script>
+    <script th:src="@{/resource/js/admin/category/add-edit.js}"></script>
 </th:block>
 
 

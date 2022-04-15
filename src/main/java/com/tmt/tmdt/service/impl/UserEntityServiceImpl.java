@@ -1,7 +1,7 @@
 package com.tmt.tmdt.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.tmt.tmdt.dto.ImageRequestDto;
+import com.tmt.tmdt.dto.FileRequestDto;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.entities.UserEntity;
@@ -62,7 +62,7 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Override
     @Transactional
-    public void update(UserEntity userEntity, ImageRequestDto imageRequestDto, String delImageId) throws IOException {
+    public void update(UserEntity userEntity, FileRequestDto fileRequestDto, String delImageId) throws IOException {
 
         //delete old image if have
 
@@ -83,17 +83,17 @@ public class UserEntityServiceImpl implements UserEntityService {
             userEntity.setImageLink(userEntity.defaultImage());
             imageService.deleteById(imageIdToDel);
         }
-        if (!imageRequestDto.getFile().isEmpty()) {
+        if (!fileRequestDto.getFile().isEmpty()) {
             //add new image
-            imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
-            Image image = imageMapper.toModel(imageRequestDto);
+            fileRequestDto.setUploadRs(uploadService.simpleUpload(fileRequestDto.getFile()));
+            Image image = imageMapper.toModel(fileRequestDto);
 
             image.setUserEntity(userEntity);
             Image savedImage = imageService.save(image);
 
             userEntity.setImageLink(savedImage.getLink());
         }
-        if ((delImageId == null || delImageId.isEmpty()) && imageRequestDto.getFile().isEmpty()) {
+        if ((delImageId == null || delImageId.isEmpty()) && fileRequestDto.getFile().isEmpty()) {
             userEntity.setImage(getUserEntity(userEntity.getId()).getImage());
         }
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
@@ -105,21 +105,22 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Transactional
     @Override
-    public void add(UserEntity userEntity, ImageRequestDto imageRequestDto) throws IOException {
+    public void add(UserEntity userEntity, FileRequestDto fileRequestDto) throws IOException {
 
 
         //add image if have , imageRequestDto away !=null but for scable -> execute fully checking
-        if (imageRequestDto != null && !imageRequestDto.getFile().isEmpty()) {
-            imageRequestDto.setUploadRs(uploadService.simpleUpload(imageRequestDto.getFile()));
-            Image image = imageMapper.toModel(imageRequestDto);
+        if (fileRequestDto != null && !fileRequestDto.getFile().isEmpty()) {
+            fileRequestDto.setUploadRs(uploadService.simpleUpload(fileRequestDto.getFile()));
+            Image image = imageMapper.toModel(fileRequestDto);
 
             Image imageSaved = imageService.save(image);
             imageSaved.setUserEntity(userEntity);
             //persistence
             userEntity.setImageLink(imageSaved.getLink());
-        } else {
-            userEntity.setImageLink(userEntity.defaultImage());
         }
+//        else {
+//            userEntity.setImageLink(userEntity.defaultImage());
+//        }
 
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
 //        userEntity.setImage(null);

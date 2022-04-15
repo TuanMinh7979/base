@@ -30,9 +30,16 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-10 ml-5">
+
+
+
                 <form th:id="mainForm" th:action="@{/admin/category/save}" th:object="${category}" method="post">
-                    <div class="form-group">
+
+
+
+
+                    <div class="form-group col-6">
                         <label>Name</label>
                         <input class="form-control" type="text" th:field="*{name}" required>
                         <div th:if="${#fields.hasErrors('name')}"
@@ -44,8 +51,10 @@
 
                     </div>
 
-                    <div class="form-group">
-                        <select th:field="*{parent}">
+
+                    <div class="form-group col-6">
+                        <label >Parent category</label>
+                        <select class="form-control" th:field="*{parent}">
                             <option value="1">No parent</option>
                             <thblock th:each="cat : ${categoriesForForm}">
 

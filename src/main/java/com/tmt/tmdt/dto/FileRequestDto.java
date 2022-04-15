@@ -13,10 +13,13 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageRequestDto {
+public class FileRequestDto {
 
     private MultipartFile file;
     Map<String, String> uploadRs = new HashMap<>();
 
 
+    public FileRequestDto(MultipartFile file) {
+        this.file= file;
+    }
 }
