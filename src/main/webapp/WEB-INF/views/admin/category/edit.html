@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit</title>
+    <th:block layout:fragment="addcss">
+        <link rel="stylesheet" th:href="@{/resource/css/admin/category/add-edit.css}">
+    </th:block>
+
 </head>
 <body>
 <div class="content-wrapper" layout:fragment="content">
@@ -52,7 +56,7 @@
                         </div>
 
                         <div class="tab-pane" id="detail" role="tabpanel">
-                            <div th:replace="admin/category/tabs/detail :: content"></div>
+                            <div th:replace="admin/category/tabs/detail-index :: content"></div>
 
                         </div>
 

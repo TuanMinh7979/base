@@ -75,4 +75,9 @@ public class Category extends BaseEntity implements Serializable {
     public Category(Integer id) {
         this.id = id;
     }
+
+    @Transient
+    public int attributeSize() {
+        return attributes.size();
+    }
 }

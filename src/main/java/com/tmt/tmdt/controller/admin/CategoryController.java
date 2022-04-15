@@ -145,6 +145,19 @@ public class CategoryController {
         return categoryService.getCategory(id).getAttributes();
     }
 
+    @PostMapping("api/{id}/attributes/add")
+    @ResponseBody
+    public ResponseEntity<Attribute> addAttribute(@PathVariable(value = "id") Integer id,
+                                                  @RequestBody Attribute attribute) {
+
+        Category category = categoryService.getCategory(id);
+        attribute.setId(String.valueOf(category.getId()) + String.valueOf(category.attributeSize()));
+        category.getAttributes().add(attribute);
+        categoryService.save(category);
+
+        return new ResponseEntity<>(attribute, HttpStatus.OK);
+
+    }
 
 
 }
