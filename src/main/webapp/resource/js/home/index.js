@@ -1,12 +1,12 @@
 $(function () {
 
-    simpleLoadContentWithGet("/admin/category/api/", loadCategoriesForMenu_Rd);
-    simpleLoadContentWithGet("/admin/product/api/21", loadProductFor);
+    simpleLoadContentWithGet("/admin/category/api/", renderCategoriesForMenu);
+    simpleLoadContentWithGet("/admin/product/api/21", renderProductFor);
 
 })
 
 
-function loadCategoriesForMenu_Rd(data) {
+function renderCategoriesForMenu(data) {
     let container = $("#navBar").find(".depart-hover");
     let rs = "";
     data.map(function (datai) {
@@ -16,18 +16,15 @@ function loadCategoriesForMenu_Rd(data) {
 
 }
 
-// function loadProducts_Rd(data) {
-//     alert(data);
-//
-// }
-function loadProductFor(data){
+
+function renderProductFor(data){
     let container = $("#hotsaleSwi").find(".swiper-wrapper");
     let rs = "";
     data.map(function (datai) {
         rs += `<div class="swiper-slide"><img src="${datai.mainImageLink}" alt=""></div>`
     })
     container.html(rs);
-    createSwiper("#hotsaleSwi")
+    createSwiper("#hotsaleSwi", 3)
 }
 
 

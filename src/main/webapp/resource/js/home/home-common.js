@@ -1,8 +1,8 @@
-function createSwiper(selector) {
+function createSwiper(selector, numOfSlide) {
     let swiper = new Swiper(selector, {
-        slidesPerView: 1,
+        slidesPerView: numOfSlide,
         spaceBetween: 30,
-        slidesPerGroup: 1,
+        slidesPerGroup: numOfSlide,
         loop: true,
         loopFillGroupWithBlank: true,
         pagination: {
