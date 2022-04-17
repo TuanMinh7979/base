@@ -40,9 +40,10 @@ public class Category extends BaseEntity implements Serializable {
     private Set<Product> products;
 
 
+    @JsonIgnore
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb", name = "attributes")
-    private Set<Attribute> attributes = new HashSet<>();
+    private Set<Attribute> attributes = new HashSet<>() ;
 
     //auto-generate from name
     private String code;
@@ -76,8 +77,8 @@ public class Category extends BaseEntity implements Serializable {
         this.id = id;
     }
 
-    @Transient
-    public int attributeSize() {
-        return attributes.size();
-    }
+//    @Transient
+//    public int attributeSize() {
+//        return this.attributes.size();
+//    }
 }

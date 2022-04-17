@@ -68,7 +68,8 @@ function renderData(data) {
             rs += `<td class="col-4" >${catei.name}</td>`
             rs += `<td class = "col-4" >${catei.code} </td>`
             rs += '<td class="col-3">'
-            rs += `<a class="btn btn-default"  href="/admin/category/edit/${catei.id}">Edit</a>`
+
+            rs += `<a class="btn btn-default"  href="/admin/category/update/${catei.id}">Edit</a>`
             rs += `<a class="btn btn-danger tag_delete_one"  href="/admin/category/api/delete/${catei.id}">Delete</a>`
             rs += "</td>"
             rs += "</tr>"

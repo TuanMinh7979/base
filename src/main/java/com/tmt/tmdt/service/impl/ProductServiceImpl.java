@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
         }
         //extra image is a option
         if (fileRequestDtos != null) {
-            System.out.println("SIZE LA :" + fileRequestDtos.size());
+
 
             for (FileRequestDto extraImagei : fileRequestDtos) {
                 if (!extraImagei.getFile().isEmpty()) {

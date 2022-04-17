@@ -154,8 +154,8 @@ public class ProductController {
             //Catch casting exception
             Long id = Long.parseLong(idx);
             product = productService.getProductWithImages(id);
-            System.out.println("************************************");
-            product.getImages().forEach(i -> System.out.println(i.getPublicId()));
+
+
         } catch (NumberFormatException e) {
             e.printStackTrace();
             product = productService.getProductByName(idx);

@@ -37,18 +37,69 @@ function deleteOnTable(event) {
     })
 }
 
+function deleteOnTableWithStringIdData(delBtn, strId) {
+
+    event.preventDefault();
+
+    let url = $(delBtn).attr("href");
+    let that = $(delBtn);
+    let data = {};
+    // data["idToDel"] = strId;
+    alert(url)
+    Swal.fire({
+
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify(strId.toString()),
+                contentType: "application/json",
+                success: function (rs) {
+                    that.closest("tr").remove();
+                },
+                error: function (rs) {
+
+
+                    // console.log(data.responseJSON);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Can not delete it',
+                        // text: 'Something went wrong!',
+
+                    })
+                }
+
+
+            })
+        }
+    })
+}
+
+
+
 function deleteManyOnTable(event) {
     event.preventDefault();
     let url = $(this).attr("href");
     // let that = $(this);
+
 
     var toDelChecboxs = [];
     var checkboxes = document.querySelectorAll('tr input[type="checkbox"]:checked');
 
 
     for (var i = 0; i < checkboxes.length; i++) {
+
         toDelChecboxs.push(parseInt(checkboxes[i].value))
     }
+    console.log(toDelChecboxs);
 
     Swal.fire({
 
@@ -93,6 +144,66 @@ function deleteManyOnTable(event) {
     })
 }
 
+function deleteManyOnTableByStringIdArray(event) {
+    event.preventDefault();
+    let url = $(this).attr("href");
+    // let that = $(this);
+
+
+    var toDelChecboxs = [];
+    var checkboxes = document.querySelectorAll('tr input[type="checkbox"]:checked');
+
+
+    for (var i = 0; i < checkboxes.length; i++) {
+
+        toDelChecboxs.push(checkboxes[i].value);
+    }
+    console.log(toDelChecboxs);
+
+    Swal.fire({
+
+        title: 'Are you sure to delete these?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+
+            $.ajax({
+                type: "post",
+                url: url,
+                contentType: "application/json",
+                data: JSON.stringify(toDelChecboxs),
+
+
+                success: function (data) {
+                    for (checkbox of checkboxes) {
+                        checkbox.parentElement.parentElement.remove();
+
+                    }
+
+
+                },
+                error: function (data) {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Can not delete',
+                        // text: 'Something went wrong!',
+
+                    })
+                }
+
+
+            })
+        }
+    })
+}
+
+
 function checkFileSize(file, fileInp, maxsize) {
     let maxsizeInKb = maxsize / 1024;
     if (file != null && file.size > maxsize) {
@@ -120,7 +231,7 @@ function handleSelectDefaultBtn(btn, mode, delIdsInpId, defaultImage) {
     let idTodel = imageInputWrapper.attr("id") != null ? imageInputWrapper.attr("id") : null;
 
 
-    if (idTodel != null && imagePreviewImg.attr("src") != defaultImage && mode === "edit"  ) {
+    if (idTodel != null && imagePreviewImg.attr("src") != defaultImage && mode === "edit") {
         addIdToDel(idTodel, delIdsInpId);
     }
 

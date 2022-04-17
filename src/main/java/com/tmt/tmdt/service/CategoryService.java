@@ -17,7 +17,7 @@ public interface CategoryService {
     Page getCategories(Pageable p);
 
 
-    void save(Category category);
+    Category save(Category category);
 
     void deleteById(Integer id);
 

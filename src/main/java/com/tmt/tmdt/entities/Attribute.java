@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 
 @Getter
@@ -17,7 +18,7 @@ public class Attribute implements Serializable {
 
     private String id;
     private String name;
-    private Object value;
+    private List<Object> value;
     private int active;
 
 
