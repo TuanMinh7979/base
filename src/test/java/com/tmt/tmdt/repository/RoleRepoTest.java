@@ -15,18 +15,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Rollback(false)
 class RoleRepoTest {
 
-    @Autowired
-    private RoleRepo roleRepo;
-
-    @Test
-    public void addMasterRole() {
-        Role masterrole = new Role("ROLE_CUSTOMER");
-
-        Role savedRole = roleRepo.save(masterrole);
-
-        assertThat(savedRole.getId() > 0);
-
-    }
+//    @Autowired
+//    private RoleRepo roleRepo;
+//
+//    @Test
+//    public void addMasterRole() {
+//        Role masterrole = new Role("ROLE_CUSTOMER");
+//
+//        Role savedRole = roleRepo.save(masterrole);
+//
+//        assertThat(savedRole.getId() > 0);
+//
+//    }
 
 
 
