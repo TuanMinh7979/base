@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Edit</title>
     <th:block layout:fragment="addcss">
-        <link rel="stylesheet" th:href="@{/resource/css/admin/category/add-edit.css}">
+        <link rel="stylesheet" th:href="@{/resource/css/admin/category-product/category-product.css}">
     </th:block>
 
 </head>
@@ -86,7 +86,11 @@
     var categoryId = [[${category.id}]]; 	// Behaves just like in HTML
     </script>
     <script th:src="@{/resource/js/check-form-change.js}"></script>
+    <!--    <script th:src="@{/resource/js/admin/category/add-edit.js}"></script>-->
     <script th:src="@{/resource/js/admin/category/add-edit.js}"></script>
+    <script th:src="@{/resource/js/admin/category-product/category-product.js}"></script>
+
+
 </th:block>
 
 

@@ -1,6 +1,6 @@
 package com.tmt.tmdt.converter;
 
-import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.request.FileRequestDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.web.multipart.MultipartFile;
 

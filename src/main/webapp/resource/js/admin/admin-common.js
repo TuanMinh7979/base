@@ -84,7 +84,6 @@ function deleteOnTableWithStringIdData(delBtn, strId) {
 }
 
 
-
 function deleteManyOnTable(event) {
     event.preventDefault();
     let url = $(this).attr("href");
@@ -247,7 +246,8 @@ function addIdToDel(idToAdd, delIdsInpId) {
     let delIdsInp = $("#".concat(delIdsInpId));
     let oldVal = delIdsInp.val();
     if (delIdsInpId.charAt(delIdsInpId.length - 1) === 's') {
-        delIdsInp.val(oldVal.concat(" ", idToAdd));
+        oldVal=oldVal.trim();
+        delIdsInp.val(oldVal.concat(" " + idToAdd));
     } else {
         delIdsInp.val(idToAdd);
     }
@@ -290,6 +290,29 @@ function changeImage(file, fileInp, mode, delIdsInpId, defaultImage) {
     }
 
 }
+
+//load content through ajax
+function loadContentWithGet(url, renderMethod) {
+
+    $.ajax({
+        type: "get",
+        url: url,
+        success: function (data) {
+            renderMethod(data);
+        },
+        error: function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Can not call this Api',
+                // text: 'Something went wrong!',
+
+            })
+        }
+
+
+    });
+}
+//load content through ajax
 
 
 

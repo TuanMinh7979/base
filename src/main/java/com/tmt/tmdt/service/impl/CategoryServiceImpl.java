@@ -1,6 +1,6 @@
 package com.tmt.tmdt.service.impl;
 
-import com.tmt.tmdt.entities.Attribute;
+import com.tmt.tmdt.dto.response.CategoryResponse;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category save(Category category) {
+
         category.setCode(TextUtil.generateCode(category.getName()));
         return cateRepository.save(category);
     }
@@ -111,11 +111,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
+
     public void reRender(List<Category> rs, List<Category> all, Integer id, String split) {
         for (Category category : all) {
             if (category.getParent() != null && category.getParent().getId() == id) {
                 String name = split + category.getName();
-                rs.add(new Category(category.getId(), name));
+                String code = category.getCode();
+                rs.add(new Category(category.getId(), name, code));
                 if (!category.getChildren().isEmpty()) reRender(rs, all, category.getId(), split.concat("--"));
 
             }
@@ -123,6 +125,9 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
     }
+
+
+
 
 
 }

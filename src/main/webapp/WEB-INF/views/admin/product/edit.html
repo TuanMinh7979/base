@@ -7,6 +7,7 @@
     <th:block layout:fragment="addcss">
         <link rel="stylesheet" th:href="@{/resource/plugins/rich-text-editor/richtext.min.css}">
         <link rel="stylesheet" th:href="@{/resource/css/admin/product/add-edit.css}">
+        <link rel="stylesheet" th:href="@{/resource/css/admin/category-product/category-product.css}">
     </th:block>
 </head>
 <body>
@@ -117,10 +118,12 @@
 
     <script th:inline="javascript">    // Enable Thymeleaf inlining
     var defaultImage = [[${product.defaultImage}]]; 	// Behaves just like in HTML
+    var productId = [[${product.id}]]; 	// Behaves just like in HTML
     </script>
 
     <script th:src="@{/resource/plugins/rich-text-editor/jquery.richtext.min.js}"></script>
     <script th:src="@{/resource/js/admin/product/add-edit.js}"></script>
+    <script th:src="@{/resource/js/admin/category-product/category-product.js}"></script>
 </th:block>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.tmt.tmdt.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.request.FileRequestDto;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.entities.UserEntity;

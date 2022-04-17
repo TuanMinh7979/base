@@ -1,5 +1,6 @@
 package com.tmt.tmdt.service;
 
+import com.tmt.tmdt.dto.response.CategoryResponse;
 import com.tmt.tmdt.entities.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,12 @@ public interface CategoryService {
     Category removeProductFromCategory(Integer cateId, Long productId);
 
     List<Category> getCategoriesInHierarchical();
+
+
+
+
+
+
 
 
 }

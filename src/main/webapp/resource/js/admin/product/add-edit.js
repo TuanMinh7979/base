@@ -64,29 +64,69 @@ $(document).on("click", ".image-preview .close-i", function () {
     $(this).parent().parent().hide();
 })
 
-//FOR DETAIL SCREEN
+//DETAIL ATTRIBUTE TAB
+$(function () {
+
+    $('.nav-tabs a').on('shown.bs.tab', function (event) {
+        var editMode = $(event.target).text();
+
+        if (editMode == "Detail") {
+
+            callAttributeApi(`/admin/product/api/${productId}/attributes`, `/admin/product/api/${productId}/attributes/delete`);
+            $("#addNewAttributeBtn").on("click", function (event) {
+                event.preventDefault();
+                $("#addModalBtn").click();
+            })
+
+            $("#saveAttributeBtn").on("click", function (event) {
+                event.preventDefault();
+                saveAttribute(this, `/admin/product/api/${productId}/attributes/add`);
+
+            });
+            $("#updateAttributeBtn").on("click", function (event) {
+                event.preventDefault();
+                saveAttribute(this, `/admin/product/api/${productId}/attributes/update`);
+
+            });
+            $("#tag_delete_many").on("click", deleteManyOnTableByStringIdArray);
+
+            $(document).on("click", '.tag_delete_one', function (event) {
+                event.preventDefault();
+                deleteOnTableWithStringIdData(this, $(this).parent().parent().find(".atb-iddel-checkbox").val());
+            })
 
 
-// $("#addNewRecordBtn").on("click", function (event) {
-//     event.preventDefault();
-//
-//     const detailRecord = '  <div class="detail-record form-inline ">\n' +
-//         '            <label>Name</label>\n' +
-//         '            <input type="text" class="form-control" name="detailName" maxlength="255">\n' +
-//         '            <label>Value</label>\n' +
-//         '            <input type="text" class="form-control" name="detailValue" maxlength="255">\n' +
-//         '\n' +
-//         '            <i class="del-detail-record__btn fas fa-window-close"></i>\n' +
-//         '\n' +
-//         '        </div>';
-//     $("#detailWrapper #detailWrapperContent").append(detailRecord);
-//
-//
-// })
-// $(document).on("click", ".detail-record .del-detail-record__btn", function () {
-//     $(this).parent().hide();
-//
-// })
+        }
+
+
+    });
+
+})
+
+$(document).on("click", ".push", function (event) {
+
+    event.preventDefault();
+    pushNewRecord(this)
+
+
+});
+$(document).on("click", ".delete", function (event) {
+
+    event.preventDefault();
+    $(this).parent().remove();
+});
+
+
+
+$(document).on("click", ".editAttributeBtn", function (event) {
+    event.preventDefault();
+    //load data first
+    loadAttributeToForm(this, `/admin/product/api/${productId}/attributes/value`);
+    //after that click modal btn
+    $("#editModalBtn").click();
+
+})
+//-DETAIL ATTRIBUTE TAB
 
 
 

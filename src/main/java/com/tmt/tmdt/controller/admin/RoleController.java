@@ -1,6 +1,6 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.ViewResponseApi;
+import com.tmt.tmdt.dto.response.ViewResponseApi;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.service.PermissionService;

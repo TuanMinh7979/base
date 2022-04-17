@@ -1,10 +1,13 @@
 package com.tmt.tmdt.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "products")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Product extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +66,23 @@ public class Product extends BaseEntity implements Serializable {
 
     //image is special case bc can not view the old file in update form now so can not use CascadeType.Persist
     //and do not use helper method
+
+    @JsonIgnore
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", name = "attributes")
+    private Set<Attribute> attributes = new HashSet<>();
+
+    //Attribute helper method
+    public Product addAttribute(Attribute newAttribute) {
+        this.attributes.add(newAttribute);
+        return this;
+    }
+
+    public Product removeAttribute(Attribute toDelAttribute) {
+        this.attributes.remove(toDelAttribute);
+        return this;
+    }
+    //-Attribute helper method
 
 
 }

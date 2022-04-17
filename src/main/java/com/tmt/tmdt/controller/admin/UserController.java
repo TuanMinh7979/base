@@ -1,8 +1,8 @@
 package com.tmt.tmdt.controller.admin;
 
 import com.tmt.tmdt.constant.UserStatus;
-import com.tmt.tmdt.dto.FileRequestDto;
-import com.tmt.tmdt.dto.ViewResponseApi;
+import com.tmt.tmdt.dto.request.FileRequestDto;
+import com.tmt.tmdt.dto.response.ViewResponseApi;
 import com.tmt.tmdt.entities.UserEntity;
 import com.tmt.tmdt.repository.UserRepo;
 import com.tmt.tmdt.service.RoleService;

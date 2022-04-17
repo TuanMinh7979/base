@@ -1,6 +1,6 @@
 package com.tmt.tmdt.controller.admin;
 
-import com.tmt.tmdt.dto.ViewResponseApi;
+import com.tmt.tmdt.dto.response.ViewResponseApi;
 import com.tmt.tmdt.entities.Attribute;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.service.CategoryService;
@@ -13,14 +13,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.Attr;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -78,7 +79,6 @@ public class CategoryController {
     }
 
 
-    @Transactional
     @PostMapping("add")
     //rest api save => add(post), edit(put)
     public String add(Model model, @Valid @ModelAttribute("category") Category category, BindingResult result) {
@@ -164,11 +164,12 @@ public class CategoryController {
     @PostMapping("api/{categoryId}/attributes/value")
     @ResponseBody
     public List<Object> getAttributeValueByAttributeId(@PathVariable("categoryId") Integer categoryId,
-                                                       @RequestBody Map<String, String> data) {
+                                                       @RequestBody String data) {
 
+        String id = data.substring(1, data.length() - 1);
         Set<Attribute> ats = categoryService.getCategory(categoryId).getAttributes();
         for (Attribute ati : ats) {
-            if (ati.getId().equals(data.get("id"))) {
+            if (ati.getId().equals(id)) {
                 return ati.getValue();
             }
         }
@@ -183,7 +184,7 @@ public class CategoryController {
         Category category = categoryService.getCategory(id);
         attribute.setId(GeneratedId.generateRandomPassword(3));
 
-        category.getAttributes().add(attribute);
+        category.addAttribute(attribute);
         categoryService.save(category);
 
         return new ResponseEntity<>(attribute, HttpStatus.OK);
@@ -204,10 +205,8 @@ public class CategoryController {
                 .collect(Collectors.toList())
                 .get(0);
 
-        Set<Attribute> attributes = category.getAttributes();
-        attributes.remove(oldAttribute);
-        attributes.add(newAttribute);
-        category.setAttributes(attributes);
+
+        category.removeAttribute(oldAttribute).addAttribute(newAttribute);
         categoryService.save(category);
 
         return new ResponseEntity<>(newAttribute, HttpStatus.OK);
@@ -231,14 +230,13 @@ public class CategoryController {
                 .get(0);
 
 
-        Set<Attribute> attributes = category.getAttributes();
-        attributes.remove(oldAttribute);
-        category.setAttributes(attributes);
+        category.removeAttribute(oldAttribute);
         categoryService.save(category);
 
         return new ResponseEntity<>(null, HttpStatus.OK);
 
     }
+
 
     @PostMapping("api/{categoryId}/attributes/deletes")
     @ResponseBody
@@ -257,13 +255,20 @@ public class CategoryController {
 
         }
         for (Attribute attributeToDel : attributeToDels) {
-            attributes.remove(attributeToDel);
+            category.removeAttribute(attributeToDel);
         }
-        category.setAttributes(attributes);
+
         categoryService.save(category);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
     //-FOR ATTRIBUTE
+
+
+    @GetMapping("/api")
+    @ResponseBody
+    public List<Category> getCategories() {
+        return categoryService.getCategoriesInHierarchical();
+    }
 
 
 }

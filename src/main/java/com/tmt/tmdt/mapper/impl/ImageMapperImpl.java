@@ -1,6 +1,6 @@
 package com.tmt.tmdt.mapper.impl;
 
-import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.request.FileRequestDto;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.mapper.ImageMapper;
 import lombok.RequiredArgsConstructor;

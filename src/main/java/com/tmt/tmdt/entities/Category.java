@@ -43,7 +43,7 @@ public class Category extends BaseEntity implements Serializable {
     @JsonIgnore
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb", name = "attributes")
-    private Set<Attribute> attributes = new HashSet<>() ;
+    private Set<Attribute> attributes = new HashSet<>();
 
     //auto-generate from name
     private String code;
@@ -72,13 +72,25 @@ public class Category extends BaseEntity implements Serializable {
         this.name = name;
     }
 
+    public Category(Integer id, String name, String code) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+    }
+
 
     public Category(Integer id) {
         this.id = id;
     }
 
-//    @Transient
-//    public int attributeSize() {
-//        return this.attributes.size();
-//    }
+    public Category addAttribute(Attribute newAttribute) {
+        this.getAttributes().add(newAttribute);
+        return this;
+    }
+
+    public Category removeAttribute(Attribute oldAttribute) {
+        this.getAttributes().remove(oldAttribute);
+        return this;
+
+    }
 }

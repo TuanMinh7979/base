@@ -1,6 +1,6 @@
 package com.tmt.tmdt.service;
 
-import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.request.FileRequestDto;
 import com.tmt.tmdt.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +34,8 @@ public interface ProductService {
 
     Product update(Product product, FileRequestDto file, List<FileRequestDto> files, String ids) throws IOException;
 
+    Product save(Product product);
+
     Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable);
 
     Page getProducts(Pageable pageable);
@@ -45,4 +47,5 @@ public interface ProductService {
     Product getProductWithImages(Long id);
 
 
+    List<Product> getProductsByCategory(Integer categoryId);
 }

@@ -1,7 +1,7 @@
 package com.tmt.tmdt.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.tmt.tmdt.dto.FileRequestDto;
+import com.tmt.tmdt.dto.request.FileRequestDto;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
@@ -101,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    @Transactional
+//    @Transactional
     public Product save(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos) throws IOException {
 
 
@@ -130,9 +129,7 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
         }
-//        if (fileRequestDto.getFile().isEmpty() && fileRequestDto == null) {
-//            product.setMainImageLink(product.defaultImage());
-//        }
+
 
         product.setCode(TextUtil.generateCode(product.getName()));
         return productRepo.save(product);
@@ -141,13 +138,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Product update(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos, String delImageIds) throws IOException {
         product.setCode(TextUtil.generateCode(product.getName()));
+
+        System.out.println(delImageIds);
+        delImageIds = delImageIds.trim();
+        System.out.println(delImageIds);
         if (delImageIds != null && !delImageIds.isEmpty()) {
             delImageIds = delImageIds.trim();
             List<String> strIds = Arrays.asList(delImageIds.split(" "));
-            Set<Long> ids = strIds.stream().map(Long::parseLong).collect(Collectors.toSet());
+            Set<Long> ids = strIds.stream().map(Long::valueOf).collect(Collectors.toSet());
             //remove image from database (orphan removeal and deleit in cloud)
             for (Long idToDel : ids) {
                 if (imageService.getImage(idToDel).isMain()) {
@@ -189,6 +190,12 @@ public class ProductServiceImpl implements ProductService {
         return productSaved;
     }
 
+    @Override
+    public Product save(Product product) {
+        product.setCode(TextUtil.generateCode(product.getName()));
+        return productRepo.save(product);
+    }
+
 
     @Override
     public void deleteById(Long id) {
@@ -211,6 +218,11 @@ public class ProductServiceImpl implements ProductService {
 //        Product product = getProduct(id);
         Product productWithImages = productRepo.getProductWithImages(id);
         return productWithImages;
+    }
+
+    @Override
+    public List<Product> getProductsByCategory(Integer categoryId) {
+        return productRepo.getProductsByCategory(categoryId);
     }
 
 
