@@ -39,4 +39,8 @@ public interface UserEntityService {
     void delete(Long id);
 
     void deletes(Long[] ids);
+
+    UserEntity getUserByUsername(String username);
+
+    UserEntity getUserEntityWithRoles(String username);
 }

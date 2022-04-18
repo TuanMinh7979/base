@@ -1,5 +1,6 @@
 package com.tmt.tmdt.repository;
 
+import com.tmt.tmdt.constant.UserStatus;
 import com.tmt.tmdt.entities.Role;
 import com.tmt.tmdt.entities.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +18,23 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(false)
 class UserRepoTest {
+    @Autowired
+    private UserRepo userRepo;
+
+    private static BCryptPasswordEncoder passwordEcorder = new BCryptPasswordEncoder(12);
+
+    @Test
+    public void encodea() {
+//        UserEntity user = new UserEntity();
+//        user.setUsername("abc");
+//        user.setEmail("abcvavsa");
+//        user.setPassword(passwordEcorder.encode("123"));
+//        user.setStatus(UserStatus.ENABLE);
+//
+//
+//        userRepo.save(user);
+
+    }
 
 //    @Autowired
 //    private UserRepo userRepo;
@@ -45,8 +65,6 @@ class UserRepoTest {
 //        userAdmin.getRoles().add(editor);
 //        userRepo.save(userAdmin);
 //    }
-
-
 
 
 }

@@ -16,7 +16,7 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
 
     @Query("select u from UserEntity u left join fetch u.roles r left join fetch r.permissions where u.username= :username")
-    Optional<UserEntity> getUserEntitysByUserNameWithPermissions(@Param("username") String username);
+    Optional<UserEntity> getUserEntitysByUserNameWithRoles(@Param("username") String username);
 
     boolean existsByUsername(String username);
 
@@ -42,4 +42,6 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "from UserEntity u join fetch u.image where u.id= :id")
     Optional<UserEntity> getUserEntityWithImage(Long id);
+
+    Optional<UserEntity> getUserEntityByUsername(String username);
 }

@@ -14,6 +14,8 @@ import com.tmt.tmdt.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class UserEntityServiceImpl implements UserEntityService {
     private final ImageMapper imageMapper;
     private final Cloudinary cloudinary;
     private final ImageService imageService;
+    private final PasswordEncoder passwordEncoder;
 
 
     private List<String> setRoleNameListHelper(List<String> currentRoleNameList, Set<Role> roles) {
@@ -96,9 +99,16 @@ public class UserEntityServiceImpl implements UserEntityService {
         if ((delImageId == null || delImageId.isEmpty()) && fileRequestDto.getFile().isEmpty()) {
             userEntity.setImage(getUserEntity(userEntity.getId()).getImage());
         }
-        userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
-        userRepo.save(userEntity);
 
+        save(userEntity);
+
+
+    }
+
+    public UserEntity save(UserEntity userEntity) {
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
+        return userRepo.save(userEntity);
 
     }
 
@@ -122,9 +132,9 @@ public class UserEntityServiceImpl implements UserEntityService {
 //            userEntity.setImageLink(userEntity.defaultImage());
 //        }
 
-        userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
+
 //        userEntity.setImage(null);
-        UserEntity usersaved = userRepo.save(userEntity);
+        save(userEntity);
 
     }
 
@@ -177,5 +187,17 @@ public class UserEntityServiceImpl implements UserEntityService {
         for (Long idi : ids) userRepo.deleteById(idi);
 
 
+    }
+
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        return userRepo.getUserEntityByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
+    }
+
+    @Override
+    public UserEntity getUserEntityWithRoles(String username) {
+        return userRepo.getUserEntitysByUserNameWithRoles(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
     }
 }

@@ -126,9 +126,10 @@
                 <div class="depart-btn">
                     <i class="ti-menu"></i>
                     <span>All departments</span>
-                    <ul  class="depart-hover">
-
-<!--                        <li><a href="#">Men’s Clothing</a></li>-->
+                    <ul class="depart-hover">
+                        <th:block th:each="cate : ${categoriesForForm}">
+                            <li><a href="${cate.code}" th:text="${cate.name}"></a></li>
+                        </th:block>
 
                     </ul>
                 </div>

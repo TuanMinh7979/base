@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
@@ -129,10 +130,7 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
         }
-
-
-        product.setCode(TextUtil.generateCode(product.getName()));
-        return productRepo.save(product);
+        return save(product);
 
 
     }
@@ -140,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
 //    @Transactional
     public Product update(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos, String delImageIds) throws IOException {
-        product.setCode(TextUtil.generateCode(product.getName()));
+
 
         System.out.println(delImageIds);
         delImageIds = delImageIds.trim();
@@ -183,17 +181,18 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
         }
-        product.setCode(TextUtil.generateCode(product.getName()));
-        Product productSaved = productRepo.save(product);
 
-
-        return productSaved;
+        return save(product);
     }
 
     @Override
+    @Transactional
     public Product save(Product product) {
-        product.setCode(TextUtil.generateCode(product.getName()));
-        return productRepo.save(product);
+
+        Product productSaved = productRepo.save(product);
+        product.setCode(TextUtil.generateCode(product.getName(), productSaved.getId()));
+        return productSaved;
+
     }
 
 

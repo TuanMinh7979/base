@@ -1,20 +1,11 @@
 $(function () {
 
-    simpleLoadContentWithGet("/admin/category/api/", renderCategoriesForMenu);
-    simpleLoadContentWithGet("/admin/product/api/21", renderProductFor);
+
+    simpleLoadContentWithGet("/api/category/21", renderProductFor);
 
 })
 
 
-function renderCategoriesForMenu(data) {
-    let container = $("#navBar").find(".depart-hover");
-    let rs = "";
-    data.map(function (datai) {
-        rs += `<li><a href="${datai.code}">${datai.name}</a></li>`
-    })
-    container.html(rs);
-
-}
 
 
 function renderProductFor(data){

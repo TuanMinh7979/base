@@ -329,13 +329,7 @@ public class ProductController {
 
     //FOR HOME
 
-    @GetMapping("api/{categoryId}")
-    @ResponseBody
-    public List<Product> getProducts(@PathVariable("categoryId") Integer categoryId) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
-        return products;
 
-    }
     //FOR HOME
 
 

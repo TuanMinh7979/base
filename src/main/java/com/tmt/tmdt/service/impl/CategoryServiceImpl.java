@@ -1,6 +1,5 @@
 package com.tmt.tmdt.service.impl;
 
-import com.tmt.tmdt.dto.response.CategoryResponse;
 import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
@@ -44,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(Category category) {
 
-        category.setCode(TextUtil.generateCode(category.getName()));
+        category.setCode(TextUtil.generateCode(category.getName(), Long.valueOf(category.getId())));
         return cateRepository.save(category);
     }
 
@@ -125,9 +124,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
     }
-
-
-
 
 
 }

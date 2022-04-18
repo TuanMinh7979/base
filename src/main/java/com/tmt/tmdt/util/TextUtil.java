@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class TextUtil {
-    public static String generateCode(String text) {
+    public static String generateCode(String text, Long id) {
         text = text.toLowerCase(Locale.ROOT);
 //
         text = text.trim();
@@ -16,7 +16,7 @@ public class TextUtil {
         result = result.replaceAll("đ", "d");
         result = result.replaceAll(" ", "-");
 
-        return result;
+        return result + "." + id;
     }
 
 
