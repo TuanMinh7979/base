@@ -106,7 +106,7 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     public UserEntity save(UserEntity userEntity) {
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+
         userEntity.setRoleNameList(setRoleNameListHelper(userEntity.getRoleNameList(), userEntity.getRoles()));
         return userRepo.save(userEntity);
 
@@ -128,9 +128,7 @@ public class UserEntityServiceImpl implements UserEntityService {
             //persistence
             userEntity.setImageLink(imageSaved.getLink());
         }
-//        else {
-//            userEntity.setImageLink(userEntity.defaultImage());
-//        }
+
 
 
 //        userEntity.setImage(null);
@@ -162,7 +160,7 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public boolean existByUserName(String username) {
+    public boolean existByUsername(String username) {
         return userRepo.existsByUsername(username);
     }
 

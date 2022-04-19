@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ public class UserController {
     private final UserEntityService userEntityService;
     private final RoleService roleService;
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
 
 
     @GetMapping("")
@@ -93,17 +95,18 @@ public class UserController {
     }
 
 
-    @PostMapping("/save")
-    public String save(Model model,
+    @PostMapping("/add")
+    public String add(Model model,
                        @RequestParam("file") FileRequestDto fileRequestDto,
                        @Valid @ModelAttribute("user") UserEntity userEntity,
                        BindingResult result) throws IOException {
 
-        if (userEntityService.existByUserName(userEntity.getUsername())) {
+        if (userEntityService.existByUsername(userEntity.getUsername())) {
             result.rejectValue("username", "nameIsExist");
         }
         if (!result.hasErrors()) {
             //only upload if no binđing error occurs
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             userEntityService.add(userEntity, fileRequestDto);
 
             return "redirect:/admin/user";
@@ -124,22 +127,6 @@ public class UserController {
 
     }
 
-//    @GetMapping("edit/{id}")
-//    @ResponseBody
-//    public UserEntity showUpdateForma(Model model, @PathVariable("id") Long id) {
-//        UserEntity userEntity = userEntityService.getUserEntity(id);
-//        model.addAttribute("user", userEntity);
-//
-//        return userEntity;
-//    }
-
-//    @PostMapping("edit/{id}")
-//    @ResponseBody
-//    public UserEntity update(Model model, @RequestBody  UserEntity user) {
-//
-//        userRepo.save(user);
-//        return null;
-//    }
 
 
     @Transactional
@@ -153,7 +140,7 @@ public class UserController {
 
         String oldUserName = userEntityService.getUserEntity(userEntity.getId()).getUsername();
         if (!(userEntity.getUsername().equals(oldUserName))
-                && userEntityService.existByUserName(userEntity.getUsername())) {
+                && userEntityService.existByUsername(userEntity.getUsername())) {
             result.rejectValue("username", "nameIsExist");
         }
         if (!result.hasErrors()) {

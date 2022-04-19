@@ -1,4 +1,4 @@
-package com.tmt.tmdt.service.security;
+package com.tmt.tmdt.security;
 
 import com.tmt.tmdt.entities.Permission;
 import com.tmt.tmdt.entities.Role;
@@ -6,19 +6,12 @@ import com.tmt.tmdt.entities.UserEntity;
 import com.tmt.tmdt.service.UserEntityService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,9 +24,6 @@ import java.util.Set;
 public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UserEntityService userEntityService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -48,7 +38,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 setAuthorities.add(new SimpleGrantedAuthority(permission.getName()));
             }
         }
-        return new User(user.getUsername(), user.getPassword(), setAuthorities);
+
+        return new CustomUserDetail(user.getUsername(),
+                user.getPassword(),
+                setAuthorities,
+                user.getImageLink());
 
 
     }

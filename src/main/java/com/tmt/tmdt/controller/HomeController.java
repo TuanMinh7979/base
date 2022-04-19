@@ -20,25 +20,15 @@ public class HomeController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    //    @ModelAttribute
-//    public void commonAtr(Model model) {
-//        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
-//
-//    }
+
     @GetMapping("")
     public String index(Model model) {
 
-//        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
         return "home/home";
     }
 
-    @GetMapping("api/category/{categoryId}")
-    @ResponseBody
-    public List<Product> getProducts(@PathVariable("categoryId") Integer categoryId) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
-        return products;
 
-    }
 
 
 }

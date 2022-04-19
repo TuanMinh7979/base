@@ -18,7 +18,8 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
     @Query("select u from UserEntity u left join fetch u.roles r left join fetch r.permissions where u.username= :username")
     Optional<UserEntity> getUserEntitysByUserNameWithRoles(@Param("username") String username);
 
-    boolean existsByUsername(String username);
+  
+    boolean existsByUsername(@Param("name") String name);
 
     @Query(value = "select * from users where username like ?1%",
             countQuery = "select count(id) from users where username like ?1%",

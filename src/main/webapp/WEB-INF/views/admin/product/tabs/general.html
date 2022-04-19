@@ -45,10 +45,13 @@
             <!--            </th:block>-->
 
             <th:block th:if="${product.id}">
+
                 <option th:each="cat : ${categoriesForForm}" th:value="${cat.id}" th:text="${cat.name}"
                         th:selected="${cat.id==product.category.id}"></option>
+
             </th:block>
             <th:block th:if="${product.id==null}">
+
                 <option th:each="cat : ${categoriesForForm}" th:value="${cat.id}" th:text="${cat.name}"
                 ></option>
             </th:block>

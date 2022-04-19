@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 @Repository
 public interface RoleRepo extends JpaRepository<Role, Integer> {
 
@@ -34,4 +35,6 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
     //for api
     @Query("select r.id from Role r join r.users u where u.id = :userId")
     List<Integer> getRoleIdsByUserId(@Param("userId") Long userId);
+
+    Optional<Role> getRoleByName(String name);
 }

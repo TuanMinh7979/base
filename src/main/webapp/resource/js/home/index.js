@@ -1,7 +1,7 @@
 $(function () {
 
 
-    simpleLoadContentWithGet("/api/category/21", renderProductFor);
+    // simpleLoadContentWithGet("/api/category/21", renderProductFor);
 
 })
 
