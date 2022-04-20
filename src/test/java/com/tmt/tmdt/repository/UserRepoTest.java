@@ -21,12 +21,18 @@ class UserRepoTest {
     @Autowired
     private UserRepo userRepo;
 
-
+    private static BCryptPasswordEncoder passwordEcorder = new BCryptPasswordEncoder(12);
 
     @Test
     public void encodea() {
-
-
+//        UserEntity user = new UserEntity();
+//        user.setUsername("abc");
+//        user.setEmail("abcvavsa");
+//        user.setPassword(passwordEcorder.encode("123"));
+//        user.setStatus(UserStatus.ENABLE);
+//
+//
+//        userRepo.save(user);
 
     }
 

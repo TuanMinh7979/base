@@ -1,5 +1,6 @@
 package com.tmt.tmdt.service;
 
+import com.tmt.tmdt.dto.response.CategoryResponse;
 import com.tmt.tmdt.entities.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,11 +33,20 @@ public interface CategoryService {
 
     Page<Category> getCategoriesByNameLike(String name, Pageable pageable);
 
+    Category addProductToCategory(Integer cateId, Long productId);
+
+    Category removeProductFromCategory(Integer cateId, Long productId);
+
+    List<Category> getCategoriesInHierarchical();
 
 
-    List<Category> getCategoriesInHierarchicalFromRoot();
 
 
+
+
+
+
+<<<<<<< HEAD
     List<Category> getCategoriesInHierarchicalFromRootWithOut(int i);
 
     Category add(Category category);
@@ -44,4 +54,6 @@ public interface CategoryService {
     Category save(Category category);
 
 
+=======
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
 }

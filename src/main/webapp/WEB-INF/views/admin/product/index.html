@@ -31,7 +31,7 @@
                 <div class="col-2 mb-5">
                     <select id="category-sel" name="category">
                         <option th:value="0" th:text="All"></option>
-                        <th:block th:each="catei : ${categoriesForFilter}">
+                        <th:block th:each="catei : ${categories}">
                             <option th:value="${catei.id}" th:text="${catei.name}"></option>
 
                         </th:block>

@@ -74,8 +74,12 @@ public class CategoryController {
         Category category = new Category();
         model.addAttribute("category", category);
 
+<<<<<<< HEAD
         List<Category> categoryList = categoryService.getCategoriesInHierarchicalFromRootWithOut(2);
         model.addAttribute("categoriesForParentForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
+=======
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
         return "admin/category/add";
     }
 
@@ -91,7 +95,7 @@ public class CategoryController {
             categoryService.add(category);
             return "redirect:/admin/category";
         }
-        model.addAttribute("categoriesForParentForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
 
         return "admin/category/add";
     }
@@ -111,7 +115,11 @@ public class CategoryController {
             category = categoryService.getCategoryByName(idx);
         }
         model.addAttribute("category", category);
+<<<<<<< HEAD
         model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
+=======
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
         return "admin/category/edit";
 
     }
@@ -125,7 +133,11 @@ public class CategoryController {
             categoryService.save(category);
             return "redirect:/admin/category";
         }
+<<<<<<< HEAD
         model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
+=======
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
 
         return "admin/category/edit";
     }
@@ -176,6 +188,13 @@ public class CategoryController {
 
 
     //-FOR ATTRIBUTE
+
+
+    @GetMapping("/api")
+    @ResponseBody
+    public List<Category> getCategories() {
+        return categoryService.getCategoriesInHierarchical();
+    }
 
 
 }

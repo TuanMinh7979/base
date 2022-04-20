@@ -38,7 +38,7 @@ public class ProductController {
     @GetMapping("")
     public String index(Model model) {
 
-        model.addAttribute("categoriesForFilter", categoryService.getCategoriesInHierarchicalFromRoot());
+//        model.addAttribute("categories", categoryService.getCategories());
         return "admin/product/index";
     }
 
@@ -48,20 +48,20 @@ public class ProductController {
 
         model.addAttribute("product", product);
 
-        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/product/add";
 
     }
 
     @GetMapping("api/viewApi")
     @ResponseBody
-    public ViewResponseApi<List<Product>> getProducts(
-            @RequestParam(name = "page", required = false) String pageParam,
-            @RequestParam(name = "limit", required = false) String limitParam,
-            @RequestParam(name = "sortBy", required = false) String sortBy,
-            @RequestParam(name = "sortDirection", required = false) String sortDirection,
-            @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
-            @RequestParam(name = "category", required = false) String categoryIdParam) {
+    public ViewResponseApi<List<Product>> getProducts(Model model,
+                                                      @RequestParam(name = "page", required = false) String pageParam,
+                                                      @RequestParam(name = "limit", required = false) String limitParam,
+                                                      @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                      @RequestParam(name = "sortDirection", required = false) String sortDirection,
+                                                      @RequestParam(name = "searchNameTerm", required = false) String searchNameTerm,
+                                                      @RequestParam(name = "category", required = false) String categoryIdParam) {
 
 
         String sortField = sortBy == null ? "id" : sortBy;
@@ -167,8 +167,7 @@ public class ProductController {
                 model.addAttribute("mainImageId", imagei.getId());
             }
         }
-        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
-
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         model.addAttribute("images", extraImages);
 //                .filter(img -> img.getIsMain() == false).collect(Collectors.toSet()));
         return "admin/product/edit";
@@ -214,6 +213,13 @@ public class ProductController {
 
     }
 
+
+//    FOR ATTRIBUTE
+
+    //FOR HOME
+
+
+    //FOR HOME
 
 
 }

@@ -11,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
+=======
+import org.springframework.transaction.annotation.Transactional;
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+<<<<<<< HEAD
     public Category add(Category category) {
         category.setAttributes(category.getParent().getAttributes());
         Category categorySaved = cateRepository.save(category);
@@ -51,6 +56,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(Category category) {
         //use for update
+=======
+    public Category save(Category category) {
+
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
         category.setCode(TextUtil.generateCode(category.getName(), Long.valueOf(category.getId())));
         return cateRepository.save(category);
     }
@@ -60,7 +69,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Integer id) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
         cateRepository.deleteById(id);
     }
 
@@ -95,33 +107,34 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-//    @Override
-//    @Transactional
-//    public Category addProductToCategory(Integer cateId, Long productId) {
-//        Category cate = getCategory(cateId);
-//        Product product = productService.getProduct(productId);
-//        cate.getProducts().add(product);
-//        return cate;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public Category removeProductFromCategory(Integer cateId, Long productId) {
-//        Category cate = getCategory(cateId);
-//        Product product = productService.getProduct(productId);
-//        cate.getProducts().remove(product);
-//        return cate;
-//    }
+    @Override
+    @Transactional
+    public Category addProductToCategory(Integer cateId, Long productId) {
+        Category cate = getCategory(cateId);
+        Product product = productService.getProduct(productId);
+        cate.getProducts().add(product);
+        return cate;
+    }
+
+    @Override
+    @Transactional
+    public Category removeProductFromCategory(Integer cateId, Long productId) {
+        Category cate = getCategory(cateId);
+        Product product = productService.getProduct(productId);
+        cate.getProducts().remove(product);
+        return cate;
+    }
 
     //category in hierarchical
     @Override
-    public List<Category> getCategoriesInHierarchicalFromRoot() {
+    public List<Category> getCategoriesInHierarchical() {
         List<Category> categoriesRs = new ArrayList<>();
         reRender(categoriesRs, cateRepository.findAll(), 1, "");
         return categoriesRs;
 
     }
 
+<<<<<<< HEAD
     @Override
     public List<Category> getCategoriesInHierarchicalFromRootWithOut(int i) {
         List<Category> categories = getCategoriesInHierarchicalFromRoot();
@@ -134,6 +147,8 @@ public class CategoryServiceImpl implements CategoryService {
         return categories;
     }
 
+=======
+>>>>>>> 5a3620c836045d0dd27a1b5f5e10b804be317485
 
     public void reRender(List<Category> rs, List<Category> all, Integer id, String split) {
         for (Category category : all) {

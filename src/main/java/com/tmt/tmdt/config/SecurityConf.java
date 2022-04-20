@@ -1,12 +1,12 @@
 package com.tmt.tmdt.config;
 
-import com.tmt.tmdt.security.UserDetailServiceImpl;
+import com.tmt.tmdt.service.security.UserDetailServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,22 +45,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN")
-                .antMatchers("/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ROLE_ADMIN", "ROLE_EMPLOYEE")
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll()
+                .formLogin().loginPage("/login").permitAll()
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login").permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403");
-
-
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resource/**");
+                .httpBasic();
     }
 }

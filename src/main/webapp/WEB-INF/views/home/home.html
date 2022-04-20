@@ -12,7 +12,7 @@
 <div class="content-wrapper" layout:fragment="content">
 
 
-
+    <span th:if="${#authentication!=null}" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <div class="container-fluid">
         <!--        <div class="swiper mySwiper">-->
         <!--            <div class="swiper-wrapper">-->

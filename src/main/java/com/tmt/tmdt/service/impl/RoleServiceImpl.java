@@ -94,11 +94,5 @@ public class RoleServiceImpl implements RoleService {
         return roleRepo.getRoleIdsByUserId(userId);
     }
 
-    @Override
-    public Role getRoleByName(String name) {
-        return roleRepo.getRoleByName(name).orElseThrow(() ->
-                new ResourceNotFoundException("Role with name " + name + " not found"));
-    }
-
 
 }
