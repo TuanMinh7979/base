@@ -21,9 +21,13 @@
 
     </table>
     <div class="col-12 d-flex justify-content-end">
-        <button   id="addNewAttributeBtn" class="btn btn-info " style="margin-right: 100px">Add attribute</button>
-        <a th:href="@{/admin/product/api/{id}/attributes/deletes(id=${product.id})}" id="tag_delete_many"
-           class="btn btn-danger ">Delete Many</a>
+        <a style="margin-right: 100px" id="saveallchangeBtn"
+           th:href="@{/admin/product/api/{id}/attributes/update(id=${product.id})}"
+           class="btn btn-info ">Save All Change</a>
+        <button id="addNewAttributeBtn" class="btn btn-info " style="margin-right: 100px">Add attribute</button>
+        <button id="tag_delete_many"
+                class="btn btn-danger">Delete Many
+        </button>
     </div>
 
 
@@ -40,7 +44,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Add attribute</h5>
+                        <h5 class="modal-title">Add attribute</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -74,7 +78,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="saveAttributeBtn" type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="saveAtrsBtn btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -96,7 +100,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Edit attribute</h5>
+                        <h5 class="modal-title">Edit attribute</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -111,11 +115,11 @@
                             </div>
                             <div style="margin-top: 10px">
                                 <label>Name: </label>
-                                <input id="atrNameInp" type="text">
+                                <input class="atrNameInp" type="text">
                             </div>
                             <div style="margin-top: 10px">
                                 <label>Active:</label>
-                                <input id="atrActiveChbx" style="width: 30px; height: 30px" type="checkbox">
+                                <input class="atrActiveChbx" style="width: 30px; height: 30px" type="checkbox">
                             </div>
                             <div style="margin-top: 10px;">
                                 <label>Values: </label>
@@ -131,7 +135,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="updateAttributeBtn" type="button" class="btn btn-primary">Update changes</button>
+                        <button type="button" class="saveAtrsBtn btn btn-primary">Update changes</button>
                     </div>
                 </div>
             </div>

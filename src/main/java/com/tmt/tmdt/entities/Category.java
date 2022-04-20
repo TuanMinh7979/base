@@ -54,6 +54,7 @@ public class Category extends BaseEntity implements Serializable {
     @JoinColumn(name = "parent_id")
     private Category parent;
     //one to one one one to many
+    @JsonIgnore
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     private Set<Category> children = new HashSet<>();
 

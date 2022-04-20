@@ -3,8 +3,8 @@ package com.tmt.tmdt.controller.admin;
 import com.tmt.tmdt.dto.response.ViewResponseApi;
 import com.tmt.tmdt.entities.Attribute;
 import com.tmt.tmdt.entities.Category;
+import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
-import com.tmt.tmdt.util.GeneratedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,12 +13,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,10 +34,7 @@ public class CategoryController {
 
 
     @GetMapping("")
-    public String index(Model model) {
-
-
-//        model.addAttribute("categoriesForFilter", categoryService.getCategoriesFrom(1));
+    public String index() {
         return "admin/category/index";
     }
 
@@ -77,6 +74,7 @@ public class CategoryController {
         Category category = new Category();
         model.addAttribute("category", category);
 
+        List<Category> categoryList = categoryService.getCategoriesInHierarchicalFromRootWithOut(2);
         model.addAttribute("categoriesForParentForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
         return "admin/category/add";
     }
@@ -90,10 +88,7 @@ public class CategoryController {
         }
 
         if (!result.hasErrors()) {
-            //when create new generate dynamicalyy a attribute example
-
-            Category categorySaved = categoryService.save(category);
-            categorySaved.getAttributes().add(new Attribute("exam" + categorySaved.getId(), "examName", Arrays.asList("examValue"), 0));
+            categoryService.add(category);
             return "redirect:/admin/category";
         }
         model.addAttribute("categoriesForParentForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
@@ -116,7 +111,7 @@ public class CategoryController {
             category = categoryService.getCategoryByName(idx);
         }
         model.addAttribute("category", category);
-        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
         return "admin/category/edit";
 
     }
@@ -130,7 +125,7 @@ public class CategoryController {
             categoryService.save(category);
             return "redirect:/admin/category";
         }
-        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
 
         return "admin/category/edit";
     }
@@ -155,11 +150,6 @@ public class CategoryController {
     }
     //-DELETE
 
-    //FOR PRODUCT INDEX
-
-
-    //
-
 
     //FOR ATTRIBUTE
 
@@ -169,106 +159,22 @@ public class CategoryController {
         return categoryService.getCategory(id).getAttributes();
     }
 
-    @PostMapping("api/{categoryId}/attributes/value")
+    @PostMapping("api/{id}/attributes/update")
     @ResponseBody
-    public List<Object> getAttributeValueByAttributeId(@PathVariable("categoryId") Integer categoryId,
-                                                       @RequestBody String data) {
-
-        String id = data.substring(1, data.length() - 1);
-        Set<Attribute> ats = categoryService.getCategory(categoryId).getAttributes();
-        for (Attribute ati : ats) {
-            if (ati.getId().equals(id)) {
-                return ati.getValue();
-            }
-        }
-        return null;
-    }
-
-    @PostMapping("api/{id}/attributes/add")
-    @ResponseBody
-    public ResponseEntity<Attribute> addAttribute(@PathVariable(value = "id") Integer id,
-                                                  @RequestBody Attribute attribute) {
+    public Set<Attribute> updateAttributes(@PathVariable("id") Integer id, @RequestBody List<Attribute> newAttributes) {
+            Set<Attribute> newSetAttributes = newAttributes.stream().collect(Collectors.toSet());
 
         Category category = categoryService.getCategory(id);
-        attribute.setId(GeneratedId.generateRandomPassword(3));
-
-        category.addAttribute(attribute);
+        category.setAttributes(newSetAttributes);
         categoryService.save(category);
 
-        return new ResponseEntity<>(attribute, HttpStatus.OK);
-
-    }
-
-    @PostMapping("api/{categoryId}/attributes/update")
-    @ResponseBody
-    public ResponseEntity<Attribute> updateAttribute(@PathVariable(value = "categoryId") Integer id,
-                                                     @RequestBody Attribute newAttribute) {
-
-        Category category = categoryService.getCategory(id);
-
-
-        Attribute oldAttribute = category.getAttributes()
-                .stream()
-                .filter(a -> a.getId().equals(newAttribute.getId()))
-                .collect(Collectors.toList())
-                .get(0);
-
-
-        category.removeAttribute(oldAttribute).addAttribute(newAttribute);
-        categoryService.save(category);
-
-        return new ResponseEntity<>(newAttribute, HttpStatus.OK);
-
-    }
-
-    @PostMapping("api/{categoryId}/attributes/delete")
-    @ResponseBody
-    public ResponseEntity<Attribute> deteteAttribute(@PathVariable(value = "categoryId") Integer id,
-//                                                     @RequestBody Map<String, String> data) {
-                                                     @RequestBody String data) {
-        String idToDel = data.substring(1, data.length() - 1);
-
-        Category category = categoryService.getCategory(id);
-
-
-        Attribute oldAttribute = category.getAttributes()
-                .stream()
-                .filter(a -> a.getId().equals(idToDel))
-                .collect(Collectors.toList())
-                .get(0);
-
-
-        category.removeAttribute(oldAttribute);
-        categoryService.save(category);
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return newSetAttributes;
 
     }
 
 
-    @PostMapping("api/{categoryId}/attributes/deletes")
-    @ResponseBody
-    public ResponseEntity<List<String>> deteteAttributes(@PathVariable(value = "categoryId") Integer id,
-                                                         @RequestBody List<String> data) {
-        Category category = categoryService.getCategory(id);
-        Set<Attribute> attributes = category.getAttributes();
-        Set<Attribute> attributeToDels = new HashSet<>();
-        for (String idi : data) {
-            for (Attribute attribute : attributes) {
-                if (attribute.getId().equals(idi)) {
-                    attributeToDels.add(attribute);
-                    break;
-                }
-            }
 
-        }
-        for (Attribute attributeToDel : attributeToDels) {
-            category.removeAttribute(attributeToDel);
-        }
 
-        categoryService.save(category);
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
     //-FOR ATTRIBUTE
 
 

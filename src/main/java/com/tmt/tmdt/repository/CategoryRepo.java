@@ -27,7 +27,11 @@ public interface CategoryRepo extends JpaRepository<Category, Integer> {
             nativeQuery = true)
     Page<Category> getCategoriesByNameLike(String name, Pageable pageable);
 
-
+    @Query("from Category c  where c.id = :id")
+    Optional<Category> getSimpleCategory(@Param("id") Integer id);
+//
+//    @Query("from Category c join fetch c.children")
+//    List<Category> getCategoriesWithChilds();
 
 
 }

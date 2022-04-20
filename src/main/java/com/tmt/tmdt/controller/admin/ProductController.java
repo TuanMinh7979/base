@@ -3,12 +3,10 @@ package com.tmt.tmdt.controller.admin;
 import com.tmt.tmdt.dto.request.FileRequestDto;
 import com.tmt.tmdt.dto.response.ViewResponseApi;
 import com.tmt.tmdt.entities.Attribute;
-import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.service.CategoryService;
 import com.tmt.tmdt.service.ProductService;
-import com.tmt.tmdt.util.GeneratedId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -100,31 +97,18 @@ public class ProductController {
     }
 
 
-    @PostMapping("save")
+    @PostMapping("add")
 //    @Transactional
-    public String save(Model model,
-                       @RequestParam("file") FileRequestDto mainImageDto,
-                       @RequestParam(value = "files", required = false) List<FileRequestDto> extraImageDtos,
-                       @Valid @ModelAttribute("product") Product product, BindingResult result) {
+    public String addWithImages(Model model,
+                      @RequestParam("file") FileRequestDto mainImageDto,
+                      @RequestParam(value = "files", required = false) List<FileRequestDto> extraImageDtos,
+                      @Valid @ModelAttribute("product") Product product, BindingResult result) {
         if (productService.existByName(product.getName())) {
             result.rejectValue("name", "nameIsExist");
         }
         if (!result.hasErrors()) {
             try {
-
-                Product productSaved = productService.save(product, mainImageDto, extraImageDtos);
-                Category category = productSaved.getCategory();
-
-                if (category != null && category.getAttributes() != null) {
-                    productSaved.setAttributes(category.getAttributes());
-                } else {
-
-                    productSaved.getAttributes().add(new Attribute("exam" + productSaved.getId(), "examName", Arrays.asList("examValue"),
-                            0));
-
-                }
-                productService.save(productSaved);
-
+                productService.add(product, mainImageDto, extraImageDtos);
                 return "redirect:/admin/product";
             } catch (IOException e) {
                 model.addAttribute("message", "Can not read your file, try again please!");
@@ -139,7 +123,7 @@ public class ProductController {
 
 
     @PostMapping(value = "update")
-    public String update(Model model,
+    public String updateWithImages(Model model,
                          @RequestParam("file") FileRequestDto mainImageDto,
                          @RequestParam(value = "files", required = false) List<FileRequestDto> extraImageDtos,
 
@@ -150,15 +134,9 @@ public class ProductController {
 
         if (!result.hasErrors()) {
             productService.update(product, mainImageDto, extraImageDtos, delImageIds);
-
-            //regard if statement success
             return "redirect:/admin/product";
         }
-
-
         return "admin/product/edit";
-
-
     }
 
 
@@ -222,109 +200,20 @@ public class ProductController {
         return productService.getProduct(id).getAttributes();
     }
 
-    @PostMapping("api/{productId}/attributes/value")
+    @PostMapping("api/{id}/attributes/update")
     @ResponseBody
-    public List<Object> getAttributeValueByAttributeId(@PathVariable("productId") Long productId,
-                                                       @RequestBody String data) {
-
-        String id = data.substring(1, data.length() - 1);
-        Set<Attribute> ats = productService.getProduct(productId).getAttributes();
-        for (Attribute ati : ats) {
-            if (ati.getId().equals(id)) {
-                return ati.getValue();
-            }
-        }
-        return null;
-    }
-
-    @PostMapping("api/{id}/attributes/add")
-    @ResponseBody
-    @Transactional
-    public ResponseEntity<Attribute> addAttribute(@PathVariable(value = "id") Long id,
-                                                  @RequestBody Attribute attribute) {
+    public Set<Attribute> updateAttributes(@PathVariable("id") Long id, @RequestBody List<Attribute> newAttributes) {
+        System.out.println("_________________________________"+newAttributes.size());
+        Set<Attribute> newSetAttributes = newAttributes.stream().collect(Collectors.toSet());
 
         Product product = productService.getProduct(id);
-        attribute.setId(GeneratedId.generateRandomPassword(3));
-
-        product.addAttribute(attribute);
+        product.setAttributes(newSetAttributes);
         productService.save(product);
 
-        return new ResponseEntity<>(attribute, HttpStatus.OK);
+        return newSetAttributes;
 
     }
 
-    @PostMapping("api/{productId}/attributes/update")
-    @ResponseBody
-    @Transactional
-    public ResponseEntity<Attribute> updateAttribute(@PathVariable(value = "productId") Long id,
-                                                     @RequestBody Attribute newAttribute) {
-
-        Product product = productService.getProduct(id);
-
-
-        Attribute oldAttribute = product.getAttributes()
-                .stream()
-                .filter(a -> a.getId().equals(newAttribute.getId()))
-                .collect(Collectors.toList())
-                .get(0);
-
-
-        product.removeAttribute(oldAttribute).addAttribute(newAttribute);
-        productService.save(product);
-
-        return new ResponseEntity<>(newAttribute, HttpStatus.OK);
-
-    }
-
-    @PostMapping("api/{productId}/attributes/delete")
-    @ResponseBody
-    @Transactional
-    public ResponseEntity<Attribute> deteteAttribute(@PathVariable(value = "productId") Long id,
-//                                                     @RequestBody Map<String, String> data) {
-                                                     @RequestBody String data) {
-        String idToDel = data.substring(1, data.length() - 1);
-
-        Product product = productService.getProduct(id);
-
-
-        Attribute oldAttribute = product.getAttributes()
-                .stream()
-                .filter(a -> a.getId().equals(idToDel))
-                .collect(Collectors.toList())
-                .get(0);
-
-
-        product.removeAttribute(oldAttribute);
-        productService.save(product);
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
-
-    }
-
-    @PostMapping("api/{productId}/attributes/deletes")
-    @ResponseBody
-    @Transactional
-    public ResponseEntity<List<String>> deteteAttributes(@PathVariable(value = "productId") Long id,
-                                                         @RequestBody List<String> data) {
-        Product product = productService.getProduct(id);
-        Set<Attribute> attributes = product.getAttributes();
-        Set<Attribute> attributeToDels = new HashSet<>();
-        for (String idi : data) {
-            for (Attribute attribute : attributes) {
-                if (attribute.getId().equals(idi)) {
-                    attributeToDels.add(attribute);
-                    break;
-                }
-            }
-
-        }
-        for (Attribute attributeToDel : attributeToDels) {
-            product.removeAttribute(attributeToDel);
-        }
-        productService.save(product);
-
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
 
 
 }

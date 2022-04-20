@@ -17,7 +17,7 @@ public interface CategoryService {
     Page getCategories(Pageable p);
 
 
-    Category save(Category category);
+
 
     void deleteById(Integer id);
 
@@ -38,4 +38,10 @@ public interface CategoryService {
 
 
     List<Category> getCategoriesInHierarchicalFromRootWithOut(int i);
+
+    Category add(Category category);
+
+    Category save(Category category);
+
+
 }

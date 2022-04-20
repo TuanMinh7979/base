@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -15,9 +17,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Rollback(false)
 class CategoryRepoTest {
 
-//    @Autowired
-//    private CategoryRepo categoryRepo;
+    @Autowired
+    private CategoryRepo categoryRepo;
 //
+
+
+    @Test
+    public void test() {
+
+//        Category category = categoryRepo.getCategoryWithChilds(3).get();
+//        System.out.println(category.getName());
+//        System.out.println(category.getChildren().size());
+
+
+    }
 //
 //    @Test
 //    public void addCategory() {

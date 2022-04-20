@@ -2,6 +2,7 @@ package com.tmt.tmdt.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.tmt.tmdt.dto.request.FileRequestDto;
+import com.tmt.tmdt.entities.Category;
 import com.tmt.tmdt.entities.Image;
 import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
@@ -101,48 +102,47 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-//    @Transactional
-    public Product save(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos) throws IOException {
+
+    public Product add(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos) throws IOException {
+        Category category = product.getCategory();
+        product.setAttributes(category.getAttributes());
+        Product productSaved = save(product);
+        productSaved.setCode(TextUtil.generateCode(product.getName(), product.getId()));
+        //relation should work in persistence
 
 
         if (!fileRequestDto.getFile().isEmpty()) {
             //save main image
             fileRequestDto.setUploadRs(uploadService.simpleUpload(fileRequestDto.getFile()));
             Image mainImage = imageMapper.toModel(fileRequestDto);
-            mainImage.setProduct(product);
+            mainImage.setProduct(productSaved);
             mainImage.setMain(true);
             Image savedMainImage = imageService.save(mainImage);
 
-            product.setMainImageLink(savedMainImage.getLink());
+            productSaved.setMainImageLink(savedMainImage.getLink());
 
 
         }
         //extra image is a option
         if (fileRequestDtos != null) {
-
-
             for (FileRequestDto extraImagei : fileRequestDtos) {
                 if (!extraImagei.getFile().isEmpty()) {
                     extraImagei.setUploadRs(uploadService.simpleUpload(extraImagei.getFile()));
                     Image extraImage = imageMapper.toModel(extraImagei);
-                    extraImage.setProduct(product);
+                    extraImage.setProduct(productSaved);
+                    //relation should work in persistence or -> not save trasient before flush
                     imageService.save(extraImage);
                 }
             }
         }
-        return save(product);
 
-
+        return save(productSaved);
     }
 
     @Override
-//    @Transactional
     public Product update(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos, String delImageIds) throws IOException {
-
-
-        System.out.println(delImageIds);
         delImageIds = delImageIds.trim();
-        System.out.println(delImageIds);
+
         if (delImageIds != null && !delImageIds.isEmpty()) {
             delImageIds = delImageIds.trim();
             List<String> strIds = Arrays.asList(delImageIds.split(" "));
@@ -163,15 +163,10 @@ public class ProductServiceImpl implements ProductService {
             mainImage.setProduct(product);
             mainImage.setMain(true);
             Image savedMainImage = imageService.save(mainImage);
-
             product.setMainImageLink(savedMainImage.getLink());
-
-
         }
 
-
         if (fileRequestDtos != null) {
-
             for (FileRequestDto extraImagei : fileRequestDtos) {
                 if (!extraImagei.getFile().isEmpty()) {
                     extraImagei.setUploadRs(uploadService.simpleUpload(extraImagei.getFile()));
@@ -182,16 +177,19 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        return save(product);
+        product.setCode(TextUtil.generateCode(product.getName(), product.getId()));
+        return productRepo.save(product);
     }
 
     @Override
-    @Transactional
     public Product save(Product product) {
 
-        Product productSaved = productRepo.save(product);
-        product.setCode(TextUtil.generateCode(product.getName(), productSaved.getId()));
-        return productSaved;
+        //main use for case not change image
+        //and must be handle for all case that persist to db
+        //use for ,which use,  how often , performance
+
+
+        return productRepo.save(product);
 
     }
 

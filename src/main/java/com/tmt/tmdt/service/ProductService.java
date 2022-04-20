@@ -30,12 +30,6 @@ public interface ProductService {
 
     boolean existByName(String name);
 
-    Product save(Product product, FileRequestDto file, List<FileRequestDto> files) throws IOException;
-
-    Product update(Product product, FileRequestDto file, List<FileRequestDto> files, String ids) throws IOException;
-
-    Product save(Product product);
-
     Page<Product> getProductsByCategoryAndNameLike(Long categoryId, String name, Pageable pageable);
 
     Page getProducts(Pageable pageable);
@@ -48,4 +42,10 @@ public interface ProductService {
 
 
     List<Product> getProductsByCategory(Integer categoryId);
+
+    Product add(Product product, FileRequestDto fileRequestDto, List<FileRequestDto> fileRequestDtos) throws IOException;
+
+    Product update(Product product, FileRequestDto file, List<FileRequestDto> files, String ids) throws IOException;
+
+    Product save(Product product);
 }

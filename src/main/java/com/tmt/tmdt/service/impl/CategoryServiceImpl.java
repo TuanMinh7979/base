@@ -1,7 +1,6 @@
 package com.tmt.tmdt.service.impl;
 
 import com.tmt.tmdt.entities.Category;
-import com.tmt.tmdt.entities.Product;
 import com.tmt.tmdt.exception.ResourceNotFoundException;
 import com.tmt.tmdt.repository.CategoryRepo;
 import com.tmt.tmdt.service.CategoryService;
@@ -12,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +19,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
+
+    //dont have input but away depend on a input field -> save method
     private final CategoryRepo cateRepository;
     private final ProductService productService;
 
@@ -43,26 +41,32 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category save(Category category) {
-
+    public Category add(Category category) {
+        category.setAttributes(category.getParent().getAttributes());
         Category categorySaved = cateRepository.save(category);
         categorySaved.setCode(TextUtil.generateCode(categorySaved.getName(), Long.valueOf(categorySaved.getId())));
-        return cateRepository.save(categorySaved);
+        return cateRepository.save(category);
     }
+
+    @Override
+    public Category save(Category category) {
+        //use for update
+        category.setCode(TextUtil.generateCode(category.getName(), Long.valueOf(category.getId())));
+        return cateRepository.save(category);
+    }
+
+
+
 
     @Override
     public void deleteById(Integer id) {
 
-        Category category = getCategory(id);
-        category.setParent(null);
         cateRepository.deleteById(id);
     }
 
     @Override
     public void deleteCategories(Integer[] ids) {
         for (Integer id : ids) {
-            Category category = getCategory(id);
-            category.setParent(null);
             cateRepository.deleteById(id);
         }
     }
@@ -129,8 +133,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return categories;
     }
-
-
 
 
     public void reRender(List<Category> rs, List<Category> all, Integer id, String split) {

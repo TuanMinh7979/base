@@ -37,52 +37,6 @@ function deleteOnTable(event) {
     })
 }
 
-function deleteOnTableWithStringIdData(delBtn, strId) {
-
-    event.preventDefault();
-
-    let url = $(delBtn).attr("href");
-    let that = $(delBtn);
-    let data = {};
-    // data["idToDel"] = strId;
-    alert(url)
-    Swal.fire({
-
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: JSON.stringify(strId.toString()),
-                contentType: "application/json",
-                success: function (rs) {
-                    that.closest("tr").remove();
-                },
-                error: function (rs) {
-
-
-                    // console.log(data.responseJSON);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Can not delete it',
-                        // text: 'Something went wrong!',
-
-                    })
-                }
-
-
-            })
-        }
-    })
-}
-
 
 function deleteManyOnTable(event) {
     event.preventDefault();
@@ -246,7 +200,7 @@ function addIdToDel(idToAdd, delIdsInpId) {
     let delIdsInp = $("#".concat(delIdsInpId));
     let oldVal = delIdsInp.val();
     if (delIdsInpId.charAt(delIdsInpId.length - 1) === 's') {
-        oldVal=oldVal.trim();
+        oldVal = oldVal.trim();
         delIdsInp.val(oldVal.concat(" " + idToAdd));
     } else {
         delIdsInp.val(idToAdd);
@@ -279,7 +233,7 @@ function changeImage(file, fileInp, mode, delIdsInpId, defaultImage) {
         reader.readAsDataURL(file);
 
 
-        if (imagePreviewImg.attr("src") != defaultImage && mode === "edit") {
+        if (imageInputWrapper.attr('id') != undefined && imagePreviewImg.attr("src") != defaultImage && mode === "edit") {
             addIdToDel(imageInputWrapper.attr('id'), delIdsInpId);
         }
 
@@ -312,6 +266,7 @@ function loadContentWithGet(url, renderMethod) {
 
     });
 }
+
 //load content through ajax
 
 
