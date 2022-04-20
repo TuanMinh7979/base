@@ -28,18 +28,18 @@ public class UserEntity extends BaseEntity implements Serializable {
     private Long id;
     @NotBlank
     private String username;
-
     @NotBlank
-    @Size(min = 6, max = 64)
+    @Size(max = 64)
     private String password;
 
     @Transient
-    @Size(min = 6, max = 64)
+    @Size(max = 5)
     private String confirmPassword;
 
+    @NotBlank
     @Size(max = 128)
     private String email;
-    private String imageLink = defaultImage();
+    private String imageLink =defaultImage();
 
 
     @JsonIgnore
@@ -51,7 +51,7 @@ public class UserEntity extends BaseEntity implements Serializable {
     private Image image;
 
     @Enumerated(EnumType.STRING)
-
+    @NotNull
     private UserStatus status;
 
     @JsonIgnore

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout">
 <head>
     <th:block th:insert="~{layout/home/fragments/home_link.html :: link}"></th:block>
     <th:block layout:fragment="addcss"></th:block>
@@ -20,48 +20,8 @@
                     +65 11.188.888
                 </div>
             </div>
-            <div class="ht-right ">
-
-
-                <a sec:authorize="isAuthenticated()" class="dropdown">
-
-
-                    <a href="#" class="login-panel dropdown-toggle"
-                       data-toggle="dropdown">
-                        <img style="height: 30px; width: 30px; border-radius: 15px"
-                             th:src="${#authentication.principal.imageLink}"
-                             alt="User Image">
-                        <span sec:authentication="principal.username"></span>
-                    </a>
-
-                    <div class="dropdown-menu">
-
-                        <th:block sec:authorize="hasRole('ROLE_CUSTOMER')">
-                            <a class="dropdown-item" href="/logout">Logout</a>
-                        </th:block>
-                        <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')">
-                            <a class="dropdown-item" href="/admin">Admin page</a>
-                            <a class="dropdown-item" href="/logout">Logout</a>
-                        </th:block>
-
-                    </div>
-                </a>
-
-                <a sec:authorize="isAnonymous()" class="dropdown">
-
-                    <a href="#" class="login-panel dropdown-toggle" data-toggle="dropdown">
-
-                        <i class="fa fa-user"></i>
-
-
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/login">Login</a>
-                        <a class="dropdown-item" href="/register">Register</a>
-                    </div>
-                </a>
-
-
+            <div class="ht-right">
+                <a href="#" class="login-panel"><i class="fa fa-user"></i>Login</a>
                 <div class="lan-selector">
                     <select class="language_drop" name="countries" id="countries" style="width:300px;">
                         <option value='yt' data-image="#" data-imagecss="flag yt"

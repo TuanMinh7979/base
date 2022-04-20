@@ -34,10 +34,7 @@ public class CategoryController {
 
 
     @GetMapping("")
-    public String index(Model model) {
-
-
-//        model.addAttribute("categoriesForFilter", categoryService.getCategoriesFrom(1));
+    public String index() {
         return "admin/category/index";
     }
 
@@ -77,7 +74,7 @@ public class CategoryController {
         Category category = new Category();
         model.addAttribute("category", category);
 
-        model.addAttribute("categoriesForParentForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/category/add";
     }
 
@@ -96,7 +93,7 @@ public class CategoryController {
             categorySaved.getAttributes().add(new Attribute("exam" + categorySaved.getId(), "examName", Arrays.asList("examValue"), 0));
             return "redirect:/admin/category";
         }
-        model.addAttribute("categoriesForParentForm", categoryService.getCategoriesInHierarchicalFromRootWithOut(2));
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
 
         return "admin/category/add";
     }
@@ -116,7 +113,7 @@ public class CategoryController {
             category = categoryService.getCategoryByName(idx);
         }
         model.addAttribute("category", category);
-        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
         return "admin/category/edit";
 
     }
@@ -130,7 +127,7 @@ public class CategoryController {
             categoryService.save(category);
             return "redirect:/admin/category";
         }
-        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchicalFromRoot());
+        model.addAttribute("categoriesForForm", categoryService.getCategoriesInHierarchical());
 
         return "admin/category/edit";
     }
@@ -154,11 +151,6 @@ public class CategoryController {
         return new ResponseEntity<>(ids, HttpStatus.OK);
     }
     //-DELETE
-
-    //FOR PRODUCT INDEX
-
-
-    //
 
 
     //FOR ATTRIBUTE
@@ -270,6 +262,13 @@ public class CategoryController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
     //-FOR ATTRIBUTE
+
+
+    @GetMapping("/api")
+    @ResponseBody
+    public List<Category> getCategories() {
+        return categoryService.getCategoriesInHierarchical();
+    }
 
 
 }

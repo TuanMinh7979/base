@@ -33,7 +33,10 @@
             <div class="col-md-10 ml-5">
 
 
+
                 <form th:id="mainForm" th:action="@{/admin/category/add}" th:object="${category}" method="post">
+
+
 
 
                     <div class="form-group col-6">
@@ -50,10 +53,10 @@
 
 
                     <div class="form-group col-6">
-                        <label>Parent category</label>
+                        <label >Parent category</label>
                         <select class="form-control" th:field="*{parent}">
-                            <option value="1">No parent(root parent)</option>
-                            <thblock th:each="cat : ${categoriesForParentForm}">
+                            <option value="1">No parent</option>
+                            <thblock th:each="cat : ${categoriesForForm}">
 
                                 <option th:value="${cat.id}">[[${cat.name}]]</option>
                             </thblock>

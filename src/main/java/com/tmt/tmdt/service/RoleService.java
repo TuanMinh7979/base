@@ -32,6 +32,4 @@ public interface RoleService {
     List<Role> getRoles();
 
     List<Integer> getRoleIdsByUserId(Long userId);
-
-    Role getRoleByName(String name);
 }

@@ -26,11 +26,10 @@ public interface UserEntityService {
     void update(UserEntity userEntity, FileRequestDto fileRequestDto, String del) throws IOException;
 
 
-    public UserEntity save(UserEntity userEntity);
     Page getUserEntityByUserName(String searchNameTerm, Pageable pageable);
 
 
-    boolean existByUsername(String username);
+    boolean existByUserName(String username);
 
     boolean existById(Long id);
 
@@ -44,6 +43,4 @@ public interface UserEntityService {
     UserEntity getUserByUsername(String username);
 
     UserEntity getUserEntityWithRoles(String username);
-
-
 }
